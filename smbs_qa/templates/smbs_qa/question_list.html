@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load imagekit %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-12">
+            <a class="btn btn-primary float-right" href="{% url 'smbs_qa:question-create' %}">{% trans "New Post" %}</a>
+        </div>
+    </div>
+    <br>
+    <div class="row">
+        {% for question in object_list %}
+            <div class="col-xs-12 col-md-6">
+                <article>
+                    <a href="{% url 'smbs_qa:question-detail' question.id question.slug %}" class="card-link text-dark">
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">
+                                    {{question.title}}
+                                </h5>
+                                <h6 class="card-subtitle mb-2 text-muted">{% trans "By" %}
+                                    {% if object.is_anonymous %}{% trans "Anonymous" %}{% else %}{{question.user.get_full_name|default:question.user.username}}{% endif %}
+                                </h6>
+                                <p class="card-text">{{question.question}}</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <br>
+                <br>
+                </div>
+        {% endfor %}
+    </div>
+{% endblock %}

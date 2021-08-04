@@ -1,0 +1,78 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load static %}
+{% load i18n %}
+{% load base %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Sign Up" %}</h1>
+    <p>{% trans "Already a member?" %} <a href="{% url 'smbs_accounts:login' %}?next={{next}}"><b>{% trans "Login!" %}</b></a></p>
+    <hr class="mb-4">
+    {% if form.non_field_errors %}
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+    {% endif %}
+    <form id="post-form" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.username.name}}">{{form.username.label}}</label>
+                    {% if form.username.errors %}
+                        <p class="text-danger">{{form.username.errors.as_text}}</p>
+                    {% endif %}
+                    {{form.username|ff_placeholder:"myusername"}}
+                </div>
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.email.name}}">{{form.email.label}}</label>
+                    {% if form.email.errors %}
+                        <p class="text-danger">{{form.email.errors.as_text}}</p>
+                    {% endif %}
+                    {{form.email|ff_placeholder:"myemail@gmail.com"}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.first_name.name}}">{{form.first_name.label}}</label>
+                    {% if form.first_name.errors %}
+                        <p class="text-danger">{{form.first_name.errors.as_text}}</p>
+                    {% endif %}
+                    {% trans 'first name' as first_name %}
+                    {{form.first_name|ff_placeholder:first_name}}
+                </div>
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.last_name.name}}">{{form.last_name.label}}</label>
+                    {% if form.last_name.errors %}
+                        <p class="text-danger">{{form.last_name.errors.as_text}}</p>
+                    {% endif %}
+                    {% trans 'last name' as last_name %}
+                    {{form.last_name|ff_placeholder:last_name}}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.password1.name}}">{{form.password1.label}}</label>
+                    {% if form.password1.errors %}
+                        <p class="text-danger">{{form.password1.errors.as_text}}</p>
+                    {% endif %}
+                    {{form.password1|ff_addcss:'form-control'}}
+                </div>
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.password2.name}}">{{form.password2.label}}</label>
+                    {% if form.password2.errors %}
+                        <p class="text-danger">{{form.password2.errors.as_text}}</p>
+                    {% endif %}
+                    {{form.password2|ff_addcss:'form-control'}}
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary" value="{% trans 'Sign Up' %}" />
+            <input type="hidden" name="next" value="{{next}}" />
+        </div>
+    </form>
+</div>
+{% endblock %}

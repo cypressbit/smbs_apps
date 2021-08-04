@@ -1,0 +1,18 @@
+{% load i18n %}
+{% load reactions %}
+
+<div class="reaction-container">
+    {% with model.get_reactions as post_reactions %}
+        <span class="reaction-counter">{{post_reactions.reaction_count}}</span>
+    {% endwith %}
+    {% if request.user.is_authenticated %}
+        {% has_reacted model request.user as user_reacted %}
+        <a href="#" class="card-link reaction-link{% if user_reacted %} reacted{% endif %}" data-action="{{action_url}}" data-reaction="thumbs_up" data-{{model_field}}={{model.id}} data-user={{request.user.id}}>
+            <i class="reaction reaction-thumbs_up"></i> {% trans "Like" %}
+        </a>
+    {% else %}
+        <a href="{% url 'smbs_accounts:login' %}?next={{request.get_full_path}}" class="card-link">
+            <i class="reaction reaction-thumbs_up"></i> {% trans "Like" %}
+        </a>
+    {% endif %}
+</div>

@@ -1,0 +1,40 @@
+.reaction {
+    width: 23px;
+    height: 23px;
+    display: inline-block;
+    background-size: contain;
+    margin-bottom: -5px;
+}
+
+.reaction-container {
+    display: inline;
+    margin-right: 16px;
+}
+
+.reacted {
+    font-weight: bold;
+}
+
+.reaction-love {
+    background-image: url('/static/images/emojis/love.png');
+}
+
+.reaction-thumbs_up {
+    background-image: url('/static/images/emojis/thumbs_up.png');
+}
+
+.reaction-tumbs_down {
+    background-image: url('/static/images/emojis/thumbs_down.png');
+}
+
+.reaction-angry {
+    background-image: url('/static/images/emojis/angry.png');
+}
+
+.reaction-happy {
+    background-image: url('/static/images/emojis/happy.png');
+}
+
+.reaction-lol {
+    background-image: url('/static/images/emojis/lol.png');
+}

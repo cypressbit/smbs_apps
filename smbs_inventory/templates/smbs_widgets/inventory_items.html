@@ -1,0 +1,32 @@
+{% load imagekit %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-blog.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+<div class="row inventory-widget-row">
+    {% for item in inventory_items %}
+        <div class="col-xs-12 col-md-4 mb-3">
+            <a href="{% url 'smbs_inventory:item-detail' item.slug %}" class="card-link text-dark">
+                <div class="card border-0 rounded inventory-card">
+                    {% if item.cover_image %}
+                        <figure>
+                            {% generateimage 'smbs_inventory:cover400x200' source=item.cover_image -- alt=item.title class="card-img-top rounded-top" style="width: 100%; height: auto" %}
+                        </figure>
+                    {% endif %}
+                    <div class="card-body">
+                        <h3 class="card-title text-primary">
+                            <b>{{item.title}}</b>
+                        </h3>
+                        <p class="card-text">{{item.description|truncatechars:150}}</p>
+                    </div>
+                </div>
+            </a>
+        </div>
+    {% endfor %}
+    <div class="col-xs-12 col-md-12 mb-3">
+        <a class="btn btn-primary float-right" href="{% url 'smbs_inventory:item-list' %}">{% trans "View More" %}</a>
+    </div>
+</div>

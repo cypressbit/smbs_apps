@@ -1,0 +1,66 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load static %}
+{% load i18n %}
+{% load base %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-user-posts.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{% trans "Create Post" %}</h2>
+    <p class="mb-0">{% trans "Share something with our community." %}</p>
+    <p class="mb-4 text-info"><small>{% trans "You can share a url, upload an image or write a post." %}</small></p>
+    {% if form.non_field_errors %}
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+    {% endif %}
+    <form id="post-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            {{form.title.label}}
+            {{form.title|ff_addcss:'form-control'}}
+        </div>
+        <div class="form-group">
+            {{form.url.label}}
+            {{form.url|ff_addcss:'form-control'}}
+        </div>
+        <div class="form-group">
+            <div class="custom-file">
+                <label class="custom-file-label" for="{{form.image.name}}">{{ form.image.label }}</label>
+                {{form.image|ff_addcss:'custom-file-input'}}
+            </div>
+        </div>
+        <hr>
+        <div class="form-group">
+            {{form.content.label}}
+            {{form.content|ff_addcss:'form-control'}}
+        </div>
+        <div class="form-group">
+            {{form.is_anonymous}}
+            {{form.is_anonymous.label}}
+        </div>
+        <div class="form-group">
+            {{form.tags.label}}
+            {% if default_tags %}
+                <div class="post-tag-container">
+                    {% for tag in default_tags %}
+                        <a href="#" class="badge badge-primary post-tag">{{tag}}</a>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            {{form.tags|ff_addcss:'form-control'}}
+            <p>{{form.tags.help_text}}</p>
+        </div>
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary" value="{% trans 'Submit Post' %}" />
+        </div>
+    </form>
+    <script type="text/javascript">
+        $('a.post-tag').click(function (event) {
+            event.preventDefault();
+            $('#id_tags').val($('#id_tags').val() + $(this).text() + ',');
+        })
+    </script>
+</div>
+{% endblock %}

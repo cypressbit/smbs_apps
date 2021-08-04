@@ -1,0 +1,31 @@
+<title>{{metadata.title}}</title>
+{% if metadata.keywords %}
+    <meta name="keywords" content="{{metadata.keywords}}"/>
+{% endif %}
+<meta name="description" content="{{metadata.description}}"/>
+<!-- Twitter Card data -->
+{% if metadata.twitter_card %}
+    <meta name="twitter:card" content="{{metadata.twitter_card}}">
+{% endif %}
+{% if metadata.twitter_site %}
+    <meta name="twitter:site" content="{{metadata.twitter_site}}">
+{% endif %}
+<meta name="twitter:title" content="{{metadata.title}}">
+<meta name="twitter:description" content="{{metadata.description}}">
+{% if metadata.twitter_creator %}
+    <meta name="twitter:creator" content="{{metadata.twitter_creator}}">
+{% endif %}
+<meta name="twitter:image" content="{{metadata.get_image_url}}">
+<!-- Open Graph data -->
+<meta property="og:title" content="{{metadata.title}}" />
+{% if metadata.og_type %}
+    <meta property="og:type" content="{{metadata.og_type}}" />
+{% endif %}
+<meta property="og:url" content="{{request.build_absolute_uri}}" />
+<meta property="og:image" content="{{metadata.get_image_url}}" />
+<meta property="og:image:secure_url" content="{{metadata.get_image_url}}" />
+<meta property="og:description" content="{{metadata.description}}" />
+<meta property="og:site_name" content="{{metadata.get_site_name}}" />
+{% if metadata.og_fb_admins %}
+    <meta property="fb:admins" content="{{metadata.og_fb_admins}}" />
+{% endif %}

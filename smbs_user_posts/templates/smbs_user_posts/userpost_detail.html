@@ -1,0 +1,71 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load static %}
+{% load i18n %}
+{% load base %}
+
+{% block extra_head %}
+    <link href="{% static 'css/reactions.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'js/reactions.js' %}"></script>
+    <link href="{% static "css/smbs-social.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12 mb-4">
+            <a class="btn btn-primary float-right" href="{% url 'smbs_user_posts:post-create' %}">{% trans "New Post" %}</a>
+        </div>
+    </div>
+    <article>
+        <div class="card">
+            {% if object.image %}
+                {% if object.url %}
+                    <a href="{{object.url}}" class="card-link text-dark">
+                        <img class="card-img-top" src="{{object.image.url}}" alt="{{object.image}}">
+                    </a>
+                {% else %}
+                    <img class="card-img-top" src="{{object.image.url}}" alt="{{object.image}}">
+                {% endif %}
+            {% endif %}
+            <div class="card-body">
+                {% if object.url %}
+                    <a href="{{object.url}}" class="card-link text-dark">
+                        <h5 class="card-title">
+                            {{object.title}}
+                        </h5>
+                    </a>
+                {% else %}
+                    <h5 class="card-title">
+                        {{object.title}}
+                    </h5>
+                {% endif %}
+                {% if object.url %}
+                    <div class="mb-3">
+                        <a href="{{object.url}}" class="card-link">
+                            <small>
+                                <i class="fas fa-link"></i>
+                                {{object.url|truncatechars:40}}
+                            </small>
+                        </a>
+                    </div>
+                {% endif %}
+                <h6 class="card-subtitle mb-1 text-muted">
+                    {% if object.is_anonymous %}{% trans "Anonymous" %}{% else %}{{object.user.get_full_name|default:object.user.username}}{% endif %}
+                </h6>
+                <div class="post-tag-container mb-3">
+                    {% for tag in object.tags.all %}
+                        <span class="badge badge-primary">{{tag.name}}</span>
+                    {% endfor %}
+                </div>
+                <h6><u>{% trans "Share this post" %}</u></h6>
+                {% include 'smbs_user_posts/share.html' %}
+                <p class="card-text">{{object.content}}</p>
+                {% url 'smbs_user_posts:post-reaction' as post_action_url %}
+                {% include 'smbs_reactions/reactions.html' with model_field='user_post' model=object action_url=post_action_url %}
+            </div>
+        </div>
+    </article>
+    {% url 'smbs_user_posts:post-comment-reaction' as action_url %}
+    {% include 'smbs_comments_tree/comments.html' with model_field='user_post_comment' action_url=action_url %}
+</div>
+{% endblock %}

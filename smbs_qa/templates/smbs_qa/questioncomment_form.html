@@ -1,0 +1,11 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load base %}
+
+{% block content %}
+    {{form.errors}}
+    {% if form.non_field_errors %}
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+    {% endif %}
+{% endblock %}

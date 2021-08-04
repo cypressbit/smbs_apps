@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load imagekit %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-social.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/smbs-inventory.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container inventory-item">
+    {% block item %}
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="text-primary inventory-title">{{object.title|title}}</h1>
+            <p class="mb-4">
+                {% for tag in object.tags.all %}
+                    <span class="badge badge-primary">{{tag.name}}</span>
+                {% endfor %}
+            </p>
+            {% if item.cover_image %}
+                <figure>
+                    {% generateimage 'smbs_inventory:cover1000x500' source=object.cover_image -- alt=object.title class="img-fluid mb-3" style="width: 100%" %}
+                </figure>
+            {% endif %}
+            <h3>{% trans "Description" %}</h3>
+            <div class="inventory-item-content mb-5">
+                {{object.description|safe}}
+            </div>
+            <h6><u>{% trans "Share this on social media" %}</u></h6>
+            {% include 'smbs_inventory/share.html' %}
+        </div>
+    </div>
+    {% endblock %}
+</div>
+<div class="container inventory-item-related">
+    <div class="row">
+        <div class="col-md-12">
+            <h2 class="mt-3 mb-3">{% trans "Related Products" %}</h2>
+            {% with object.get_related_items|slice:":6" as inventory_items %}
+                {% include 'smbs_widgets/inventory_items.html' %}
+            {% endwith %}
+        </div>
+    </div>
+</div>
+{% endblock %}

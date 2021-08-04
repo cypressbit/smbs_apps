@@ -1,0 +1,171 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load static %}
+{% load i18n %}
+{% load admin_urls %}
+
+{% block extra_head %}
+    <link href="{% static 'quill/quill.snow.css' %}" rel="stylesheet">
+    <script type="text/javascript" src="{% static 'quill/quill.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'quill/image-resize.min.js' %}"></script>
+{% endblock %}
+
+{% block post %}
+    {{form.errors}}
+    {% if form.non_field_errors %}
+        <h1 class="text-danger">{% trans "Failed to publish post" %}</h1>
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+        <p class="text-danger">{% trans "Save this post as draft and fix the errors above before attempting to publish it" %}</p>
+    {% endif %}
+    <form id="post-form" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div id="title-editor" class="editor">
+            {% if object %}
+                <h1>{{object.title}}</h1>
+            {% else %}
+                <h1>{% trans 'Post Title' %}</h1>
+            {% endif %}
+        </div>
+        <p><small>{% trans 'Written by' %} {{request.user.get_full_name|default:request.user.username}} {% trans 'on' %} {{form.initial.publish_date|date:"M d, Y, h:i a"}}</small></p>
+        <br>
+        <div id="content-editor" class="editor">
+            {% if object %}
+                {{object.content|safe}}
+            {% else %}
+                <p>{% trans 'Write your awesome post!' %}</p>
+            {% endif %}
+        </div>
+        <br>
+        <h3>{% trans 'Post Settings' %}</h3>
+        <div class="form-group">
+            {{form.description.label}}
+            {{form.description}}
+        </div>
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
+                    {{form.cover_image.label}}
+                    <div class="custom-file">
+                        {{form.cover_image}}
+                        <label class="custom-file-label">{% trans "Choose a cover image" %}</label>
+                    </div>
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    {{form.publish_date.label}}
+                    {{form.publish_date}}
+                </div>
+                <div class="col-md-3 col-xs-12">
+                    {{form.language.label}}
+                    {{form.language}}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-9 col-xs-12">
+                <div class="form-group">
+                    {{form.tags.label}}
+                    {{form.tags}}
+                    <p>{{form.tags.help_text}}</p>
+                </div>
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <div class="form-group form-check">
+                    <br>
+                    {{form.is_draft}}
+                    <label class="form-check-label">{% trans "Post Is Draft" %}</label>
+                </div>
+            </div>
+        </div>
+        {{form.author}}
+        {{form.slug}}
+        {{form.title}}
+        {{form.content}}
+        {{form.site}}
+        <br>
+        <h3>{% trans 'SEO Results' %}</h3>
+        {% if object and object.checks.seo %}
+            {% with object.checks.seo as seo %}
+                {% if seo.passed %}
+                    <span class="badge badge-success">{% trans "Passed all SEO checks" %}</span>
+                {% else %}
+                    <span class="badge badge-danger">{% trans "One or more SEO checks failed" %}</span>
+                {% endif %}
+                <table class="table table-borderless">
+                  <thead>
+                    <tr>
+                      <th scope="col">Check</th>
+                      <th scope="col">Results</th>
+                      <th scope="col">Message</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for k,v in seo.results.items %}
+                        <tr {% if not v.success %}class="table-danger"{% endif %}>
+                          <td>{{k}}</td>
+                          <td>{{v.results|truncatechars:'40'}}</td>
+                          <td>{{v.message}}</td>
+                        </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+            {% endwith %}
+        {% else %}
+            <p>{% trans "No SEO checks have been applied to this post" %}</p>
+        {% endif %}
+        <div class="text-right">
+            <input id="submit-post" type="submit" class="btn btn-primary" value="{% trans 'Save Post' %}" />
+        </div>
+    </form>
+
+<style>
+.editor {
+	font-family: inherit !important;
+	font-size: inherit !important;
+	border: none !important;
+	padding: 0 !important;
+}
+.editor > .ql-editor {
+	padding: 12px 0 !important;
+}
+
+#content-editor {
+    margin-bottom: 40px;
+}
+</style>
+
+<script>
+$(document).ready(function() {
+    var Image = Quill.import('formats/image');
+    Image.className = 'img-fluid';
+    Quill.register(Image, true);
+    var quillTitle = new Quill('#title-editor', {
+      modules: {
+        toolbar: false
+      },
+      theme: 'snow'
+    });
+
+    var quillContent = new Quill('#content-editor', {
+      modules: {
+        toolbar: [
+          [{ size: [ 'small', false, 'large', 'huge' ]}],
+          ['bold', 'italic'],
+          ['link', 'blockquote', 'code-block', 'image'],
+          [{ list: 'ordered' }, { list: 'bullet' }]
+        ],
+        imageResize: {modules: [ 'Resize', 'DisplaySize']}
+      },
+      theme: 'snow'
+    });
+
+    $('form#post-form').submit(function(){
+      var title = $('#title-editor').find('h1').text();
+      $('input[name=title]').val(title);
+
+      var content = $('#content-editor').find('.ql-editor').html();
+      $('textarea[name=content]').val(content);
+
+      return true;
+    });
+});
+</script>
+{% endblock %}

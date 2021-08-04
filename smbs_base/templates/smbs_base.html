@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load static %}
+{% load i18n %}
+{% get_current_language as LANGUAGE_CODE %}
+{% get_available_languages as langs %}
+<html lang="{{LANGUAGE_CODE}}">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% block metatags %}{% endblock %}
+    {{theme}}
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+    <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    {{global_metadata}}
+    {{custom_css}}
+    {% if alerts %}
+      <link href="{% static "css/alerts.css" %}" rel="stylesheet" type="text/css">
+    {% endif %}
+    {% if icon %}
+      <link rel="shortcut icon" href="{{icon.url}}">
+    {% endif %}
+    {% block head %}{% endblock %}
+    {% block extra_head %}{% endblock %}
+    {% if metadata %}
+      {% include 'smbs_base/metadata.html' %}
+    {% endif %}
+  </head>
+  <body>
+    {% block nav %}
+        <nav class="navbar navbar-expand-lg mb-4 {% if navbar_type == 'navbar_light' %}navbar-light{% else %}navbar-dark bg-primary{% endif %}">
+            <div class="container">
+                  <a class="navbar-brand" href="/">
+                      {% if logo %}
+                        <img id="logo" class="logo" src="{{logo.url}}" />
+                      {% else %}
+                        {{site.name}}
+                      {% endif %}
+                  </a>
+                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                  </button>
+                  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                      {% if 'smbs_pages' in installed_apps %}
+                        {% include 'smbs_pages/page_navigation.html' with pages=pages %}
+                      {% endif %}
+                    </ul>
+                  </div>
+            </div>
+        </nav>
+    {% endblock %}
+    {% if alerts %}
+        <div class="container pt-4">
+            {% for alert in alerts %}
+                {% if not alert.homepage_only or request.get_full_path == '/' %}
+                    <div class="alert alert-{{alert.alert_type}} alert-{{alert.position}}" role="alert">
+                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                      <h4 class="alert-heading">{{alert.title}}</h4>
+                      <p>{{alert.content|safe}}</p>
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    {% endif %}
+    {% block pre_content %}{% endblock %}
+    {% block content %}{% endblock %}
+    {% block post_content %}{% endblock %}
+    {% block footer %}
+      <div class="container">
+          <footer class="footer mt-5">
+              <div class="container">
+                  <div class="row row-centered">
+                    <div class="col-xs-12 col-md-8 col-centered">
+                      <ul class="nav nav-pills">
+                        <li><a href="https://{{current_site.domain}}">© {% now "Y" %} {{current_site.name}}</a></li>
+                      </ul>
+                    </div>
+                  </div>
+              </div>
+          </footer>
+      </div>
+    {% endblock %}
+  </body>
+</html>

@@ -1,0 +1,34 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load base %}
+
+{% block content %}
+    {{form.errors}}
+    {% if form.non_field_errors %}
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+    {% endif %}
+    <form id="post-form" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            {{form.title.label}}
+            {{form.title|ff_addcss:'form-control'}}
+        </div>
+        <div class="form-group">
+            {{form.question.label}}
+            {{form.question|ff_addcss:'form-control'}}
+        </div>
+        <div class="form-group">
+            {{form.is_anonymous.label}}
+            {{form.is_anonymous}}
+        </div>
+        <div class="form-group">
+            {{form.tags.label}}
+            {{form.tags|ff_addcss:'form-control'}}
+            <p>{{form.tags.help_text}}</p>
+        </div>
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary" value="{% trans 'Submit Question' %}" />
+        </div>
+    </form>
+{% endblock %}

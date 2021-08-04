@@ -1,0 +1,18 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load staticfiles %}
+{% load i18n %}
+{% load base %}
+
+{% block content %}
+    <p>
+        <a class="text-primary float-right" href="{% url 'smbs_qa:question-create' %}">{% trans "Ask Question" %}</a>
+    </p>
+    <h1>{{object.title}}</h1>
+    <small>{% trans "By" %}
+        {% if object.is_anonymous %}{% trans "Anonymous" %}{% else %}{{question.user.get_full_name|default:question.user.username}}{% endif %}
+    </small>
+    <p class="lead">
+        <strong>{{object.question}}</strong>
+    </p>
+    {% include 'smbs_comments_tree/comments.html' %}
+{% endblock %}

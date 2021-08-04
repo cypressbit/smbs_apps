@@ -1,0 +1,17 @@
+db.sqlite3
+__pycache__
+/media/
+.kateproject
+.kateproject.d
+*.pyc
+*.tar.gz
+/static
+.idea
+celerybeat-schedule
+geckodriver.log
+alpuente_db.sql
+*.sql
+env
+images
+labels
+*.pth

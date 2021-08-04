@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load imagekit %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-inventory.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container inventory-container">
+    <div class="row">
+        <div class="col-md-12">
+            <h1 class="mb-4 text-primary text-center">{{inventory_page_title}}</h1>
+        </div>
+    </div>
+    <div class="row">
+        {% for item in object_list %}
+            <div class="col-xs-12 col-md-4 mb-4">
+                <a href="{% url 'smbs_inventory:item-detail' item.slug %}" class="card-link text-dark">
+                    <div class="card border-1 rounded">
+                        {% if item.cover_image %}
+                            <figure>
+                                {% generateimage 'smbs_inventory:cover400x200' source=item.cover_image -- alt=item.title class="card-img-top rounded-top" style="width: 100%; height: auto" %}
+                            </figure>
+                        {% endif %}
+                        <div class="card-body">
+                            <h3 class="card-title text-primary">
+                                <b>{{item.title}}</b>
+                            </h3>
+                            <p class="card-text">{{item.description|truncatechars:150}}</p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

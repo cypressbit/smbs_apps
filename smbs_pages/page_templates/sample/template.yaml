@@ -1,0 +1,11 @@
+---
+name: E-Commerce 1
+navbar_type: light
+pages:
+  - name: home
+    navigation_order: 1
+    widgets:
+      - type: html
+        content: html/index.html
+  - name: test
+

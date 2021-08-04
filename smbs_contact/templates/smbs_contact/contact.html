@@ -1,0 +1,12 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load static %}
+{% load i18n %}
+{% load base %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-3">{% trans "Contact Us" %}</h1>
+    <h3>{{object.display_name}}</h3>
+    <p class="lead"><a href="mailto:{{object.email_address}}">{{object.email_address}}</a></p>
+</div>
+{% endblock %}

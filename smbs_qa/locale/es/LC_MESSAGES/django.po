@@ -1,0 +1,76 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-01-28 02:40-0600\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: models.py:16
+msgid "User"
+msgstr "Usuario"
+
+#: models.py:17
+msgid "Title"
+msgstr "Título"
+
+#: models.py:18
+msgid "Ask anonymously"
+msgstr "Pregunta anónima"
+
+#: models.py:19
+msgid "Question"
+msgstr "Pregunta"
+
+#: models.py:21
+msgid ""
+"A list of comma-separated tags related to your question, for example "
+"\"health, fitness\"."
+msgstr ""
+"Una lista de etiquetas separadas por comas, por ejemplo \"salud, fitness\"."
+
+#: templates/smbs_qa/question_detail.html:8
+#: templates/smbs_qa/question_list.html:8
+msgid "Ask Question"
+msgstr "Crear Pregunta"
+
+#: templates/smbs_qa/question_detail.html:11
+#: templates/smbs_qa/question_list.html:22
+msgid "By"
+msgstr "Por"
+
+#: templates/smbs_qa/question_detail.html:12
+#: templates/smbs_qa/question_list.html:23
+#, fuzzy
+#| msgid "Ask anonymously"
+msgid "Anonymous"
+msgstr "Anónima"
+
+#: templates/smbs_qa/question_form.html:31
+msgid "Submit Question"
+msgstr "Enviar Pregunta"
+
+#: urls.py:12
+msgid "create/"
+msgstr "crear/"
+
+#: urls.py:13
+msgid "comments/<int:pk>/<slug:slug>/"
+msgstr "comentarios/<int:pk>/<slug:slug>/"
+
+#: urls.py:14
+#, fuzzy
+#| msgid "comments/<int:pk>/<slug:slug>/"
+msgid "comments/<int:pk>/<slug:slug>/add/"
+msgstr "comentarios/<int:pk>/<slug:slug>/"

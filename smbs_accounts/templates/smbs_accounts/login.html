@@ -1,0 +1,38 @@
+{% extends 'smbs_blog/post_detail.html' %}
+{% load static %}
+{% load i18n %}
+{% load base %}
+
+{% block content %}
+<div class="container">
+    {% if form.non_field_errors %}
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+    {% endif %}
+    <p>{% trans "Not a member yet?" %} <a href="{% url 'smbs_accounts:signup' %}?next={{next}}"><b>{% trans "Sign up!" %}</b></a></p>
+    <form id="post-form" enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+        <div class="form-group">
+            <div class="row">
+                <div class="col-md-6 col-xs-12 mb-3">
+                    <label class="font-weight-bold" for="{{form.username.name}}">{{form.username.label}}</label>
+                    {% if form.username.errors %}
+                        <p class="text-danger">{{form.username.errors.as_text}}</p>
+                    {% endif %}
+                    {{form.username|ff_addcss:'form-control'}}
+                </div>
+                <div class="col-md-6 col-xs-12">
+                    <label class="font-weight-bold" for="{{form.password.name}}">{{form.password.label}}</label>
+                    {% if form.password.errors %}
+                        <p class="text-danger">{{form.password.errors.as_text}}</p>
+                    {% endif %}
+                    {{form.password|ff_addcss:'form-control'}}
+                </div>
+            </div>
+        </div>
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary" value="{% trans 'Login' %}" />
+            <input type="hidden" name="next" value="{{next}}" />
+        </div>
+    </form>
+</div>
+{% endblock %}

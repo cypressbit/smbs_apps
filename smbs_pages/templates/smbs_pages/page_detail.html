@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load pages %}
+
+{% block content %}
+    {% if page.custom_css %}
+        <style>{{page.custom_css|safe}}</style>
+    {% endif %}
+    {% with object.get_content_tree as content_tree %}
+        {% for container, content in content_tree.containers.items %}
+            {% if container.custom_css %}
+                <style>{{container.custom_css|safe}}</style>
+            {% endif %}
+            <div class="{{container.custom_classes|default:'container'}}">
+                {% for row, row_content in content.rows.items %}
+                    {% if row.custom_css %}
+                        <style>{{row.custom_css|safe}}</style>
+                    {% endif %}
+                    <div class="row {{row.custom_classes|default:''}}">
+                        {% for column, column_content in row_content.columns.items %}
+                            {% if column.custom_css %}
+                                <style>{{container.custom_css|safe}}</style>
+                            {% endif %}
+                            <div class="col-md-{{column.width}} {{column.custom_classes|default:''}}">
+                                {% for widget in column_content %}
+                                    {% if widget.custom_css %}
+                                        <style>{{widget.custom_css|safe}}</style>
+                                    {% endif %}
+                                    {% render_widget widget %}
+                                {% endfor %}
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% endwith %}
+{% endblock %}

@@ -1,0 +1,55 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2019-03-20 18:30-0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: templates/smbs_accounts/login.html:10
+msgid "Not a member yet?"
+msgstr "No eres miembro?"
+
+#: templates/smbs_accounts/login.html:10
+msgid "Sign up!"
+msgstr "Reg&iacute;strate!"
+
+#: templates/smbs_accounts/login.html:26
+msgid "Login"
+msgstr "Iniciar sesi&oacute;n"
+
+#: templates/smbs_accounts/logout.html:6
+msgid "Thanks for spending some quality time with the Web site today."
+msgstr "Gracias por visitarnos, vuelve pronto!"
+
+#: templates/smbs_accounts/logout.html:8
+msgid "Log in again"
+msgstr "Iniciar sesi&oacute;n de nuevo"
+
+#: templates/smbs_accounts/signup.html:9
+msgid "Failed to sign up"
+msgstr "Error al registrarse"
+
+#: templates/smbs_accounts/signup.html:12
+msgid "Already a member?"
+msgstr "Ya eres miembro?"
+
+#: templates/smbs_accounts/signup.html:12
+msgid "Login!"
+msgstr "Inicia sesi&oacute;n"
+
+#: templates/smbs_accounts/signup.html:52
+msgid "Sign Up"
+msgstr "Registrar"

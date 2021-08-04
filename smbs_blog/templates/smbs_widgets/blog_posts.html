@@ -1,0 +1,31 @@
+{% load imagekit %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-blog.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+    <div class="row">
+        {% for post in blog_posts %}
+            {% if not post.is_draft %}
+                <div class="col-xs-12 col-md-4 mb-3">
+                    <article>
+                        <a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
+                            <div class="card border-0">
+                                <figure>
+                                    {% generateimage 'smbs_blog:cover320x160' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" %}
+                                </figure>
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <b>{{post.title}}</b>
+                                    </h3>
+                                    <p class="card-text smbs-post-content">{{post.description}}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>

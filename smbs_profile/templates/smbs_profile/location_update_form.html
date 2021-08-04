@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load i18n %}
+{% load base %}
+
+{% block extra_head %}
+    <script type="text/javascript" src="{% static 'js/bootstrap-select.min.js' %}"></script>
+    <link href="{% static 'css/bootstrap-select.min.css' %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Update Profile" %}</h1>
+    <hr class="mb-4">
+    {% if form.non_field_errors %}
+        <p class="text-danger">{{form.non_field_errors.as_text}}</p>
+    {% endif %}
+    {% if form.errors %}
+        <p class="text-danger">{{form.errors.as_text}}</p>
+    {% endif %}
+    <form id="profile-form" method="POST">
+        {% csrf_token %}
+        <div class="form-group mb-3">
+            <label for="id_city">{% trans "City" %}</label>
+            {{form.city|ff_addcss:'selectpicker'|ff_addcss:'form-control'|ff_attr:'data-live-search,true'}}
+        </div>
+        <div class="form-check mb-3">
+            {{form.newsletter_signup|ff_addcss:'form-check-input'}}
+            <label for="id_newsletter_signup" class="form-check-label">{% trans "Sign Up For Our Newsletter" %}</label>
+        </div>
+        <div class="text-right">
+            <input type="submit" class="btn btn-primary" value="{% trans 'Update' %}" />
+            <input type="hidden" name="next" value="{{next}}" />
+        </div>
+    </form>
+</div>
+{% endblock %}

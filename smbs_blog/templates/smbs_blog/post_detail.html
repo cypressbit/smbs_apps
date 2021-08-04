@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load imagekit %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-social.css" %}" rel="stylesheet" type="text/css">
+    <link href="{% static "css/smbs-blog.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container blog-post">
+    {% block post %}
+        <figure>
+            {% generateimage 'smbs_blog:cover1200x600' source=object.cover_image -- alt=object.title class="img-fluid mb-3 border rounded" style="width: 100%" %}
+        </figure>
+        <h1 class="text-primary blog-post-title">{{object.title|title}}
+            {% if request.user.is_staff %}
+                <a class="btn btn-primary float-right" href="{% url 'smbs_blog:post-edit' object.id %}">{% trans "Edit Post" %}</a>
+            {% endif %}
+        </h1>
+        <p><small>{% trans 'Written by' %} {{object.author.get_full_name}} {% trans 'on' %} {{object.publish_date}}</small></p>
+        <p class="mb-4">
+            {% for tag in object.tags.all %}
+                <span class="badge badge-primary">{{tag.name}}</span>
+            {% endfor %}
+        </p>
+        <h6><u>{% trans "Share this article on social media" %}</u></h6>
+        {% include 'smbs_blog/share.html' %}
+        <div class="blog-post-content mt-4">
+            {{object.content|safe}}
+        </div>
+        {% if request.user.is_staff %}
+            <br>
+            <h3>{% trans 'SEO Results' %}</h3>
+            {% if object and object.checks.seo %}
+                {% with object.checks.seo as seo %}
+                    {% if seo.passed %}
+                        <span class="badge badge-success">{% trans "Passed all SEO checks" %}</span>
+                    {% else %}
+                        <span class="badge badge-danger">{% trans "One or more SEO checks failed" %}</span>
+                    {% endif %}
+                    <table class="table table-borderless">
+                      <thead>
+                        <tr>
+                          <th scope="col">Check</th>
+                          <th scope="col">Results</th>
+                          <th scope="col">Message</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for k,v in seo.results.items %}
+                            <tr {% if not v.success %}class="table-danger"{% endif %}>
+                              <td>{{k}}</td>
+                              <td>{{v.results|truncatechars:'40'}}</td>
+                              <td>{{v.message}}</td>
+                            </tr>
+                        {% endfor %}
+                      </tbody>
+                    </table>
+                {% endwith %}
+            {% else %}
+                <p>{% trans "No SEO checks have been applied to this post" %}</p>
+            {% endif %}
+        {% endif %}
+    {% endblock %}
+    {% if comments %}
+        {% include 'smbs_comments_tree/comments.html' %}
+    {% endif %}
+</div>
+{% endblock %}

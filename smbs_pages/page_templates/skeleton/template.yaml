@@ -1,0 +1,22 @@
+---
+name: E-Commerce 1
+page:
+  - name: home
+    navigation_order: 1
+    resources:
+      - container:
+        - row:
+            column:
+              - widget:
+                  type: headline
+                  content: Welcome to my website
+              - widget:
+                  type: paragraph
+                  content: Add something about your website
+        - row:
+            column:
+              - widget:
+                  type: headline
+                  content: Products
+              - widget:
+                  type: inventory

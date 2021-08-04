@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load imagekit %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-blog.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    {% if request.user.is_staff %}
+        <div class="row">
+            <div class="col-md-12">
+                <a class="btn btn-primary float-right mb-4" href="{% url 'smbs_blog:post-create' %}">{% trans "New Post" %}</a>
+            </div>
+        </div>
+    {% endif %}
+    <div class="row">
+        {% for post in object_list %}
+            {% if not post.is_draft or request.user.is_staff %}
+                <div class="col-xs-12 col-md-6">
+                    <article>
+                        <a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
+                            <div class="card border-0">
+                                <figure>
+                                    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" %}
+                                </figure>
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <b>{{post.title}}</b>
+                                        {% if post.is_draft %}
+                                            <span class="badge badge-warning">{% trans "Draft preview" %}</span>
+                                        {% endif %}
+                                    </h3>
+                                    <p class="card-text blog-post-content">{{post.description}}</p>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    <br>
+                    <br>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
