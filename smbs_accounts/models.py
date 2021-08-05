@@ -1,7 +1,7 @@
 from django.db import models
 
-from smbs_pages.models import Page
-from smbs_base.models import SettingsModel
+from smbs_apps.smbs_pages.models import Page
+from smbs_apps.smbs_base.models import SettingsModel
 
 
 class AccountSettings(SettingsModel):

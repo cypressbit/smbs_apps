@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_alerts.models import Alert
+from smbs_apps.smbs_alerts.models import Alert
 
 
 class AlertAdmin(admin.ModelAdmin):

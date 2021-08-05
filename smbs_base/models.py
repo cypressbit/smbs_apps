@@ -4,7 +4,7 @@ from django.contrib.sites.models import Site
 
 from django.db import models
 
-from smbs_base.storage import OverwriteStorage
+from smbs_apps.smbs_base.storage import OverwriteStorage
 
 
 def site_logo_path(instance, filename):

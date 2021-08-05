@@ -1,7 +1,7 @@
 from django.urls import path, re_path
 from django.contrib.admin.views.decorators import staff_member_required
 
-from smbs_blog.views import PostCreateView, PostListView, PostDetailView, PostUpdateView
+from smbs_apps.smbs_blog.views import PostCreateView, PostListView, PostDetailView, PostUpdateView
 
 
 app_name = 'smbs_blog'

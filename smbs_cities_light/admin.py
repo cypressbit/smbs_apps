@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_cities_light.models import Country, State, City
+from smbs_apps.smbs_cities_light.models import Country, State, City
 
 
 class CountryAdmin(admin.ModelAdmin):

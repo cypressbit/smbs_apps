@@ -9,9 +9,9 @@ from django.views.generic.edit import CreateView, UpdateView
 
 from django.urls import reverse
 
-from smbs_base.views import SMBSView, SMBSObjectMetadataView
-from smbs_blog.models import Post, BlogSettings
-from smbs_blog.forms import PostForm
+from smbs_apps.smbs_base.views import SMBSView, SMBSObjectMetadataView
+from smbs_apps.smbs_blog.models import Post, BlogSettings
+from smbs_apps.smbs_blog.forms import PostForm
 
 
 class PostListView(SMBSView, ListView):

@@ -16,8 +16,8 @@ from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.core import management
 
-from smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
-from smbs_pages.widgets import discovered_widgets, load_widget
+from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
+from smbs_apps.smbs_pages.widgets import discovered_widgets, load_widget
 
 
 class Template(SiteModel, TimestampModel):

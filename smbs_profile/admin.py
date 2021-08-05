@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_profile.models import LocationProfile
+from smbs_apps.smbs_profile.models import LocationProfile
 
 
 class LocationProfileAdmin(admin.ModelAdmin):

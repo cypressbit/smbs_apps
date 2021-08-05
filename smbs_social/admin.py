@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_social.models import SocialSettings
+from smbs_apps.smbs_social.models import SocialSettings
 
 
 class SocialSettingsAdmin(admin.ModelAdmin):

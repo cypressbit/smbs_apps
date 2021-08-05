@@ -1,6 +1,6 @@
 from django.template import loader
 
-from smbs_blog.models import Post
+from smbs_apps.smbs_blog.models import Post
 
 
 class Widget:

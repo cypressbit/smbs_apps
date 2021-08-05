@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 
 from django.db import models
 
-from smbs_base.models import SiteModel, TimestampModel, SettingsModel
+from smbs_apps.smbs_base.models import SiteModel, TimestampModel, SettingsModel
 
 
 class NewsletterSettings(SettingsModel):

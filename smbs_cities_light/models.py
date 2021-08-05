@@ -3,7 +3,7 @@ from django.utils.text import slugify
 
 from django.db import models
 
-from smbs_base.models import TimestampModel
+from smbs_apps.smbs_base.models import TimestampModel
 
 
 class Country(TimestampModel):

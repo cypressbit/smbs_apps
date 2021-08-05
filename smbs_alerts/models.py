@@ -2,7 +2,7 @@ from django.contrib.sites.models import Site
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 
-from smbs_base.models import TimestampModel
+from smbs_apps.smbs_base.models import TimestampModel
 
 
 def get_current_site():
