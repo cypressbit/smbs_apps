@@ -4,7 +4,7 @@ from django import forms
 from django.utils.text import slugify
 from django.contrib.sites.models import Site
 
-from smbs_blog.models import Post
+from smbs_apps.smbs_blog.models import Post
 
 
 class PostForm(forms.ModelForm):

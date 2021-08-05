@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.decorators import login_required
 
-from smbs_profile.views import profile_update, LocationProfileUpdateView
+from smbs_apps.smbs_profile.views import profile_update, LocationProfileUpdateView
 
 
 app_name = 'smbs_profile'

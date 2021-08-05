@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_base.models import BaseSettings, ObjectMetadata, ViewMetadata
+from smbs_apps.smbs_base.models import BaseSettings, ObjectMetadata, ViewMetadata
 
 
 class SettingsAdmin(admin.ModelAdmin):

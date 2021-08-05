@@ -1,7 +1,7 @@
 from django.views.generic.edit import UpdateView
 from django.contrib.sites.models import Site
 from django.shortcuts import redirect
-from smbs_profile.models import ProfileSettings, LocationProfile
+from smbs_apps.smbs_profile.models import ProfileSettings, LocationProfile
 
 
 class ProfileUpdateMixin(object):

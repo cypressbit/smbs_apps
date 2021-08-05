@@ -5,8 +5,8 @@ from mptt.models import MPTTModel, TreeForeignKey
 from django.db import models
 from django.contrib.auth.models import User
 
-from smbs_base.models import TimestampModel
-from smbs_reactions.mixins import ReactionMixin
+from smbs_apps.smbs_base.models import TimestampModel
+from smbs_apps.smbs_reactions.mixins import ReactionMixin
 
 
 class Comment(MPTTModel, TimestampModel, ReactionMixin):

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_contact.models import ContactSettings
+from smbs_apps.smbs_contact.models import ContactSettings
 
 
 class ContactSettingsAdmin(admin.ModelAdmin):

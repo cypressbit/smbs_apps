@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_pages.models import Page, Column, Row, Container, Widget, Media
+from smbs_apps.smbs_pages.models import Page, Column, Row, Container, Widget, Media
 
 
 class PageAdmin(admin.ModelAdmin):

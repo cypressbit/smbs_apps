@@ -9,9 +9,9 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from smbs_base.models import SiteModel, TimestampModel, SettingsModel, ObjectMetadata
-from smbs_comments_tree.models import Comment
-from smbs_blog.seo import run_seo_checks
+from smbs_apps.smbs_base.models import SiteModel, TimestampModel, SettingsModel, ObjectMetadata
+from smbs_apps.smbs_comments_tree.models import Comment
+from smbs_apps.smbs_blog.seo import run_seo_checks
 
 
 class BlogSettings(SettingsModel):

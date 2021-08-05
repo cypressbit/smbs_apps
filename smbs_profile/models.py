@@ -5,8 +5,8 @@ from django.utils.translation import gettext_lazy as _
 
 from django.db import models
 
-from smbs_base.models import SettingsModel, TimestampModel
-from smbs_cities_light.models import City
+from smbs_apps.smbs_base.models import SettingsModel, TimestampModel
+from smbs_apps.smbs_cities_light.models import City
 
 
 class ProfileSettings(SettingsModel):

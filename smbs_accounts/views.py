@@ -6,8 +6,8 @@ from django.contrib.auth import login, authenticate
 from django.shortcuts import redirect, reverse
 from django.conf import settings
 
-from smbs_accounts.forms import SMBSUserCreationForm
-from smbs_accounts.models import AccountSettings
+from smbs_apps.smbs_accounts.forms import SMBSUserCreationForm
+from smbs_apps.smbs_accounts.models import AccountSettings
 
 
 logger = logging.getLogger('smbs-debug')

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from django.contrib.auth import views
 
-from smbs_accounts.views import SignUpView
+from smbs_apps.smbs_accounts.views import SignUpView
 
 
 app_name = 'smbs_accounts'

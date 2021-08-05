@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from smbs_base.admin import SettingsAdmin
-from smbs_blog.models import Post, BlogSettings
+from smbs_apps.smbs_base.admin import SettingsAdmin
+from smbs_apps.smbs_blog.models import Post, BlogSettings
 
 
 class BlogSettingsAdmin(SettingsAdmin):

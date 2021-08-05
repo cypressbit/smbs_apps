@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from smbs_comments_tree.models import Comment
+from smbs_apps.smbs_comments_tree.models import Comment
 
 
 class CommentAdmin(admin.ModelAdmin):

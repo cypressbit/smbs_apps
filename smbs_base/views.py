@@ -2,7 +2,7 @@ from django.http import JsonResponse
 from django.views.generic.base import TemplateView
 from django.urls import reverse_lazy, reverse
 
-from smbs_base.models import ViewMetadata
+from smbs_apps.smbs_base.models import ViewMetadata
 
 
 class SMBSPage(type):
