@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class SmbsCitiesLightConfig(AppConfig):
-    name = 'smbs_cities_light'
+    name = 'smbs_apps.smbs_cities_light'

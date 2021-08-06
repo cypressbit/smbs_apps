@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import smbs_alerts.models
+import smbs_apps.smbs_alerts.models
 
 
 class Migration(migrations.Migration):

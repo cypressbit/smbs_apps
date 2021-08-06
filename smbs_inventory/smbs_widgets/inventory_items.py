@@ -1,6 +1,6 @@
 from django.template import loader
 
-from smbs_inventory.models import Item
+from smbs_apps.smbs_inventory.models import Item
 
 
 class Widget:

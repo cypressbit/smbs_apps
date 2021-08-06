@@ -1,7 +1,7 @@
 from django.db.models.signals import pre_save
 
-from smbs_blog.models import Post
-from smbs_blog.metadata import create_post_metadata
+from smbs_apps.smbs_blog.models import Post
+from smbs_apps.smbs_blog.metadata import create_post_metadata
 
 
 def create_metadata_handler(sender, instance, **kwargs):

@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import smbs_forms.validators
+import smbs_apps.smbs_forms.validators
 
 
 class Migration(migrations.Migration):
@@ -21,7 +21,7 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name='contact',
             name='phone',
-            field=models.CharField(help_text='Phone Number', max_length=24, validators=[smbs_forms.validators.validate_phone]),
+            field=models.CharField(help_text='Phone Number', max_length=24, validators=[smbs_apps.smbs_forms.validators.validate_phone]),
         ),
         migrations.CreateModel(
             name='ContactWithAddressFormSettings',
@@ -51,7 +51,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(help_text='Name', max_length=64)),
                 ('email', models.EmailField(help_text='E-mail Address', max_length=254)),
-                ('phone', models.CharField(help_text='Phone Number', max_length=24, validators=[smbs_forms.validators.validate_phone])),
+                ('phone', models.CharField(help_text='Phone Number', max_length=24, validators=[smbs_apps.smbs_forms.validators.validate_phone])),
                 ('address', models.CharField(help_text='Address', max_length=128)),
                 ('city', models.CharField(help_text='City', max_length=64)),
                 ('state', models.CharField(help_text='State', max_length=32)),

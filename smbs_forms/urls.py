@@ -1,6 +1,6 @@
 from django.urls import path
 
-from smbs_forms.views import contact
+from smbs_apps.smbs_forms.views import contact
 
 
 app_name = 'smbs_forms'

@@ -2,8 +2,8 @@ from django.shortcuts import redirect
 from django.core.mail import send_mail
 from django.core.mail.backends.smtp import EmailBackend as SMTPBackend
 
-from smbs_forms.models import ContactFormSettings
-from smbs_forms.forms import ContactForm
+from smbs_apps.smbs_forms.models import ContactFormSettings
+from smbs_apps.smbs_forms.forms import ContactForm
 
 
 def contact(request):
