@@ -1,9 +1,9 @@
 from django.contrib import admin
 
-from smbs_base.admin import SettingsAdmin
+from smbs_apps.smbs_base.admin import SettingsAdmin
 
-from smbs_forms.models import ContactFormSettings, Contact
-from smbs_forms.forms import ContactFormSettingsForm
+from smbs_apps.smbs_forms.models import ContactFormSettings, Contact
+from smbs_apps.smbs_forms.forms import ContactFormSettingsForm
 
 
 class ContactFormSettingsAdmin(SettingsAdmin):

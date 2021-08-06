@@ -1,6 +1,6 @@
 from django.forms import ModelForm, PasswordInput
 
-from smbs_forms.models import Contact, ContactFormSettings, ContactWithAddress, ContactWithAddressFormSettings
+from smbs_apps.smbs_forms.models import Contact, ContactFormSettings, ContactWithAddress, ContactWithAddressFormSettings
 
 
 class FormSettings(ModelForm):

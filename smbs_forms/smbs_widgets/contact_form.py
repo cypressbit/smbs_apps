@@ -1,6 +1,6 @@
 from django.template import Template, loader
 
-from smbs_forms.forms import ContactForm
+from smbs_apps.smbs_forms.forms import ContactForm
 
 
 class Widget:

@@ -2,7 +2,7 @@ from django.shortcuts import get_object_or_404
 
 from django.views.generic import DetailView
 
-from smbs_pages.models import Page
+from smbs_apps.smbs_pages.models import Page
 
 
 class PageDetailView(DetailView):

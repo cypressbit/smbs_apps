@@ -7,7 +7,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
 
-from smbs_base.models import SiteModel, TimestampModel, ObjectMetadata, SettingsModel
+from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata, SettingsModel
 
 
 class InventorySettings(SettingsModel):

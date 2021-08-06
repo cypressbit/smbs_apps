@@ -2,7 +2,7 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import smbs_forms.validators
+import smbs_apps.smbs_forms.validators
 
 
 class Migration(migrations.Migration):
@@ -35,7 +35,7 @@ class Migration(migrations.Migration):
                 ('updated', models.DateTimeField(auto_now=True)),
                 ('name', models.CharField(help_text='Name', max_length=60)),
                 ('email', models.EmailField(help_text='E-mail Address', max_length=254)),
-                ('phone', models.CharField(help_text='Phone Number', max_length=20, validators=[smbs_forms.validators.validate_phone])),
+                ('phone', models.CharField(help_text='Phone Number', max_length=20, validators=[smbs_apps.smbs_forms.validators.validate_phone])),
                 ('message', models.TextField(help_text='Message')),
                 ('site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sites.site')),
             ],

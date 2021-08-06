@@ -2,8 +2,8 @@ from django.apps import AppConfig
 
 
 class SmbsBlogConfig(AppConfig):
-    name = 'smbs_blog'
+    name = 'smbs_apps.smbs_blog'
 
     def ready(self):
-        import smbs_blog.signals
+        import smbs_apps.smbs_blog.signals
 

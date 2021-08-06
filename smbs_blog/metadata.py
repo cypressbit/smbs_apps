@@ -1,6 +1,6 @@
 from django.utils.text import Truncator
 
-from smbs_base.models import ObjectMetadata
+from smbs_apps.smbs_base.models import ObjectMetadata
 
 
 def create_post_metadata(instance):

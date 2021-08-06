@@ -2,8 +2,8 @@ from django.utils.translation import gettext_lazy as _
 from django.contrib.sites.models import Site
 from django.db import models
 
-from smbs_base.models import SiteModel, TimestampModel, SettingsModel
-from smbs_forms.validators import validate_phone
+from smbs_apps.smbs_base.models import SiteModel, TimestampModel, SettingsModel
+from smbs_apps.smbs_forms.validators import validate_phone
 
 
 class FormSettings(SettingsModel):

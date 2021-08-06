@@ -2,8 +2,8 @@
 
 from django.db import migrations, models
 import django.db.models.deletion
-import smbs_base.models
-import smbs_base.storage
+import smbs_apps.smbs_base.models
+import smbs_apps.smbs_base.storage
 
 
 class Migration(migrations.Migration):
@@ -23,7 +23,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('created', models.DateTimeField(auto_now_add=True)),
                 ('updated', models.DateTimeField(auto_now=True)),
-                ('logo', models.FileField(blank=True, null=True, storage=smbs_base.storage.OverwriteStorage(), upload_to=smbs_base.models.site_logo_path, validators=[smbs_base.models.validate_image_extension])),
+                ('logo', models.FileField(blank=True, null=True, storage=smbs_apps.smbs_base.storage.OverwriteStorage(), upload_to=smbs_apps.smbs_base.models.site_logo_path, validators=[smbs_apps.smbs_base.models.validate_image_extension])),
                 ('google_tag_manager_script', models.TextField(blank=True)),
                 ('google_tag_manager_noscript', models.TextField(blank=True)),
                 ('email_host', models.CharField(blank=True, max_length=255, null=True)),
@@ -31,7 +31,7 @@ class Migration(migrations.Migration):
                 ('email_user', models.CharField(blank=True, max_length=255, null=True)),
                 ('email_password', models.CharField(blank=True, max_length=255, null=True)),
                 ('email_use_tls', models.BooleanField(default=False)),
-                ('custom_css', models.FileField(blank=True, null=True, storage=smbs_base.storage.OverwriteStorage(), upload_to=smbs_base.models.site_css_path)),
+                ('custom_css', models.FileField(blank=True, null=True, storage=smbs_apps.smbs_base.storage.OverwriteStorage(), upload_to=smbs_apps.smbs_base.models.site_css_path)),
                 ('site', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='sites.Site')),
             ],
             options={

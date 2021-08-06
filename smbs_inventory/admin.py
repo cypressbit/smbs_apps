@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from smbs_base.admin import SettingsAdmin
+from smbs_apps.smbs_base.admin import SettingsAdmin
 
-from smbs_inventory.models import Item, Category, InventorySettings
+from smbs_apps.smbs_inventory.models import Item, Category, InventorySettings
 
 
 class InventorySettingsAdmin(SettingsAdmin):

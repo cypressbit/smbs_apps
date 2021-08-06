@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class SmbsCommentsTreeConfig(AppConfig):
-    name = 'smbs_comments_tree'
+    name = 'smbs_apps.smbs_comments_tree'
