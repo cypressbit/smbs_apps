@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
                 ('title', models.CharField(max_length=128)),
                 ('content', models.TextField()),
                 ('position', models.CharField(choices=[('top', 'Top'), ('bottom', 'Bottom')], default='top', max_length=24)),
-                ('site', models.ForeignKey(default=smbs_alerts.models.get_current_site, on_delete=django.db.models.deletion.CASCADE, to='sites.Site')),
+                ('site', models.ForeignKey(default=smbs_apps.smbs_alerts.models.get_current_site, on_delete=django.db.models.deletion.CASCADE, to='sites.Site')),
             ],
             options={
                 'abstract': False,
