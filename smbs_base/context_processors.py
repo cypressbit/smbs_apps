@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 
-from smbs_base.models import BaseSettings
+from hige-wo-soru-soshite-joshikousei-wo-hirousmbs_base.models import BaseSettings
 
 
 def base(request):

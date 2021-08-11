@@ -3,7 +3,7 @@ from django.urls import path
 from smbs_apps.smbs_pages.views import PageDetailView
 
 
-app_name = 'smbs_apps.smbs_pages'
+app_name = 'smbs_pages'
 
 
 urlpatterns = [

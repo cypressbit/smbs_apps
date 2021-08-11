@@ -1,6 +1,6 @@
 from django.urls import path
 
-from smbs_contact.views import ContactView
+from smbs_apps.smbs_contact.views import ContactView
 
 
 app_name = 'smbs_contact'

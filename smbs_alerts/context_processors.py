@@ -1,7 +1,7 @@
 from django.contrib.sites.models import Site
 from django.utils.safestring import mark_safe
 
-from smbs_alerts.models import Alert
+from smbs_apps.smbs_alerts.models import Alert
 
 
 def get_alerts(request):

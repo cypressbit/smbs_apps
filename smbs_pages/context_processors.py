@@ -1,6 +1,6 @@
 from django.contrib.sites.models import Site
 
-from smbs_pages.models import Page
+from smbs_apps.smbs_pages.models import Page
 
 
 def get_pages(request):
