@@ -1,6 +1,6 @@
 from django.contrib.sites.models import Site
 
-from smbs_social.models import SocialSettings
+from smbs_apps.smbs_social.models import SocialSettings
 
 
 def get_social_settings(request):

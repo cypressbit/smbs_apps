@@ -1,6 +1,6 @@
 from django.views.generic.detail import DetailView
 
-from smbs_contact.models import ContactSettings
+from smbs_apps.smbs_contact.models import ContactSettings
 
 
 class ContactView(DetailView):
