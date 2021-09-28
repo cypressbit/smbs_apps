@@ -1,6 +1,6 @@
 from django.urls import path, re_path
 
-from smbs_inventory.views import ItemListView, ItemDetailView
+from smbs_apps.smbs_inventory.views import ItemListView, ItemDetailView
 
 
 app_name = 'smbs_inventory'

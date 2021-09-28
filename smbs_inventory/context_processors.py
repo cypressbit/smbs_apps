@@ -1,6 +1,6 @@
 from django.contrib.sites.models import Site
 
-from smbs_inventory.models import InventorySettings
+from smbs_apps.smbs_inventory.models import InventorySettings
 
 
 def inventory(request):
