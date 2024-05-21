@@ -1,6 +1,8 @@
 from taggit.managers import TaggableManager
 
-from django.contrib.postgres.fields import JSONField, ArrayField
+from django.contrib.postgres.fields import ArrayField
+from django.db.models import JSONField
+
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 

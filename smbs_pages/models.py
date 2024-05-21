@@ -13,7 +13,7 @@ except ImportError:
 
 from django.urls import reverse
 from django.db import models
-from django.contrib.postgres.fields import JSONField
+from django.db.models import JSONField
 from django.core import management
 
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
