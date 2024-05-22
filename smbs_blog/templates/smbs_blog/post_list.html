@@ -24,7 +24,7 @@
                         <a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
                             <div class="card border-0">
                                 <figure>
-                                    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" %}
+                                    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
                                 </figure>
                                 <div class="card-body">
                                     <h3 class="card-title">
@@ -45,4 +45,14 @@
         {% endfor %}
     </div>
 </div>
+<div id="taboola-below-article-thumbnails" class="container mt-5 mb-5"></div>
+<script type="text/javascript">
+  window._taboola = window._taboola || [];
+  _taboola.push({
+    mode: 'alternating-thumbnails-a',
+    container: 'taboola-below-article-thumbnails',
+    placement: 'Below Article Thumbnails',
+    target_type: 'mix'
+  });
+</script>
 {% endblock %}

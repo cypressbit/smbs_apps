@@ -27,9 +27,19 @@
         </p>
         <h6><u>{% trans "Share this article on social media" %}</u></h6>
         {% include 'smbs_blog/share.html' %}
-        <div class="blog-post-content mt-4">
+        <div class="blog-post-content mt-4 mb-4">
             {{object.content|safe}}
         </div>
+	<div id="taboola-mid-article-thumbnails" class="mt-4 mb-4"></div>
+<script type="text/javascript">
+  window._taboola = window._taboola || [];
+  _taboola.push({
+    mode: 'thumbnails-mid',
+    container: 'taboola-mid-article-thumbnails',
+    placement: 'Mid Article Thumbnails',
+    target_type: 'mix'
+  });
+</script>
         {% if request.user.is_staff %}
             <br>
             <h3>{% trans 'SEO Results' %}</h3>
@@ -67,5 +77,49 @@
     {% if comments %}
         {% include 'smbs_comments_tree/comments.html' %}
     {% endif %}
-</div>
+    <div class="row mt-5 mb-4">
+	<div class="col-md-12">
+		<h1 class="text-center">{% trans "Related Posts" %}</h1>
+        </div>
+    </div>	    
+    <div class="row">
+	{% for post in object.tags.similar_objects  %}
+	    {% if not post.is_draft or request.user.is_staff %}
+		<div class="col-xs-12 col-md-6">
+		    <article>
+			<a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
+			    <div class="card border-0">
+				<figure>
+				    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
+				</figure>
+				<div class="card-body">
+				    <h3 class="card-title">
+					<b>{{post.title}}</b>
+					{% if post.is_draft %}
+					    <span class="badge badge-warning">{% trans "Draft preview" %}</span>
+					{% endif %}
+				    </h3>
+				    <p class="card-text blog-post-content">{{post.description}}</p>
+
+				</div>
+			    </div>
+			</a>
+		    </article>
+		    <br>
+		    <br>
+		</div>
+	    {% endif %}
+	{% endfor %}
+    </div>
+</div> 
+<div id="taboola-below-article-thumbnails" class="container mt-5 mb-5"></div>
+<script type="text/javascript">
+  window._taboola = window._taboola || [];
+  _taboola.push({
+    mode: 'alternating-thumbnails-a',
+    container: 'taboola-below-article-thumbnails',
+    placement: 'Below Article Thumbnails',
+    target_type: 'mix'
+  });
+</script>
 {% endblock %}

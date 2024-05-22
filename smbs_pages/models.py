@@ -13,7 +13,7 @@ except ImportError:
 
 from django.urls import reverse
 from django.db import models
-from django.db.models import JSONField
+from django.contrib.postgres.fields import JSONField
 from django.core import management
 
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
@@ -110,7 +110,7 @@ class Page(SiteModel, TimestampModel):
     template = models.ForeignKey(Template, blank=True, null=True, on_delete=models.DO_NOTHING)
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, blank=True, null=True, unique=True)
+    slug = models.SlugField(max_length=255, allow_unicode=True, blank=True, null=True, unique=True)
     active = models.BooleanField(default=False)
     show_on_navigation = models.BooleanField(default=True)
     navigation_order = models.PositiveSmallIntegerField(blank=True, null=True)
