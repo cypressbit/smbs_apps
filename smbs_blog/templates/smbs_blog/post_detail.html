@@ -30,16 +30,6 @@
         <div class="blog-post-content mt-4 mb-4">
             {{object.content|safe}}
         </div>
-	<div id="taboola-mid-article-thumbnails" class="mt-4 mb-4"></div>
-<script type="text/javascript">
-  window._taboola = window._taboola || [];
-  _taboola.push({
-    mode: 'thumbnails-mid',
-    container: 'taboola-mid-article-thumbnails',
-    placement: 'Mid Article Thumbnails',
-    target_type: 'mix'
-  });
-</script>
         {% if request.user.is_staff %}
             <br>
             <h3>{% trans 'SEO Results' %}</h3>
@@ -111,15 +101,5 @@
 	    {% endif %}
 	{% endfor %}
     </div>
-</div> 
-<div id="taboola-below-article-thumbnails" class="container mt-5 mb-5"></div>
-<script type="text/javascript">
-  window._taboola = window._taboola || [];
-  _taboola.push({
-    mode: 'alternating-thumbnails-a',
-    container: 'taboola-below-article-thumbnails',
-    placement: 'Below Article Thumbnails',
-    target_type: 'mix'
-  });
-</script>
+</div>
 {% endblock %}
