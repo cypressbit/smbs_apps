@@ -14,7 +14,7 @@
                         <a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
                             <div class="card border-0">
                                 <figure>
-                                    {% generateimage 'smbs_blog:cover320x160' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" %}
+                                    {% generateimage 'smbs_blog:cover320x160' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
                                 </figure>
                                 <div class="card-body">
                                     <h3 class="card-title">

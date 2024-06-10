@@ -13,7 +13,7 @@ except ImportError:
 
 from django.urls import reverse
 from django.db import models
-from django.db.models import JSONField
+from django.contrib.postgres.fields import JSONField
 from django.core import management
 
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
@@ -21,9 +21,9 @@ from smbs_apps.smbs_pages.widgets import discovered_widgets, load_widget
 
 
 class Template(SiteModel, TimestampModel):
-    TEMPLATE_PATH = 'smbs_pages/templates/{}'
+    TEMPLATE_PATH = 'smbs_pages/templates'
 
-    file = models.FileField(upload_to='smbs_pages/files')
+    file = models.FileField(upload_to=TEMPLATE_PATH)
     name = models.CharField(max_length=64, blank=True, null=True)
     version = models.CharField(max_length=16, blank=True, null=True)
     is_installed = models.BooleanField(default=False)
@@ -40,7 +40,7 @@ class Template(SiteModel, TimestampModel):
     @property
     def template_path(self):
         base_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        return os.path.join(base_path, self.TEMPLATE_PATH.format(self.id))
+        return os.path.join(base_path, self.TEMPLATE_PATH, str(self.id))
 
     def load_template_file(self):
         data = yaml.load(open(self.template_path + 'template.yaml', 'rb'), Loader=Loader)
@@ -110,7 +110,7 @@ class Page(SiteModel, TimestampModel):
     template = models.ForeignKey(Template, blank=True, null=True, on_delete=models.DO_NOTHING)
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=255)
-    slug = models.SlugField(max_length=255, blank=True, null=True, unique=True)
+    slug = models.SlugField(max_length=255, allow_unicode=True, blank=True, null=True, unique=True)
     active = models.BooleanField(default=False)
     show_on_navigation = models.BooleanField(default=True)
     navigation_order = models.PositiveSmallIntegerField(blank=True, null=True)

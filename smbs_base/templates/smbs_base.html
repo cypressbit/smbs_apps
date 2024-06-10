@@ -10,9 +10,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% block metatags %}{% endblock %}
     {{theme}}
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
@@ -46,7 +43,7 @@
                   </button>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                      {% if 'smbs_pages' in installed_apps %}
+                      {% if 'smbs_apps.smbs_pages' in installed_apps %}
                         {% include 'smbs_pages/page_navigation.html' with pages=pages %}
                       {% endif %}
                     </ul>
