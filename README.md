@@ -140,11 +140,11 @@ To override templates, create a templates directory in your project root and add
 ### Contributing
 We welcome contributions from the community. To contribute:
 
--Fork the repository.
--Create a new branch for your feature or bug fix.
--Commit your changes and push to your fork.
--Create a pull request detailing your changes.
--Please ensure your code adheres to the project's coding standards and includes tests where applicable.
+- Fork the repository.
+- Create a new branch for your feature or bug fix.
+- Commit your changes and push to your fork.
+- Create a pull request detailing your changes.
+- Please ensure your code adheres to the project's coding standards and includes tests where applicable.
 
 ## License
 SMBS is released under the MIT License. See LICENSE for more information.
