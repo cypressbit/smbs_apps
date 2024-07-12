@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load imagekit %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-shop.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        {% for item in object_list %}
+            <div class="col-xs-12 col-md-6">
+                <article>
+                    <a href="{% url 'shop:item_detail' item.slug %}" class="card-link text-dark">
+                        <div class="card border-0">
+                            <figure>
+                                {% generateimage 'smbs_shop:cover600x300' source=item.cover_image -- alt=item.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
+                            </figure>
+                            <div class="card-body">
+                                <h3 class="card-title"><b>{{ item.title }}</b></h3>
+                                <p class="card-text">{{ item.description|truncatewords:30 }}</p>
+                                <p class="card-text"><b>{{ item.get_effective_price }} {{ currency }}</b></p>
+                                <p class="card-text">{{ item.stock_quantity }} in stock</p>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+                <br><br>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+

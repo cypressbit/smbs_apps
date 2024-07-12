@@ -1,0 +1,52 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+{% load imagekit %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-shop.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <figure>
+                {% generateimage 'smbs_shop:cover1200x600' source=object.cover_image -- alt=object.title class="img-fluid mb-3 border rounded" style="width: 100%" %}
+            </figure>
+            <h1 class="text-primary">{{ object.title }}</h1>
+            <p>{{ object.description }}</p>
+            <p><b>{{ object.get_effective_price }} {{ currency }}</b></p>
+            <p>{{ object.stock_quantity }} in stock</p>
+            <form action="{% url 'shop:add_to_cart' object.id %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">{% trans "Add to Cart" %}</button>
+            </form>
+            <hr>
+            <h3>{% trans "Related Items" %}</h3>
+            <div class="row">
+                {% for related_item in object.get_related_items %}
+                    <div class="col-xs-12 col-md-6">
+                        <article>
+                            <a href="{% url 'shop:item_detail' related_item.slug %}" class="card-link text-dark">
+                                <div class="card border-0">
+                                    <figure>
+                                        {% generateimage 'smbs_shop:cover600x300' source=related_item.cover_image -- alt=related_item.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
+                                    </figure>
+                                    <div class="card-body">
+                                        <h3 class="card-title"><b>{{ related_item.title }}</b></h3>
+                                        <p class="card-text">{{ related_item.description|truncatewords:30 }}</p>
+                                        <p class="card-text"><b>{{ related_item.get_effective_price }} {{ currency }}</b></p>
+                                    </div>
+                                </div>
+                            </a>
+                        </article>
+                        <br><br>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+

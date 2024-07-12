@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-shop.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Payment Successful" %}</h1>
+    <p>{% trans "Thank you for your purchase! Your order has been placed successfully." %}</p>
+    <a href="{% url 'shop:item_list' %}" class="btn btn-primary">{% trans "Continue Shopping" %}</a>
+</div>
+{% endblock %}
+
