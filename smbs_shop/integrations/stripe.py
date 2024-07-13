@@ -4,7 +4,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import JsonResponse
 
-from smbs_shop.models import ShopSettings, Order
+from smbs_apps.smbs_shop.models import ShopSettings, ShopOrder
 
 
 def get_stripe_api_key():
@@ -50,8 +50,7 @@ def handle_stripe_webhook(request):
 
 def handle_successful_payment(payment_intent):
     order_id = payment_intent['metadata']['order_id']
-    order = Order.objects.get(id=order_id)
+    order = ShopOrder.objects.get(id=order_id)
     order.status = 'completed'
     order.save()
     # Update payment record or perform other actions here
-

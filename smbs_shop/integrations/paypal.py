@@ -4,7 +4,7 @@ from django.conf import settings
 from django.urls import reverse
 from django.http import JsonResponse
 
-from smbs_shop.models import ShopSettings, Order
+from smbs_apps.smbs_shop.models import ShopSettings, ShopOrder
 
 
 def configure_paypal_sdk():
@@ -35,7 +35,7 @@ def create_paypal_payment(order):
                     "price": str(item.item.get_effective_price()),
                     "currency": "USD",
                     "quantity": item.quantity
-                } for item in order.orderitem_set.all()]
+                } for item in order.shoporderitem_set.all()]
             },
             "amount": {
                 "total": str(order.total_price),
@@ -76,8 +76,7 @@ def handle_paypal_webhook(request):
 
 def handle_successful_payment(event):
     order_id = event['resource']['invoice_number']
-    order = Order.objects.get(id=order_id)
+    order = ShopOrder.objects.get(id=order_id)
     order.status = 'completed'
     order.save()
     # Update payment record or perform other actions here
-
