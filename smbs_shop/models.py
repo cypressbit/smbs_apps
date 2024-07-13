@@ -37,7 +37,6 @@ class ShopCategory(SiteModel, TimestampModel):
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
-    site = models.ForeignKey('smbs_base.Site', on_delete=models.CASCADE)
 
     class Meta:
         verbose_name = _('Category')
@@ -67,7 +66,6 @@ class ShopItem(SiteModel, TimestampModel):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     sku = models.CharField(max_length=64, unique=True)
-    site = models.ForeignKey('smbs_base.Site', on_delete=models.CASCADE)
 
     def get_absolute_url(self):
         return reverse('shop:item_detail', args=[self.slug])
