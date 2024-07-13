@@ -1,9 +1,11 @@
+import json
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
+import stripe
 
 from smbs_apps.smbs_base.views import SMBSView, SMBSObjectMetadataView
 from smbs_apps.smbs_shop.models import (ShopItem, ShopCart, ShopCartItem, ShopOrder,
@@ -105,12 +107,19 @@ class PaymentView(SMBSView, View):
     def get(self, request, order_id):
         order = get_object_or_404(ShopOrder, id=order_id)
         form = PaymentForm()
-        return render(request, self.template_name, {'order': order, 'form': form, 'stripe_public_key': settings.STRIPE_PUBLIC_KEY})
+        shop_settings = ShopSettings.get_settings()
+        return render(request, self.template_name, {
+            'order': order,
+            'form': form,
+            'stripe_public_key': shop_settings.stripe_publishable_key,
+        })
 
     def post(self, request, order_id):
         order = get_object_or_404(ShopOrder, id=order_id)
         data = json.loads(request.body)
         payment_method_id = data.get('payment_method_id')
+        shop_settings = ShopSettings.get_settings()
+        stripe.api_key = shop_settings.stripe_api_key
 
         if payment_method_id:
             try:
@@ -135,33 +144,3 @@ class PaymentView(SMBSView, View):
                         return render(request, self.template_name, {'order': order, 'form': form, 'error': approval_url['error']})
                     return redirect(approval_url['approval_url'])
             return render(request, self.template_name, {'order': order, 'form': form})
-
-
-@method_decorator(login_required, name='dispatch')
-class PaymentSuccessView(SMBSView, View):
-    name = 'payment_success'
-    template_name = 'smbs_shop/shoppayment_success.html'
-
-    def get(self, request, order_id):
-        order = get_object_or_404(ShopOrder, id=order_id)
-        order.status = 'completed'
-        order.save()
-        payment = ShopPayment.objects.get(order=order)
-        payment.payment_status = 'completed'
-        payment.save()
-        return render(request, self.template_name, {'order': order})
-
-
-@method_decorator(login_required, name='dispatch')
-class UserOrdersView(SMBSView, ListView):
-    model = ShopOrder
-    name = 'orders'
-    template_name = 'smbs_shop/shopuser_orders.html'
-
-    def get_queryset(self):
-        return ShopOrder.objects.filter(user=self.request.user)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['orders'] = self.get_queryset()
-        return context

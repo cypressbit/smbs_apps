@@ -22,6 +22,7 @@ class ShopSettings(SettingsModel):
 
     enable_stripe = models.BooleanField(default=False)
     stripe_api_key = models.CharField(max_length=255, blank=True, null=True)
+    stripe_publishable_key = models.CharField(max_length=255, blank=True, null=True)
     stripe_webhook_secret = models.CharField(max_length=255, blank=True, null=True)
 
     @classmethod
@@ -30,6 +31,7 @@ class ShopSettings(SettingsModel):
 
     class Meta:
         verbose_name = _('Shop Settings')
+        verbose_name_plural = _('Shop Settings')
 
 
 class ShopCategory(SiteModel, TimestampModel):
