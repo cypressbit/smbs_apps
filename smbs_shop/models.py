@@ -1,9 +1,11 @@
 from taggit.managers import TaggableManager
+
 from django.utils.translation import gettext_lazy as _
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
+
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata, SettingsModel
 
 
@@ -30,9 +32,8 @@ class ShopSettings(SettingsModel):
         verbose_name = _('Shop Settings')
 
 
-
 class Category(SiteModel, TimestampModel):
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='shop_categories')
     slug = models.SlugField(max_length=255, unique=True)
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
@@ -47,18 +48,17 @@ class Item(SiteModel, TimestampModel):
         ENGLISH = 'en', _('English')
         FRENCH = 'fr', _('French')
         SPANISH = 'es', _('Spanish')
-        # Add other language choices as needed
 
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='shop_items')
     slug = models.SlugField(max_length=255, unique=True)
-    metadata = models.ForeignKey(ObjectMetadata, on_delete=models.SET_NULL, blank=True, null=True)
+    metadata = models.ForeignKey(ObjectMetadata, on_delete=models.SET_NULL, blank=True, null=True, related_name='shop_items')
     language = models.CharField(max_length=10, choices=LanguageChoices.choices)
     publish_date = models.DateTimeField()
-    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, blank=True, null=True, related_name='items')
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
     cover_image = models.ImageField(upload_to='smbs_shop_images', blank=True, null=True)
-    tags = TaggableManager()
+    tags = TaggableManager(related_name='shop_items')
     stock_quantity = models.PositiveSmallIntegerField(default=1)
     is_in_stock = models.BooleanField(default=True)
     is_featured = models.BooleanField(default=False)
@@ -68,7 +68,7 @@ class Item(SiteModel, TimestampModel):
     sku = models.CharField(max_length=64, unique=True)
 
     def get_absolute_url(self):
-        return reverse('smbs_shop:item-detail', args=[self.slug])
+        return reverse('shop:item_detail', args=[self.slug])
 
     def get_related_items(self):
         objects = self.tags.similar_objects()
@@ -84,8 +84,8 @@ class Item(SiteModel, TimestampModel):
 
 
 class ItemReview(TimestampModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shop_item_reviews')
+    inventory_item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='reviews')
     positive_review = models.BooleanField(default=True)
     comment = models.TextField()
 
@@ -95,7 +95,7 @@ class ItemReview(TimestampModel):
 
 
 class Cart(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='shop_cart')
     items = models.ManyToManyField(Item, through='CartItem')
 
     class Meta:
@@ -104,8 +104,8 @@ class Cart(models.Model):
 
 
 class CartItem(models.Model):
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name='cart_items')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='cart_items')
     quantity = models.PositiveIntegerField(default=1)
 
     class Meta:
@@ -114,7 +114,7 @@ class CartItem(models.Model):
 
 
 class Order(TimestampModel):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='shop_orders')
     items = models.ManyToManyField(Item, through='OrderItem')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed')])
@@ -125,8 +125,8 @@ class Order(TimestampModel):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE)
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
+    item = models.ForeignKey(Item, on_delete=models.CASCADE, related_name='order_items')
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -136,7 +136,7 @@ class OrderItem(models.Model):
 
 
 class Payment(TimestampModel):
-    order = models.OneToOneField(Order, on_delete=models.CASCADE)
+    order = models.OneToOneField(Order, on_delete=models.CASCADE, related_name='payment')
     amount = models.DecimalField(max_digits=10, decimal_places=2)
     payment_method = models.CharField(max_length=50)
     payment_status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed')])
