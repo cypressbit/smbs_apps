@@ -8,7 +8,7 @@ from django.http import JsonResponse
 from smbs_apps.smbs_base.views import SMBSView, SMBSObjectMetadataView
 
 from smbs_apps.smbs_shop.models import (ShopItem, ShopCart, ShopCartItem, ShopOrder,
-                                        ShopOrderItem, ShopPayment, ShopSettings)
+                                         ShopOrderItem, ShopPayment, ShopSettings)
 from smbs_apps.smbs_shop.forms import CheckoutForm, PaymentForm
 from smbs_apps.smbs_shop.integrations.stripe import create_stripe_payment_intent
 from smbs_apps.smbs_shop.integrations.paypal import create_paypal_payment
