@@ -22,7 +22,7 @@
 
 <script type="text/javascript">
     document.addEventListener("DOMContentLoaded", function() {
-        var stripe = Stripe('{{ stripe_public_key }}');  // Set this in your context
+        var stripe = Stripe('{{ stripe_public_key }}');
         var elements = stripe.elements();
         var card = elements.create('card');
         card.mount('#card-element');
@@ -76,6 +76,15 @@
                         } else {
                             if (result.paymentIntent.status === 'succeeded') {
                                 window.location.href = "{% url 'shop:payment_success' order.id %}";
+                            } else if (result.paymentIntent.status === 'requires_action') {
+                                stripe.handleCardAction(result.paymentIntent.client_secret).then(function(result) {
+                                    if (result.error) {
+                                        var errorElement = document.getElementById('card-errors');
+                                        errorElement.textContent = result.error.message;
+                                    } else {
+                                        window.location.href = "{% url 'shop:payment_success' order.id %}";
+                                    }
+                                });
                             }
                         }
                     });

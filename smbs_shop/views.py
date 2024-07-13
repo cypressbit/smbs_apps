@@ -132,6 +132,7 @@ class PaymentView(SMBSView, View):
                     confirmation_method='manual',
                     confirm=True,
                     metadata={'order_id': order.id},
+                    return_url=request.build_absolute_uri(reverse('shop:payment_success', args=[order.id])),
                 )
                 return JsonResponse({'client_secret': intent.client_secret})
             except stripe.error.CardError as e:
