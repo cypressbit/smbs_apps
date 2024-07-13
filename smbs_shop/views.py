@@ -81,20 +81,20 @@ class CheckoutView(SMBSView, View):
     def get(self, request):
         cart = get_object_or_404(ShopCart, user=request.user)
         cart_items = ShopCartItem.objects.filter(cart=cart)
-        form = CheckoutForm()
+        form = CheckoutForm(cart_items=cart_items)
         return render(request, self.template_name, {'cart_items': cart_items, 'form': form})
 
     def post(self, request):
-        form = CheckoutForm(request.POST)
+        cart = get_object_or_404(ShopCart, user=request.user)
+        cart_items = ShopCartItem.objects.filter(cart=cart)
+        form = CheckoutForm(request.POST, cart_items=cart_items)
         if form.is_valid():
             order = ShopOrder.objects.create(user=request.user, total_price=form.cleaned_data['total_price'])
-            cart = get_object_or_404(ShopCart, user=request.user)
-            cart_items = ShopCartItem.objects.filter(cart=cart)
             for cart_item in cart_items:
                 ShopOrderItem.objects.create(order=order, item=cart_item.item, quantity=cart_item.quantity, price=cart_item.item.get_effective_price())
             cart_items.delete()
             return redirect('shop:payment', order_id=order.id)
-        return render(request, self.template_name, {'form': form})
+        return render(request, self.template_name, {'cart_items': cart_items, 'form': form})
 
 
 @method_decorator(login_required, name='dispatch')

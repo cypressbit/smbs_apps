@@ -19,6 +19,13 @@ class CheckoutForm(forms.Form):
     # billing_address = forms.CharField(max_length=255)
     # Additional form fields can be added here based on requirements.
 
+    def __init__(self, *args, **kwargs):
+        cart_items = kwargs.pop('cart_items', None)
+        super().__init__(*args, **kwargs)
+        if cart_items:
+            total = sum(item.item.get_effective_price() * item.quantity for item in cart_items)
+            self.fields['total_price'].initial = total
+
 
 class PaymentForm(forms.ModelForm):
     """
