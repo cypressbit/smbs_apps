@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 {% load i18n %}
 {% load static %}
+{% load shop_extras %}
 
 {% block extra_head %}
     <link href="{% static "css/smbs-shop.css" %}" rel="stylesheet" type="text/css">
@@ -8,7 +9,7 @@
 
 {% block content %}
 <div class="container">
-    <h1>{% trans "Your Cart" %}</h1>
+    <h1>{% trans "Your Cart Items" %}</h1>
     {% if cart_items %}
         <table class="table">
             <thead>
