@@ -1,5 +1,6 @@
 from django import forms
-from smbs_apps.smbs_shop.models import Order, Payment
+
+from smbs_apps.smbs_shop.models import ShopOrder, ShopPayment
 
 
 class CheckoutForm(forms.Form):
@@ -30,7 +31,7 @@ class PaymentForm(forms.ModelForm):
     payment_method = forms.ChoiceField(choices=PAYMENT_METHOD_CHOICES)
 
     class Meta:
-        model = Payment
+        model = ShopPayment
         fields = ['payment_method']
 
     def __init__(self, *args, **kwargs):
