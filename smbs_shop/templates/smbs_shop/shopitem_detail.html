@@ -20,6 +20,10 @@
             <p>{{ object.stock_quantity }} in stock</p>
             <form action="{% url 'shop:add_to_cart' object.id %}" method="post">
                 {% csrf_token %}
+                <div class="form-group">
+                    <label for="quantity">{% trans "Quantity" %}</label>
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ object.stock_quantity }}" class="form-control">
+                </div>
                 <button type="submit" class="btn btn-primary">{% trans "Add to Cart" %}</button>
             </form>
             <hr>

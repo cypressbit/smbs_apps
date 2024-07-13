@@ -45,8 +45,9 @@ class AddToCartView(View):
     def post(self, request, item_id):
         item = get_object_or_404(ShopItem, id=item_id)
         cart, created = ShopCart.objects.get_or_create(user=request.user)
+        quantity = int(request.POST.get('quantity', 1))
         cart_item, created = ShopCartItem.objects.get_or_create(cart=cart, item=item)
-        cart_item.quantity += 1
+        cart_item.quantity += quantity
         cart_item.save()
         return redirect('shop:cart_detail')
 
