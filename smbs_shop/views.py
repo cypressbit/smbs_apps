@@ -1,17 +1,21 @@
 import json
+
+import stripe
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
 from django.views.generic import ListView, DetailView, View
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.http import JsonResponse
-import stripe
 
 from smbs_apps.smbs_base.views import SMBSView, SMBSObjectMetadataView
-from .models import ShopItem, ShopCart, ShopCartItem, ShopOrder, ShopOrderItem, ShopPayment, ShopSettings
-from .forms import CheckoutForm, PaymentForm
-from .integrations.stripe import create_stripe_payment_intent
-from .integrations.paypal import create_paypal_payment
+from smbs_apps.smbs_shop.models import (ShopItem, ShopCart, ShopCartItem, ShopOrder,
+                                        ShopOrderItem, ShopPayment, ShopSettings)
+from smbs_apps.smbs_shop.forms import CheckoutForm, PaymentForm
+from smbs_apps.smbs_shop.integrations.stripe import create_stripe_payment_intent
+from smbs_apps.smbs_shop.integrations.paypal import create_paypal_payment
+
 
 class ItemListView(SMBSView, ListView):
     model = ShopItem
@@ -24,6 +28,7 @@ class ItemListView(SMBSView, ListView):
         context['shop_settings'] = settings
         return context
 
+
 class ItemDetailView(SMBSObjectMetadataView, DetailView):
     model = ShopItem
     template_name = 'smbs_shop/shopitem_detail.html'
@@ -34,6 +39,7 @@ class ItemDetailView(SMBSObjectMetadataView, DetailView):
         context['shop_settings'] = settings
         return context
 
+
 @method_decorator(login_required, name='dispatch')
 class AddToCartView(View):
     def post(self, request, item_id):
@@ -43,6 +49,7 @@ class AddToCartView(View):
         cart_item.quantity += 1
         cart_item.save()
         return redirect('shop:cart_detail')
+
 
 @method_decorator(login_required, name='dispatch')
 class CartDetailView(SMBSView, ListView):
@@ -61,12 +68,14 @@ class CartDetailView(SMBSView, ListView):
         context['cart_items'] = self.get_queryset()
         return context
 
+
 @method_decorator(login_required, name='dispatch')
 class RemoveFromCartView(View):
     def post(self, request, cart_item_id):
         cart_item = get_object_or_404(ShopCartItem, id=cart_item_id)
         cart_item.delete()
         return redirect('shop:cart_detail')
+
 
 @method_decorator(login_required, name='dispatch')
 class CheckoutView(SMBSView, View):
@@ -90,6 +99,7 @@ class CheckoutView(SMBSView, View):
             cart_items.delete()
             return redirect('shop:payment', order_id=order.id)
         return render(request, self.template_name, {'cart_items': cart_items, 'form': form})
+
 
 @method_decorator(login_required, name='dispatch')
 class PaymentView(SMBSView, View):
@@ -137,6 +147,7 @@ class PaymentView(SMBSView, View):
                     return redirect(approval_url['approval_url'])
             return render(request, self.template_name, {'order': order, 'form': form})
 
+
 @method_decorator(login_required, name='dispatch')
 class PaymentSuccessView(SMBSView, View):
     name = 'payment_success'
@@ -150,6 +161,7 @@ class PaymentSuccessView(SMBSView, View):
         payment.payment_status = 'completed'
         payment.save()
         return render(request, self.template_name, {'order': order})
+
 
 @method_decorator(login_required, name='dispatch')
 class UserOrdersView(SMBSView, ListView):
