@@ -119,7 +119,9 @@ class ShopOrder(TimestampModel):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     items = models.ManyToManyField(ShopItem, through='ShopOrderItem')
     total_price = models.DecimalField(max_digits=10, decimal_places=2)
-    status = models.CharField(max_length=20, choices=[('pending', 'Pending'), ('completed', 'Completed')])
+    status = models.CharField(max_length=20, choices=[('pending', 'Pending'),
+                                                      ('completed', 'Completed'),
+                                                      ('in_payment', 'Processing Payment')])
 
     class Meta:
         verbose_name = _('Order')

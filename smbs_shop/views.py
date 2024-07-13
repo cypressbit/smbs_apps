@@ -96,6 +96,7 @@ class CheckoutView(SMBSView, View):
             order = ShopOrder.objects.create(user=request.user, total_price=form.cleaned_data['total_price'])
             for cart_item in cart_items:
                 ShopOrderItem.objects.create(order=order, item=cart_item.item, quantity=cart_item.quantity, price=cart_item.item.get_effective_price())
+            ShopPayment.objects.create(order=order, amount=order.total_price, payment_method='stripe')
             cart_items.delete()
             return redirect('shop:payment', order_id=order.id)
         return render(request, self.template_name, {'cart_items': cart_items, 'form': form})
@@ -134,6 +135,8 @@ class PaymentView(SMBSView, View):
                     metadata={'order_id': order.id},
                     return_url=request.build_absolute_uri(reverse('shop:payment_success', args=[order.id])),
                 )
+                order.status = 'in_payment'
+                order.save()
                 return JsonResponse({'client_secret': intent.client_secret})
             except stripe.error.CardError as e:
                 return JsonResponse({'error': str(e)}, status=400)
@@ -155,10 +158,11 @@ class PaymentSuccessView(SMBSView, View):
     template_name = 'smbs_shop/shoppayment_success.html'
 
     def get(self, request, order_id):
-        order = get_object_or_404(ShopOrder, id=order_id)
+        order = get_object_or_404(ShopOrder, id=order_id, status='in_payment')
         order.status = 'completed'
         order.save()
-        payment = get_object_or_404(ShopPayment, order=order)
+        payment, created = ShopPayment.objects.get_or_create(order=order, defaults={'amount': order.total_price,
+                                                                                    'payment_method': 'stripe'})
         payment.payment_status = 'completed'
         payment.save()
         return render(request, self.template_name, {'order': order})

@@ -32,7 +32,7 @@ class PaymentForm(forms.ModelForm):
     Form for the payment process.
     """
     PAYMENT_METHOD_CHOICES = [
-        ('paypal', 'PayPal'),
+        # ('paypal', 'PayPal'),
         ('stripe', 'Stripe'),
     ]
     payment_method = forms.ChoiceField(choices=PAYMENT_METHOD_CHOICES)
