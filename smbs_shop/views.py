@@ -47,7 +47,10 @@ class AddToCartView(View):
         cart, created = ShopCart.objects.get_or_create(user=request.user)
         quantity = int(request.POST.get('quantity', 1))
         cart_item, created = ShopCartItem.objects.get_or_create(cart=cart, item=item)
-        cart_item.quantity += quantity
+        if created:
+            cart_item.quantity = quantity  # Set the quantity for new items
+        else:
+            cart_item.quantity += quantity  # Increment the quantity for existing items
         cart_item.save()
         return redirect('shop:cart_detail')
 
