@@ -105,24 +105,36 @@ class PaymentView(SMBSView, View):
     def get(self, request, order_id):
         order = get_object_or_404(ShopOrder, id=order_id)
         form = PaymentForm()
-        return render(request, self.template_name, {'order': order, 'form': form})
+        return render(request, self.template_name, {'order': order, 'form': form, 'stripe_public_key': settings.STRIPE_PUBLIC_KEY})
 
     def post(self, request, order_id):
         order = get_object_or_404(ShopOrder, id=order_id)
-        form = PaymentForm(request.POST)
-        if form.is_valid():
-            payment_method = form.cleaned_data['payment_method']
-            if payment_method == 'stripe':
-                intent = create_stripe_payment_intent(order)
-                if 'error' in intent:
-                    return render(request, self.template_name, {'order': order, 'form': form, 'error': intent['error']})
+        data = json.loads(request.body)
+        payment_method_id = data.get('payment_method_id')
+
+        if payment_method_id:
+            try:
+                intent = stripe.PaymentIntent.create(
+                    amount=int(order.total_price * 100),  # Amount in cents
+                    currency='usd',
+                    payment_method=payment_method_id,
+                    confirmation_method='manual',
+                    confirm=True,
+                    metadata={'order_id': order.id},
+                )
                 return JsonResponse({'client_secret': intent.client_secret})
-            elif payment_method == 'paypal':
-                approval_url = create_paypal_payment(order)
-                if 'error' in approval_url:
-                    return render(request, self.template_name, {'order': order, 'form': form, 'error': approval_url['error']})
-                return redirect(approval_url['approval_url'])
-        return render(request, self.template_name, {'order': order, 'form': form})
+            except stripe.error.CardError as e:
+                return JsonResponse({'error': str(e)}, status=400)
+        else:
+            form = PaymentForm(request.POST)
+            if form.is_valid():
+                payment_method = form.cleaned_data['payment_method']
+                if payment_method == 'paypal':
+                    approval_url = create_paypal_payment(order)
+                    if 'error' in approval_url:
+                        return render(request, self.template_name, {'order': order, 'form': form, 'error': approval_url['error']})
+                    return redirect(approval_url['approval_url'])
+            return render(request, self.template_name, {'order': order, 'form': form})
 
 
 @method_decorator(login_required, name='dispatch')
