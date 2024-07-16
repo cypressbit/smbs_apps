@@ -6,6 +6,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.urls import reverse
 
+from smbs_apps.smbs_custom_attrs.models import CustomAttribute
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata, SettingsModel
 
 
@@ -24,6 +25,9 @@ class ShopSettings(SettingsModel):
     stripe_api_key = models.CharField(max_length=255, blank=True, null=True)
     stripe_publishable_key = models.CharField(max_length=255, blank=True, null=True)
     stripe_webhook_secret = models.CharField(max_length=255, blank=True, null=True)
+
+    enable_custom_attribute_filtering = models.BooleanField(default=False)
+    custom_attribute_filters = JSONField(blank=True, null=True)
 
     @classmethod
     def get_settings(cls):
@@ -68,6 +72,7 @@ class ShopItem(SiteModel, TimestampModel):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
     sku = models.CharField(max_length=64, unique=True)
+    custom_attributes = GenericRelation(CustomAttribute)
 
     def get_absolute_url(self):
         return reverse('shop:item_detail', args=[self.slug])

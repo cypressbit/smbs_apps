@@ -9,6 +9,21 @@
 
 {% block content %}
 <div class="container">
+    <h1>{% trans "Products" %}</h1>
+    {% if shop_settings.enable_custom_attribute_filtering %}
+        <form method="get" class="form-inline mb-4">
+            {% for filter_name, filter_values in custom_filters.items %}
+                <label class="mr-2">{{ filter_name|title }}</label>
+                {% for value in filter_values %}
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" name="{{ filter_name }}" value="{{ value }}" id="{{ filter_name }}_{{ forloop.counter }}">
+                        <label class="form-check-label" for="{{ filter_name }}_{{ forloop.counter }}">{{ value }}</label>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">{% trans "Filter" %}</button>
+        </form>
+    {% endif %}
     <div class="row">
         {% for item in object_list %}
             <div class="col-xs-12 col-md-6">
@@ -22,7 +37,6 @@
                                 <h3 class="card-title"><b>{{ item.title }}</b></h3>
                                 <p class="card-text">{{ item.description|truncatewords:30 }}</p>
                                 <p class="card-text"><b>{{ item.get_effective_price }} {{ currency }}</b></p>
-                                <p class="card-text">{{ item.stock_quantity }} in stock</p>
                             </div>
                         </div>
                     </a>

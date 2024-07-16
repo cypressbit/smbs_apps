@@ -10,6 +10,7 @@ from django.utils.decorators import method_decorator
 from django.http import JsonResponse
 
 from smbs_apps.smbs_base.views import SMBSView, SMBSObjectMetadataView
+from smbs_apps.smbs_custom_attrs.models import CustomAttribute
 from smbs_apps.smbs_shop.models import (ShopItem, ShopCart, ShopCartItem, ShopOrder,
                                         ShopOrderItem, ShopPayment, ShopSettings)
 from smbs_apps.smbs_shop.forms import CheckoutForm, PaymentForm
@@ -22,10 +23,24 @@ class ItemListView(SMBSView, ListView):
     name = 'shop'
     template_name = 'smbs_shop/shopitem_list.html'
 
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        settings = ShopSettings.get_settings()
+        if settings.enable_custom_attribute_filtering and settings.custom_attribute_filters:
+            for filter_name, filter_details in settings.custom_attribute_filters.items():
+                filter_values = self.request.GET.getlist(filter_name)
+                if filter_values:
+                    queryset = queryset.filter(custom_attributes__name=filter_name, custom_attributes__value__in=filter_values)
+        return queryset
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         settings = ShopSettings.get_settings()
         context['shop_settings'] = settings
+        if settings.enable_custom_attribute_filtering and settings.custom_attribute_filters:
+            context['custom_filters'] = {}
+            for filter_name, filter_details in settings.custom_attribute_filters.items():
+                context['custom_filters'][filter_name] = CustomAttribute.objects.filter(name=filter_name).values_list('value', flat=True).distinct()
         return context
 
 
