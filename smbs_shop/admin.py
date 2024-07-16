@@ -3,6 +3,10 @@ from smbs_apps.smbs_shop.models import (ShopSettings, ShopCategory, ShopItem, Sh
                                         ShopCart, ShopCartItem, ShopOrder, ShopOrderItem, ShopPayment)
 
 
+class TimestampModelAdmin(admin.ModelAdmin):
+    readonly_fields = ('created_at', 'updated_at')
+
+
 @admin.register(ShopSettings)
 class ShopSettingsAdmin(admin.ModelAdmin):
     list_display = ('navigation_title', 'navigation_slug', 'page_title', 'enable_custom_attribute_filtering')
@@ -21,12 +25,12 @@ class ShopSettingsAdmin(admin.ModelAdmin):
 
 
 @admin.register(ShopCategory)
-class ShopCategoryAdmin(admin.ModelAdmin):
+class ShopCategoryAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('title', 'slug', 'user', 'created_at', 'updated_at')
 
 
 @admin.register(ShopItem)
-class ShopItemAdmin(admin.ModelAdmin):
+class ShopItemAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('title', 'slug', 'category', 'price', 'stock_quantity', 'is_in_stock', 'publish_date')
     list_filter = ('category', 'is_in_stock', 'is_featured', 'is_visible', 'publish_date')
     search_fields = ('title', 'description')
@@ -49,7 +53,7 @@ class ShopCartItemAdmin(admin.ModelAdmin):
 
 
 @admin.register(ShopOrder)
-class ShopOrderAdmin(admin.ModelAdmin):
+class ShopOrderAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'total_price', 'status', 'created_at', 'updated_at')
     list_filter = ('status', 'created_at', 'updated_at')
 
@@ -60,12 +64,12 @@ class ShopOrderItemAdmin(admin.ModelAdmin):
 
 
 @admin.register(ShopPayment)
-class ShopPaymentAdmin(admin.ModelAdmin):
+class ShopPaymentAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('order', 'amount', 'payment_method', 'payment_status', 'created_at')
     list_filter = ('payment_status', 'created_at')
 
 
 @admin.register(ShopItemReview)
-class ShopItemReviewAdmin(admin.ModelAdmin):
+class ShopItemReviewAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'shop_item', 'positive_review', 'created_at', 'updated_at')
     list_filter = ('positive_review', 'created_at', 'updated_at')
