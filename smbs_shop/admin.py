@@ -3,33 +3,17 @@ from smbs_apps.smbs_shop.models import (ShopSettings, ShopCategory, ShopItem, Sh
                                         ShopCart, ShopCartItem, ShopOrder, ShopOrderItem, ShopPayment)
 
 
+# Use this as a mixin to store common logic.
 class TimestampModelAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
 
 
-@admin.register(ShopSettings)
-class ShopSettingsAdmin(admin.ModelAdmin):
-    list_display = ('navigation_title', 'navigation_slug', 'page_title', 'enable_custom_attribute_filtering')
-    fieldsets = (
-        (None, {
-            'fields': ('navigation_title', 'navigation_slug', 'page_title')
-        }),
-        ('Payment Settings', {
-            'fields': ('enable_paypal', 'paypal_client_id', 'paypal_client_secret', 'paypal_mode', 'paypal_webhook_id',
-                       'enable_stripe', 'stripe_api_key', 'stripe_publishable_key', 'stripe_webhook_secret')
-        }),
-        ('Custom Attributes', {
-            'fields': ('enable_custom_attribute_filtering', 'custom_attribute_filters')
-        }),
-    )
-
-
-@admin.register(ShopCategory)
+# Inherit the mixin.
 class ShopCategoryAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('title', 'slug', 'user', 'created_at', 'updated_at')
 
 
-@admin.register(ShopItem)
+# Inherit the mixin.
 class ShopItemAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('title', 'slug', 'category', 'price', 'stock_quantity', 'is_in_stock', 'publish_date')
     list_filter = ('category', 'is_in_stock', 'is_featured', 'is_visible', 'publish_date')
@@ -42,34 +26,30 @@ class ShopItemAdmin(TimestampModelAdmin, admin.ModelAdmin):
     )
 
 
-@admin.register(ShopCart)
-class ShopCartAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(ShopCartItem)
-class ShopCartItemAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(ShopOrder)
+# Inherit the mixin.
 class ShopOrderAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'total_price', 'status', 'created_at', 'updated_at')
     list_filter = ('status', 'created_at', 'updated_at')
 
 
-@admin.register(ShopOrderItem)
-class ShopOrderItemAdmin(admin.ModelAdmin):
-    pass
-
-
-@admin.register(ShopPayment)
+# Inherit the mixin.
 class ShopPaymentAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('order', 'amount', 'payment_method', 'payment_status', 'created_at')
     list_filter = ('payment_status', 'created_at')
 
 
-@admin.register(ShopItemReview)
+# Inherit the mixin.
 class ShopItemReviewAdmin(TimestampModelAdmin, admin.ModelAdmin):
     list_display = ('user', 'shop_item', 'positive_review', 'created_at', 'updated_at')
     list_filter = ('positive_review', 'created_at', 'updated_at')
+
+
+admin.site.register(ShopSettings)
+admin.site.register(ShopCategory, ShopCategoryAdmin)
+admin.site.register(ShopItem, ShopItemAdmin)
+admin.site.register(ShopCart)
+admin.site.register(ShopCartItem)
+admin.site.register(ShopOrder, ShopOrderAdmin)
+admin.site.register(ShopOrderItem)
+admin.site.register(ShopPayment, ShopPaymentAdmin)
+admin.site.register(ShopItemReview, ShopItemReviewAdmin)
