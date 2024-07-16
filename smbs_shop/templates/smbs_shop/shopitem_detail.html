@@ -40,6 +40,11 @@
                                     <div class="card-body">
                                         <h3 class="card-title"><b>{{ related_item.title }}</b></h3>
                                         <p class="card-text">{{ related_item.description|truncatewords:30 }}</p>
+                                        <ul class="smbs-custom-attrs">
+                                            {% for custom_attr in custom_attributes %}
+                                                <li><b>{{ custom_attr.name }}:</b> {{ custom_attr.value }}</li>
+                                            {% endfor %}
+                                        </ul>
                                         <p class="card-text"><b>{{ related_item.get_effective_price }} {{ currency }}</b></p>
                                     </div>
                                 </div>

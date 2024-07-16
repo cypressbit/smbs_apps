@@ -37,6 +37,9 @@
                                 <h3 class="card-title"><b>{{ item.title }}</b></h3>
                                 <p class="card-text">{{ item.description|truncatewords:30 }}</p>
                                 <p class="card-text"><b>{{ item.get_effective_price }} {{ currency }}</b></p>
+                                {% for custom_attr in item.custom_attributes.all %}
+                                    <p class="card-text"><b>{{ custom_attr.name }}:</b> {{ custom_attr.value }}</p>
+                                {% endfor %}
                             </div>
                         </div>
                     </a>

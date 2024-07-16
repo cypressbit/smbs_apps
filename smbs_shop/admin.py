@@ -14,7 +14,7 @@ class TimestampModelAdmin(admin.ModelAdmin):
 class CustomAttributeInline(GenericTabularInline):
     model = CustomAttribute
     extra = 1
-    
+
 
 # Inherit the mixin.
 class ShopCategoryAdmin(TimestampModelAdmin):
