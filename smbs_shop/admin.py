@@ -40,8 +40,12 @@ class ShopPaymentAdmin(TimestampModelAdmin):
 
 # Inherit the mixin.
 class ShopItemReviewAdmin(TimestampModelAdmin):
-    list_display = ('user', 'shop_item', 'positive_review', 'created', 'updated')
+    list_display = ('user', 'get_shop_item_title', 'positive_review', 'created', 'updated')
     list_filter = ('positive_review', 'created', 'updated')
+
+    def get_shop_item_title(self, obj):
+        return obj.shop_item.title
+    get_shop_item_title.short_description = 'Shop Item'
 
 
 admin.site.register(ShopSettings)
