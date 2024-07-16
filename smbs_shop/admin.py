@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.contrib.contenttypes.admin import GenericTabularInline
+
 from smbs_apps.smbs_shop.models import (ShopSettings, ShopCategory, ShopItem, ShopItemReview,
                                         ShopCart, ShopCartItem, ShopOrder, ShopOrderItem, ShopPayment)
 from smbs_apps.smbs_custom_attrs.models import CustomAttribute
@@ -9,10 +11,10 @@ class TimestampModelAdmin(admin.ModelAdmin):
     readonly_fields = ('created', 'updated')
 
 
-class CustomAttributeInline(admin.TabularInline):
+class CustomAttributeInline(GenericTabularInline):
     model = CustomAttribute
     extra = 1
-
+    
 
 # Inherit the mixin.
 class ShopCategoryAdmin(TimestampModelAdmin):
