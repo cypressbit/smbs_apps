@@ -5,16 +5,16 @@ from smbs_apps.smbs_shop.models import (ShopSettings, ShopCategory, ShopItem, Sh
 
 # Use this as a mixin to store common logic.
 class TimestampModelAdmin(admin.ModelAdmin):
-    readonly_fields = ('created_at', 'updated_at')
+    readonly_fields = ('created', 'updated')
 
 
 # Inherit the mixin.
-class ShopCategoryAdmin(TimestampModelAdmin, admin.ModelAdmin):
-    list_display = ('title', 'slug', 'user', 'created_at', 'updated_at')
+class ShopCategoryAdmin(TimestampModelAdmin):
+    list_display = ('title', 'slug', 'user', 'created', 'updated')
 
 
 # Inherit the mixin.
-class ShopItemAdmin(TimestampModelAdmin, admin.ModelAdmin):
+class ShopItemAdmin(TimestampModelAdmin):
     list_display = ('title', 'slug', 'category', 'price', 'stock_quantity', 'is_in_stock', 'publish_date')
     list_filter = ('category', 'is_in_stock', 'is_featured', 'is_visible', 'publish_date')
     search_fields = ('title', 'description')
@@ -27,21 +27,21 @@ class ShopItemAdmin(TimestampModelAdmin, admin.ModelAdmin):
 
 
 # Inherit the mixin.
-class ShopOrderAdmin(TimestampModelAdmin, admin.ModelAdmin):
-    list_display = ('user', 'total_price', 'status', 'created_at', 'updated_at')
-    list_filter = ('status', 'created_at', 'updated_at')
+class ShopOrderAdmin(TimestampModelAdmin):
+    list_display = ('user', 'total_price', 'status', 'created', 'updated')
+    list_filter = ('status', 'created', 'updated')
 
 
 # Inherit the mixin.
-class ShopPaymentAdmin(TimestampModelAdmin, admin.ModelAdmin):
-    list_display = ('order', 'amount', 'payment_method', 'payment_status', 'created_at')
-    list_filter = ('payment_status', 'created_at')
+class ShopPaymentAdmin(TimestampModelAdmin):
+    list_display = ('order', 'amount', 'payment_method', 'payment_status', 'created')
+    list_filter = ('payment_status', 'created')
 
 
 # Inherit the mixin.
-class ShopItemReviewAdmin(TimestampModelAdmin, admin.ModelAdmin):
-    list_display = ('user', 'shop_item', 'positive_review', 'created_at', 'updated_at')
-    list_filter = ('positive_review', 'created_at', 'updated_at')
+class ShopItemReviewAdmin(TimestampModelAdmin):
+    list_display = ('user', 'shop_item', 'positive_review', 'created', 'updated')
+    list_filter = ('positive_review', 'created', 'updated')
 
 
 admin.site.register(ShopSettings)
