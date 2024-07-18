@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-shop.css" %}" rel="stylesheet" type="text/css">
+    <script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Payment" %}</h1>
+    <p>{% trans "Order Total:" %} {{ order.total_price }} {{ currency }}</p>
+    <form id="payment-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button id="submit-button" type="submit" class="btn btn-primary">{% trans "Pay Now" %}</button>
+    </form>
+    <div id="card-element"><!-- Stripe.js injects the Card Element --></div>
+    <div id="card-errors" role="alert"></div>
+</div>
+
+<script type="text/javascript">
+    document.addEventListener("DOMContentLoaded", function() {
+        var stripe = Stripe('{{ stripe_public_key }}');
+        var elements = stripe.elements();
+        var card = elements.create('card');
+        card.mount('#card-element');
+
+        card.addEventListener('change', function(event) {
+            var displayError = document.getElementById('card-errors');
+            if (event.error) {
+                displayError.textContent = event.error.message;
+            } else {
+                displayError.textContent = '';
+            }
+        });
+
+        var form = document.getElementById('payment-form');
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            stripe.createPaymentMethod({
+                type: 'card',
+                card: card,
+            }).then(function(result) {
+                if (result.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = result.error.message;
+                } else {
+                    stripePaymentMethodHandler(result.paymentMethod.id);
+                }
+            });
+        });
+
+        function stripePaymentMethodHandler(paymentMethodId) {
+            fetch("{% url 'shop:payment' order.id %}", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': '{{ csrf_token }}',
+                },
+                body: JSON.stringify({
+                    payment_method_id: paymentMethodId,
+                }),
+            }).then(function(result) {
+                return result.json();
+            }).then(function(response) {
+                if (response.error) {
+                    var errorElement = document.getElementById('card-errors');
+                    errorElement.textContent = response.error;
+                } else {
+                    stripe.confirmCardPayment(response.client_secret).then(function(result) {
+                        if (result.error) {
+                            var errorElement = document.getElementById('card-errors');
+                            errorElement.textContent = result.error.message;
+                        } else {
+                            if (result.paymentIntent.status === 'succeeded') {
+                                window.location.href = "{% url 'shop:payment_success' order.id %}";
+                            } else if (result.paymentIntent.status === 'requires_action') {
+                                stripe.handleCardAction(result.paymentIntent.client_secret).then(function(result) {
+                                    if (result.error) {
+                                        var errorElement = document.getElementById('card-errors');
+                                        errorElement.textContent = result.error.message;
+                                    } else {
+                                        window.location.href = "{% url 'shop:payment_success' order.id %}";
+                                    }
+                                });
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load static %}
+
+{% block extra_head %}
+    <link href="{% static "css/smbs-shop.css" %}" rel="stylesheet" type="text/css">
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>{% trans "Checkout" %}</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.total_price }}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">{% trans "Place Order" %}</button>
+    </form>
+</div>
+{% endblock %}
