@@ -6,6 +6,7 @@ from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.contrib.sites.models import Site
 from django.urls import reverse
 
 from smbs_apps.smbs_custom_attrs.models import CustomAttribute
@@ -46,6 +47,11 @@ class ShopCategory(SiteModel, TimestampModel):
     title = models.CharField(max_length=255, unique=True)
     description = models.TextField()
 
+    def save(self, *args, **kwargs):
+        if not self.site_id:
+            self.site = Site.objects.get_current()
+        super(ShopCategory, self).save(*args, **kwargs)
+
     class Meta:
         verbose_name = _('Category')
         verbose_name_plural = _('Categories')
@@ -85,6 +91,11 @@ class ShopItem(SiteModel, TimestampModel):
 
     def get_effective_price(self):
         return self.discount_price if self.discount_price else self.price
+
+    def save(self, *args, **kwargs):
+        if not self.site_id:
+            self.site = Site.objects.get_current()
+        super(ShopItem, self).save(*args, **kwargs)
 
     class Meta:
         ordering = ['-publish_date']
