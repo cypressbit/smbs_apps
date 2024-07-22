@@ -30,7 +30,7 @@ class ShopItemAdmin(TimestampModelAdmin):
     fieldsets = (
         (None, {
             'fields': ('title', 'slug', 'category', 'description', 'cover_image', 'price', 'discount_price',
-                       'stock_quantity', 'is_in_stock', 'is_featured', 'is_visible', 'publish_date', 'tags')
+                       'stock_quantity', 'is_in_stock', 'is_featured', 'is_visible', 'publish_date', 'tags', 'sku')
         }),
     )
     inlines = [CustomAttributeInline]
