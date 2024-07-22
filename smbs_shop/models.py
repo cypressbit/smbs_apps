@@ -79,7 +79,7 @@ class ShopItem(SiteModel, TimestampModel):
     is_visible = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    sku = models.CharField(max_length=64, unique=True, blank=True, null=True)
+    sku = models.CharField(max_length=64, unique=True)
     custom_attributes = GenericRelation(CustomAttribute)
 
     def get_absolute_url(self):
