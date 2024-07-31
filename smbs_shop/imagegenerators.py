@@ -24,19 +24,19 @@ class ShopCover320x320(BaseCover):
     processors = [Thumbnail(WIDTH, HEIGHT)]
 
 
-class ShopCover320x160(ImageSpec):
+class ShopCover320x160(BaseCover):
     WIDTH = 320
     HEIGHT = 160
     processors = [Thumbnail(WIDTH, HEIGHT)]
 
 
-class ShopCover600x300(ImageSpec):
+class ShopCover600x300(BaseCover):
     WIDTH = 600
     HEIGHT = 300
     processors = [ResizeToFill(WIDTH, HEIGHT)]
 
 
-class ShopCover1200x600(ImageSpec):
+class ShopCover1200x600(BaseCover):
     WIDTH = 1200
     HEIGHT = 600
     processors = [ResizeToFill(WIDTH, HEIGHT)]
