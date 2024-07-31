@@ -1,7 +1,10 @@
+from io import BytesIO
+
+from django.utils.translation import gettext as _
+
+from PIL import Image, ImageDraw
 from imagekit import ImageSpec, register
 from imagekit.processors import Thumbnail, ResizeToFill
-from PIL import Image, ImageDraw
-from django.utils.translation import gettext as _
 
 
 class BaseCover(ImageSpec):
@@ -14,7 +17,10 @@ class BaseCover(ImageSpec):
             image = Image.new('RGB', (self.WIDTH, self.HEIGHT), color=(255, 255, 255))
             draw = ImageDraw.Draw(image)
             draw.text((150, 130), _("No Image"), fill=(0, 0, 0))
-            return image
+            buffer = BytesIO()
+            image.save(buffer, format='JPEG')
+            buffer.seek(0)
+            return buffer
         return super().generate()
 
 
