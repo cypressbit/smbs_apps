@@ -119,7 +119,7 @@ class ShopItem(SiteModel, TimestampModel):
 
         # Load a truetype or opentype font file, and create a font object.
         try:
-            font = ImageFont.truetype("arial.ttf", 150)
+            font = ImageFont.truetype("arial.ttf", 50)
         except IOError:
             font = ImageFont.load_default()
 
