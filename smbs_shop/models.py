@@ -119,7 +119,7 @@ class ShopItem(SiteModel, TimestampModel):
 
         # Load a truetype or opentype font file, and create a font object.
         try:
-            font = ImageFont.truetype("arial.ttf", 50)
+            font = ImageFont.truetype("arial.ttf", 150)
         except IOError:
             font = ImageFont.load_default()
 
@@ -130,7 +130,7 @@ class ShopItem(SiteModel, TimestampModel):
 
         draw.text((text_x, text_y), text, fill=text_color, font=font)
 
-        output = BytesIO()
+        output = io.BytesIO()
         image.save(output, format='WEBP')
         output.seek(0)
         return ContentFile(output.read(), f'{self.slug}_no_image.jpg')
