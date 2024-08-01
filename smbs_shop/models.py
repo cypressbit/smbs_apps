@@ -1,4 +1,8 @@
+import uuid
+import io
+
 from taggit.managers import TaggableManager
+from PIL import Image, ImageDraw
 
 from django.utils.translation import gettext_lazy as _
 from django.contrib.postgres.fields import JSONField
@@ -95,7 +99,23 @@ class ShopItem(SiteModel, TimestampModel):
     def save(self, *args, **kwargs):
         if not self.site_id:
             self.site = Site.objects.get_current()
+        if not self.sku:
+            self.sku = self.generate_sku()
+        if not self.cover_image:
+            self.cover_image.save(f'{self.slug}_no_image.jpg', self.generate_blank_image(), save=False)
         super(ShopItem, self).save(*args, **kwargs)
+
+    def generate_sku(self):
+        return self.title.replace(' ', '-').upper()[:10] + '-' + str(uuid.uuid4()).split('-')[0].upper()
+
+    def generate_blank_image(self):
+        image = Image.new('RGB', (600, 300), color=(255, 255, 255))
+        draw = ImageDraw.Draw(image)
+        draw.text((150, 130), _("No Image"), fill=(0, 0, 0))
+        output = io.BytesIO()
+        image.save(output, format='WEBP')
+        output.seek(0)
+        return ContentFile(output.read(), f'{self.slug}_no_image.webp')
 
     class Meta:
         ordering = ['-publish_date']
