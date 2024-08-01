@@ -4,7 +4,7 @@ import io
 from taggit.managers import TaggableManager
 from PIL import Image, ImageDraw
 
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, gettext
 from django.contrib.postgres.fields import JSONField
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
@@ -12,6 +12,7 @@ from django.conf import settings
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
 from django.urls import reverse
+from django.core.files.base import ContentFile
 
 from smbs_apps.smbs_custom_attrs.models import CustomAttribute
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata, SettingsModel
@@ -109,9 +110,9 @@ class ShopItem(SiteModel, TimestampModel):
         return self.title.replace(' ', '-').upper()[:10] + '-' + str(uuid.uuid4()).split('-')[0].upper()
 
     def generate_blank_image(self):
-        image = Image.new('RGB', (600, 300), color=(255, 255, 255))
+        image = Image.new('RGB', (300, 300), color=(255, 255, 255))
         draw = ImageDraw.Draw(image)
-        draw.text((150, 130), _("No Image"), fill=(0, 0, 0))
+        draw.text((150, 130), gettext("No Image"), fill=(0, 0, 0))
         output = io.BytesIO()
         image.save(output, format='WEBP')
         output.seek(0)
