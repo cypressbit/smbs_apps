@@ -2,7 +2,7 @@ import uuid
 import io
 
 from taggit.managers import TaggableManager
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 
 from django.utils.translation import gettext_lazy as _, gettext
 from django.contrib.postgres.fields import JSONField
@@ -84,7 +84,7 @@ class ShopItem(SiteModel, TimestampModel):
     is_visible = models.BooleanField(default=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
     discount_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    sku = models.CharField(max_length=64, unique=True)
+    sku = models.CharField(max_length=64, blank=True, null=True)
     custom_attributes = GenericRelation(CustomAttribute)
 
     def get_absolute_url(self):
@@ -110,13 +110,30 @@ class ShopItem(SiteModel, TimestampModel):
         return self.title.replace(' ', '-').upper()[:10] + '-' + str(uuid.uuid4()).split('-')[0].upper()
 
     def generate_blank_image(self):
-        image = Image.new('RGB', (300, 300), color=(255, 255, 255))
+        width, height = 300, 300
+        background_color = (211, 211, 211)  # Light gray
+        text_color = (0, 0, 0)  # Black
+
+        image = Image.new('RGB', (width, height), color=background_color)
         draw = ImageDraw.Draw(image)
-        draw.text((150, 130), gettext("No Image"), fill=(0, 0, 0))
-        output = io.BytesIO()
-        image.save(output, format='WEBP')
+
+        # Load a truetype or opentype font file, and create a font object.
+        try:
+            font = ImageFont.truetype("arial.ttf", 50)
+        except IOError:
+            font = ImageFont.load_default()
+
+        text = gettext("No Image")
+        text_width, text_height = draw.textsize(text, font=font)
+        text_x = (width - text_width) / 2
+        text_y = (height - text_height) / 2
+
+        draw.text((text_x, text_y), text, fill=text_color, font=font)
+
+        output = BytesIO()
+        image.save(output, format='JPEG')
         output.seek(0)
-        return ContentFile(output.read(), f'{self.slug}_no_image.webp')
+        return ContentFile(output.read(), f'{self.slug}_no_image.jpg')
 
     class Meta:
         ordering = ['-publish_date']
