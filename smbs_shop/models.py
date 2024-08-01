@@ -124,14 +124,14 @@ class ShopItem(SiteModel, TimestampModel):
             font = ImageFont.load_default()
 
         text = gettext("No Image")
-        text_width, text_height = draw.textsize(text, font=font)
+        text_width, text_height = draw.textbbox((0, 0), text, font=font)[2:4]
         text_x = (width - text_width) / 2
         text_y = (height - text_height) / 2
 
         draw.text((text_x, text_y), text, fill=text_color, font=font)
 
         output = BytesIO()
-        image.save(output, format='JPEG')
+        image.save(output, format='WEBP')
         output.seek(0)
         return ContentFile(output.read(), f'{self.slug}_no_image.jpg')
 
