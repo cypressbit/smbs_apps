@@ -1,5 +1,5 @@
 from imagekit import ImageSpec, register
-from imagekit.processors import Thumbnail, ResizeToFill
+from imagekit.processors import Thumbnail, ResizeToFill, SmartResize
 
 
 class BaseCover(ImageSpec):
@@ -34,11 +34,11 @@ class ShopCover600x600(BaseCover):
 class ShopCover1200x600(BaseCover):
     WIDTH = 1200
     HEIGHT = 600
-    processors = [ResizeToFill(WIDTH, HEIGHT)]
+    processors = [SmartResize(WIDTH, HEIGHT)]
 
 
 register.generator('smbs_shop:cover320x320', ShopCover320x320)
 register.generator('smbs_shop:cover320x160', ShopCover320x160)
 register.generator('smbs_shop:cover600x300', ShopCover600x300)
-register.generator('smbs_shop:cover600x600', ShopCover600x300)
+register.generator('smbs_shop:cover600x600', ShopCover600x600)
 register.generator('smbs_shop:cover1200x600', ShopCover1200x600)
