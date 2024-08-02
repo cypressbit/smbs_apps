@@ -25,6 +25,12 @@ class ShopCover600x300(BaseCover):
     processors = [ResizeToFill(WIDTH, HEIGHT)]
 
 
+class ShopCover600x600(BaseCover):
+    WIDTH = 600
+    HEIGHT = 600
+    processors = [ResizeToFill(WIDTH, HEIGHT)]
+
+
 class ShopCover1200x600(BaseCover):
     WIDTH = 1200
     HEIGHT = 600
@@ -34,4 +40,5 @@ class ShopCover1200x600(BaseCover):
 register.generator('smbs_shop:cover320x320', ShopCover320x320)
 register.generator('smbs_shop:cover320x160', ShopCover320x160)
 register.generator('smbs_shop:cover600x300', ShopCover600x300)
+register.generator('smbs_shop:cover600x600', ShopCover600x300)
 register.generator('smbs_shop:cover1200x600', ShopCover1200x600)
