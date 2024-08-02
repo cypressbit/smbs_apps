@@ -35,11 +35,13 @@
                             </figure>
                             <div class="card-body d-flex flex-column">
                                 <h3 class="card-title"><b>{{ item.title }}</b></h3>
-                                <p class="card-text">{{ item.description|truncatewords:30 }}</p>
-                                <p class="card-text"><b>{{ item.get_effective_price }} {{ currency }}</b></p>
+                                <p><b>{% trans "Product Description" %}</b></p>
+                                <p class="card-text">{{ item.description|truncatewords:50 }}</p>
                                 {% for custom_attr in item.custom_attributes.all %}
                                     <p class="card-text"><b>{{ custom_attr.name }}:</b> {{ custom_attr.value }}</p>
                                 {% endfor %}
+                                <p><b>{% trans "Price" %}</b></p>
+                                <p class="card-text"><b>{{ item.get_effective_price }} {{ currency }}</b></p>
                             </div>
                         </div>
                     </a>

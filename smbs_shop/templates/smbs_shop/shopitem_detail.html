@@ -10,12 +10,16 @@
 {% block content %}
 <div class="container">
     <div class="row">
-        <div class="col-md-12">
+        <div class="col-xs-12 col-md-6">
             <figure>
-                {% generateimage 'smbs_shop:cover1200x600' source=object.cover_image -- alt=object.title class="img-fluid mb-3 border rounded" style="width: 100%" %}
+                {% generateimage 'smbs_shop:cover1200x1200' source=object.cover_image -- alt=object.title class="img-fluid mb-3 border rounded" style="width: 100%" %}
             </figure>
+        </div>
+        <div class="col-xs-12 col-md-6">
             <h1 class="text-primary">{{ object.title }}</h1>
+            <h3>{% trans "Product Description" %}</h3>
             <p>{{ object.description }}</p>
+            <h3>{% trans "Price" %}</h3>
             <p><b>{{ object.get_effective_price }} {{ currency }}</b></p>
             <p>{{ object.stock_quantity }} in stock</p>
             <form action="{% url 'shop:add_to_cart' object.id %}" method="post">
@@ -39,12 +43,14 @@
                                     </figure>
                                     <div class="card-body">
                                         <h3 class="card-title"><b>{{ related_item.title }}</b></h3>
+                                        <p><b>{% trans "Product Description" %}</b></p>
                                         <p class="card-text">{{ related_item.description|truncatewords:30 }}</p>
                                         <ul class="smbs-custom-attrs">
                                             {% for custom_attr in custom_attributes %}
                                                 <li><b>{{ custom_attr.name }}:</b> {{ custom_attr.value }}</li>
                                             {% endfor %}
                                         </ul>
+                                        <p><b>{% trans "Price" %}</b></p>
                                         <p class="card-text"><b>{{ related_item.get_effective_price }} {{ currency }}</b></p>
                                     </div>
                                 </div>
