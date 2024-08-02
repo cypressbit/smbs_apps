@@ -37,8 +37,15 @@ class ShopCover1200x600(BaseCover):
     processors = [SmartResize(WIDTH, HEIGHT)]
 
 
+class ShopCover1200x1200(BaseCover):
+    WIDTH = 1200
+    HEIGHT = 1200
+    processors = [SmartResize(WIDTH, HEIGHT)]
+
+
 register.generator('smbs_shop:cover320x320', ShopCover320x320)
 register.generator('smbs_shop:cover320x160', ShopCover320x160)
 register.generator('smbs_shop:cover600x300', ShopCover600x300)
 register.generator('smbs_shop:cover600x600', ShopCover600x600)
 register.generator('smbs_shop:cover1200x600', ShopCover1200x600)
+register.generator('smbs_shop:cover1200x1200', ShopCover1200x1200)
