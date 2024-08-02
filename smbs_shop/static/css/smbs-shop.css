@@ -1,0 +1,19 @@
+.card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.card-body {
+    display: flex;
+    flex-direction: column;
+}
+
+.card-body .card-text {
+    flex-grow: 1;
+}
+
+.card-body .btn {
+    margin-top: auto;
+}
+
