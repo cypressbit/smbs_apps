@@ -115,9 +115,9 @@ class BaseSettings(SettingsModel):
 
 
 class BaseMetadata(TimestampModel):
-    title = models.CharField(max_length=60, blank=True, null=True)
-    description = models.CharField(max_length=160, blank=True, null=True)
-    keywords = models.CharField(max_length=255, blank=True, null=True)
+    title = models.CharField(max_length=300, blank=True, null=True)
+    description = models.CharField(max_length=300, blank=True, null=True)
+    keywords = models.CharField(max_length=300, blank=True, null=True)
     image = models.ImageField(upload_to='smbs_base/metadata', blank=True, null=True)
     twitter_card = models.CharField(max_length=24, blank=True, null=True)
     twitter_site = models.CharField(max_length=24, blank=True, null=True)

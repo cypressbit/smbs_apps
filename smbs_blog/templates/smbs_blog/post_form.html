@@ -49,11 +49,17 @@
                         <label class="custom-file-label">{% trans "Choose a cover image" %}</label>
                     </div>
                 </div>
-                <div class="col-md-3 col-xs-12">
+                <div class="col-md-6 col-xs-12">
+                    {{form.cover_image_alt_text.label}}
+                    {{form.cover_image_alt_text}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-xs-12">
                     {{form.publish_date.label}}
                     {{form.publish_date}}
                 </div>
-                <div class="col-md-3 col-xs-12">
+                <div class="col-md-6 col-xs-12">
                     {{form.language.label}}
                     {{form.language}}
                 </div>
@@ -118,13 +124,13 @@
 
 <style>
 .editor {
-	font-family: inherit !important;
-	font-size: inherit !important;
-	border: none !important;
-	padding: 0 !important;
+        font-family: inherit !important;
+        font-size: inherit !important;
+        border: none !important;
+        padding: 0 !important;
 }
 .editor > .ql-editor {
-	padding: 12px 0 !important;
+        padding: 12px 0 !important;
 }
 
 #content-editor {
@@ -133,7 +139,7 @@
 </style>
 
 <script>
-$(document).ready(function() {
+window.onload = function () {
     var Image = Quill.import('formats/image');
     Image.className = 'img-fluid';
     Quill.register(Image, true);
@@ -147,7 +153,7 @@ $(document).ready(function() {
     var quillContent = new Quill('#content-editor', {
       modules: {
         toolbar: [
-	  [{ 'header': [1, 2, 3, 4, 5, 6, false] }],		
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
           [{ size: [ 'small', false, 'large', 'huge' ]}],
           ['bold', 'italic'],
           ['link', 'blockquote', 'code-block', 'image', 'video'],
@@ -167,6 +173,31 @@ $(document).ready(function() {
 
       return true;
     });
-});
+
+    quillContent.getModule('toolbar').addHandler('image', () => {
+            let fileInput = document.createElement('input');
+            fileInput.setAttribute('type', 'file');
+            fileInput.setAttribute('accept', 'image/webp, image/png, image/gif, image/jpeg, image/bmp, image/x-icon');
+            fileInput.click();
+
+            fileInput.addEventListener('change', () => {
+                let file = fileInput.files[0];
+                let reader = new FileReader();
+
+                reader.addEventListener('load', () => {
+                    let range = quillContent.getSelection(true);
+                    let altText = prompt("Enter alt text for the image:");
+                    let img = document.createElement('img');
+                    img.src = reader.result;
+                    img.alt = altText;
+                    quillContent.clipboard.dangerouslyPasteHTML(range.index, img.outerHTML);
+                }, false);
+
+                if (file) {
+                    reader.readAsDataURL(file);
+                }
+            });
+        });
+};
 </script>
 {% endblock %}
