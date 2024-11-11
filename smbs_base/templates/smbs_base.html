@@ -46,8 +46,16 @@
                       {% if 'smbs_apps.smbs_pages' in installed_apps %}
                         {% include 'smbs_pages/page_navigation.html' with pages=pages %}
                       {% endif %}
+                      {% block nav-items %}
+                      {% endblock %}
                     </ul>
                   </div>
+                  <div class="navbar-collapse collapse order-3 dual-collapse2">
+                    <ul class="navbar-nav ml-auto">
+                      {% block right-nav-items %}
+                      {% endblock %}
+                    </ul>
+                </div>
             </div>
         </nav>
     {% endblock %}
