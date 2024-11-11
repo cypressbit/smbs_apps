@@ -12,7 +12,7 @@
 <div class="container blog-post">
     {% block post %}
         <figure>
-            {% generateimage 'smbs_blog:cover1200x600' source=object.cover_image -- alt=object.title class="img-fluid mb-3 border rounded" style="width: 100%" %}
+            {% generateimage 'smbs_blog:cover1200x600' source=object.cover_image -- alt=object.get_cover_alt class="img-fluid mb-3 border rounded" style="width: 100%" %}
         </figure>
         <h1 class="text-primary blog-post-title">{{object.title|title}}
             {% if request.user.is_staff %}
@@ -20,11 +20,6 @@
             {% endif %}
         </h1>
         <p><small>{% trans 'Written by' %} {{object.author.get_full_name}} {% trans 'on' %} {{object.publish_date}}</small></p>
-        <p class="mb-4">
-            {% for tag in object.tags.all %}
-                <span class="badge badge-primary">{{tag.name}}</span>
-            {% endfor %}
-        </p>
         <h6><u>{% trans "Share this article on social media" %}</u></h6>
         {% include 'smbs_blog/share.html' %}
         <div class="blog-post-content mt-4 mb-4">
@@ -68,38 +63,38 @@
         {% include 'smbs_comments_tree/comments.html' %}
     {% endif %}
     <div class="row mt-5 mb-4">
-	<div class="col-md-12">
-		<h1 class="text-center">{% trans "Related Posts" %}</h1>
+        <div class="col-md-12">
+                <h1 class="text-center">{% trans "Related Posts" %}</h1>
         </div>
-    </div>	    
+    </div>
     <div class="row">
-	{% for post in object.tags.similar_objects  %}
-	    {% if not post.is_draft or request.user.is_staff %}
-		<div class="col-xs-12 col-md-6">
-		    <article>
-			<a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
-			    <div class="card border-0">
-				<figure>
-				    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
-				</figure>
-				<div class="card-body">
-				    <h3 class="card-title">
-					<b>{{post.title}}</b>
-					{% if post.is_draft %}
-					    <span class="badge badge-warning">{% trans "Draft preview" %}</span>
-					{% endif %}
-				    </h3>
-				    <p class="card-text blog-post-content">{{post.description}}</p>
+        {% for post in object.tags.similar_objects  %}
+            {% if not post.is_draft or request.user.is_staff %}
+                <div class="col-xs-12 col-md-6">
+                    <article>
+                        <a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
+                            <div class="card border-0">
+                                <figure>
+                                    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
+                                </figure>
+                                <div class="card-body">
+                                    <h3 class="card-title">
+                                        <b>{{post.title}}</b>
+                                        {% if post.is_draft %}
+                                            <span class="badge badge-warning">{% trans "Draft preview" %}</span>
+                                        {% endif %}
+                                    </h3>
+                                    <p class="card-text blog-post-content">{{post.description}}</p>
 
-				</div>
-			    </div>
-			</a>
-		    </article>
-		    <br>
-		    <br>
-		</div>
-	    {% endif %}
-	{% endfor %}
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                    <br>
+                    <br>
+                </div>
+            {% endif %}
+        {% endfor %}
     </div>
 </div>
 {% endblock %}

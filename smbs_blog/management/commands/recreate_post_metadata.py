@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand
 
-from smbs_blog.models import Post
-from smbs_blog.metadata import create_post_metadata
+from smbs_apps.smbs_blog.models import Post
+from smbs_apps.smbs_blog.metadata import create_post_metadata
 
 
 class Command(BaseCommand):

@@ -4,8 +4,8 @@ from smbs_apps.smbs_base.models import ObjectMetadata
 
 
 def create_post_metadata(instance):
-    title = Truncator(instance.title).chars(60)
-    description = Truncator(instance.description).chars(160)
+    title = Truncator(instance.title).chars(300)
+    description = Truncator(instance.description).chars(300)
     metadata = ObjectMetadata.generate_base_metadata(
         title, description, instance.cover_image, instance.metadata
     )

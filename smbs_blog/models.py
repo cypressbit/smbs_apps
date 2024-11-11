@@ -105,6 +105,7 @@ class Post(SiteModel, TimestampModel):
     language = models.CharField(max_length=10, choices=settings.LANGUAGES)
     title = models.CharField(max_length=255, unique=True)
     cover_image = models.ImageField(upload_to='smbs_blog_images', blank=True)
+    cover_image_alt_text = models.CharField(max_length=300, blank=True, null=True)
     content = models.TextField()
     description = models.CharField(max_length=300)
     tags = TaggableManager()
@@ -112,6 +113,9 @@ class Post(SiteModel, TimestampModel):
 
     def get_absolute_url(self):
         return reverse('smbs_blog:post-detail', args=[self.slug])
+
+    def get_cover_alt(self):
+        return self.cover_image_alt_text or self.title
 
     def clean(self):
         if not self.cover_image:
