@@ -1,6 +1,8 @@
 import os
 import shutil
 import zipfile
+import mimetypes
+from pathlib import Path
 
 from collections import OrderedDict
 
@@ -15,6 +17,8 @@ from django.urls import reverse
 from django.db import models
 from django.contrib.postgres.fields import JSONField
 from django.core import management
+from django.core.files import File
+from django.utils.text import slugify
 
 from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
 from smbs_apps.smbs_pages.widgets import discovered_widgets, load_widget
@@ -153,6 +157,20 @@ class Page(SiteModel, TimestampModel):
             super(Page, self).save(*args, **kwargs)
 
 
+def media_upload_to(instance, filename: str) -> str:
+    """
+    On first upload, build the stored filename from instance.name if present,
+    otherwise fall back to the original filename.
+    """
+    original = Path(filename)
+    ext = original.suffix.lower()
+
+    base = instance.name or original.stem
+    base = slugify(base) or "file"
+
+    return f"page/media/{base}{ext}"
+
+
 class Media(TimestampModel):
     IMAGE = 'image'
     VIDEO = 'video'
@@ -166,11 +184,82 @@ class Media(TimestampModel):
         (DOCUMENT, 'Document'),
     ]
 
+    # what the user edits in admin
     name = models.CharField(max_length=128, blank=True, null=True)
-    file = models.FileField(upload_to='page/media/')
+
+    # stored type (optional, but makes admin filtering easy)
+    media_type = models.CharField(max_length=16, choices=TYPES, blank=True, null=True)
+
+    file = models.FileField(upload_to=media_upload_to)
 
     def __str__(self):
         return self.name or str(self.id)
+
+    @property
+    def filename(self) -> str:
+        return os.path.basename(self.file.name) if self.file else ""
+
+    @property
+    def file_url(self) -> str:
+        try:
+            return self.file.url if self.file else ""
+        except Exception:
+            # some storages can error if file missing
+            return ""
+
+    def _guess_media_type(self) -> str:
+        """
+        Best-effort guess from mimetype using the stored name.
+        """
+        if not self.file:
+            return self.DOCUMENT
+
+        mt, _ = mimetypes.guess_type(self.file.name)
+        if not mt:
+            return self.DOCUMENT
+
+        if mt.startswith("image/"):
+            return self.IMAGE
+        if mt.startswith("video/"):
+            return self.VIDEO
+        if mt.startswith("audio/"):
+            return self.AUDIO
+        return self.DOCUMENT
+
+    def save(self, *args, **kwargs):
+        old = None
+        if self.pk:
+            old = Media.objects.filter(pk=self.pk).only("name", "file").first()
+
+        # auto-fill media_type if empty
+        if self.file and not self.media_type:
+            self.media_type = self._guess_media_type()
+
+        # If user changed ONLY the name, rename the stored file too (copy+delete).
+        # (If they uploaded a new file, upload_to will already handle the name.)
+        if (
+            old
+            and old.file
+            and self.file
+            and old.file.name == self.file.name
+            and (old.name != self.name)
+            and self.name
+        ):
+            ext = Path(old.file.name).suffix.lower()
+            base = slugify(self.name) or "file"
+            new_relpath = f"page/media/{base}{ext}"
+
+            storage = self.file.storage
+            new_relpath = storage.get_available_name(new_relpath)
+
+            # Copy then delete old (works across many storages, including S3)
+            with old.file.open("rb") as f:
+                storage.save(new_relpath, File(f))
+
+            storage.delete(old.file.name)
+            self.file.name = new_relpath
+
+        super().save(*args, **kwargs)
 
 
 class StyleModel(models.Model):
