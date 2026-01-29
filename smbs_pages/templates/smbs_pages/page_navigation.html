@@ -7,7 +7,21 @@
       </a>
       <div class="dropdown-menu" id="#navTogglePage-{{page.id}}">
         {% for child_page in page.get_child_pages %}
-          <a class="dropdown-item" href="{{child_page.get_absolute_url}}">{{child_page.name}}</a>
+            {% if child_page.is_active %}
+                <a class="dropdown-item" href="{{child_page.get_absolute_url}}">{{child_page.name}}</a>
+            {% endif %}
+            {% if child_page.has_child_pages %}
+                {% if child_page.is_active %}
+                    <a class="dropdown-item" href="{{child_page.get_absolute_url}}">{{child_page.name}}</a>
+                {% else %}
+                    <h6 class="dropdown-header">{{child_page.name}}</h6>
+                {% endif %}
+                {% for sub_child_page in child_page.get_child_pages %}
+                    {% if sub_child_page.is_active %}
+                        <a class="dropdown-item" href="{{sub_child_page.get_absolute_url}}">{{sub_child_page.name}}</a>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
         {% endfor %}
       </div>
     </li>
