@@ -2,7 +2,7 @@
   {% with page.get_absolute_url as page_url %}
   {% if page.has_child_pages %}
     <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="{{page_url}}" id="navbarDropdown-{{page.id}}" role="button" data-hover="dropdown" data-target="#navTogglePage-{{page.id}}" aria-haspopup="true" aria-expanded="false">
+      <a class="nav-link dropdown-toggle" href="{{page_url}}" id="navbarDropdown-{{page.id}}" role="button" data-toggle="dropdown" data-target="#navTogglePage-{{page.id}}" aria-haspopup="true" aria-expanded="false">
         {{page.name}}
       </a>
       <div class="dropdown-menu" id="#navTogglePage-{{page.id}}">
