@@ -151,7 +151,7 @@ class Page(SiteModel, TimestampModel):
 
     def save(self, *args, **kwargs):
         parents = self.get_all_parents()
-        if len(parents) >= 2:
+        if len(parents) >= 3:
             raise Exception('Page depth not supported')
         else:
             super(Page, self).save(*args, **kwargs)
