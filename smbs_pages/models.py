@@ -118,9 +118,21 @@ class Page(SiteModel, TimestampModel):
     active = models.BooleanField(default=False)
     show_on_navigation = models.BooleanField(default=True)
     navigation_order = models.PositiveSmallIntegerField(blank=True, null=True)
+    nav_parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING,
+                                   related_name='nav_children')
 
     def __str__(self):
         return self.name or str(self.id)
+
+    def has_nav_children(self):
+        return self.nav_children.filter(site=self.site, show_on_navigation=True, active=True).exists()
+
+    def get_nav_children(self):
+        return self.nav_children.filter(
+            site=self.site,
+            show_on_navigation=True,
+            active=True
+        ).order_by('navigation_order', 'name')
 
     def get_content_tree(self):
         tree = OrderedDict()

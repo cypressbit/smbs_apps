@@ -1,34 +1,35 @@
 {% for page in pages %}
   {% with page.get_absolute_url as page_url %}
-  {% if page.has_child_pages %}
-    <li class="nav-item dropdown">
-      <a class="nav-link dropdown-toggle" href="{{page_url}}" id="navbarDropdown-{{page.id}}" role="button" data-toggle="dropdown" data-target="#navTogglePage-{{page.id}}" aria-haspopup="true" aria-expanded="false">
-        {{page.name}}
-      </a>
-      <div class="dropdown-menu" id="#navTogglePage-{{page.id}}">
-        {% for child_page in page.get_child_pages %}
-            {% if child_page.is_active %}
-                <a class="dropdown-item" href="{{child_page.get_absolute_url}}">{{child_page.name}}</a>
+    {% if page.has_nav_children %}
+      <li class="nav-item dropdown {% if request.path|slice:page_url|length == page_url|length %}{% endif %}">
+        <a class="nav-link dropdown-toggle"
+           href="{{ page_url }}"
+           id="navbarDropdown-{{ page.id }}"
+           role="button"
+           data-toggle="dropdown"
+           aria-haspopup="true"
+           aria-expanded="false">
+          {{ page.name }}
+        </a>
+
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown-{{ page.id }}">
+          {% for child_page in page.get_nav_children %}
+            <a class="dropdown-item" href="{{ child_page.get_absolute_url }}">{{ child_page.name }}</a>
+
+            {% if child_page.has_nav_children %}
+              <div class="dropdown-divider"></div>
+              <h6 class="dropdown-header">{{ child_page.name }}</h6>
+              {% for sub_child_page in child_page.get_nav_children %}
+                <a class="dropdown-item" href="{{ sub_child_page.get_absolute_url }}">{{ sub_child_page.name }}</a>
+              {% endfor %}
             {% endif %}
-            {% if child_page.has_child_pages %}
-                {% if child_page.is_active %}
-                    <a class="dropdown-item" href="{{child_page.get_absolute_url}}">{{child_page.name}}</a>
-                {% else %}
-                    <h6 class="dropdown-header">{{child_page.name}}</h6>
-                {% endif %}
-                {% for sub_child_page in child_page.get_child_pages %}
-                    {% if sub_child_page.is_active %}
-                        <a class="dropdown-item" href="{{sub_child_page.get_absolute_url}}">{{sub_child_page.name}}</a>
-                    {% endif %}
-                {% endfor %}
-            {% endif %}
-        {% endfor %}
-      </div>
-    </li>
-  {% else %}
-    <li class="nav-item {% if request.get_full_path == page_url %}active{% endif %}">
-      <a class="nav-link" href="{{page_url}}">{{page.name}}</a>
-    </li>
-  {% endif %}
+          {% endfor %}
+        </div>
+      </li>
+    {% else %}
+      <li class="nav-item {% if request.path == page_url %}active{% endif %}">
+        <a class="nav-link" href="{{ page_url }}">{{ page.name }}</a>
+      </li>
+    {% endif %}
   {% endwith %}
 {% endfor %}
