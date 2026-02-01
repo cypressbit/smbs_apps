@@ -8,7 +8,6 @@ def get_pages(request):
     pages = Page.objects.filter(
         site=site,
         show_on_navigation=True,
-        active=True,
         nav_parent__isnull=True
     ).order_by('navigation_order', 'name')
     return {
