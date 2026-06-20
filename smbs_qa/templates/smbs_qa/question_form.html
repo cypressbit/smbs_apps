@@ -10,24 +10,24 @@
     {% endif %}
     <form id="post-form" method="POST">
         {% csrf_token %}
-        <div class="form-group">
+        <div class="mb-3">
             {{form.title.label}}
             {{form.title|ff_addcss:'form-control'}}
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             {{form.question.label}}
             {{form.question|ff_addcss:'form-control'}}
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             {{form.is_anonymous.label}}
             {{form.is_anonymous}}
         </div>
-        <div class="form-group">
+        <div class="mb-3">
             {{form.tags.label}}
             {{form.tags|ff_addcss:'form-control'}}
             <p>{{form.tags.help_text}}</p>
         </div>
-        <div class="text-right">
+        <div class="text-end">
             <input type="submit" class="btn btn-primary" value="{% trans 'Submit Question' %}" />
         </div>
     </form>

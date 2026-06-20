@@ -12,7 +12,7 @@
     {% if request.user.is_staff %}
         <div class="row">
             <div class="col-md-12">
-                <a class="btn btn-primary float-right mb-4" href="{% url 'smbs_blog:post-create' %}">{% trans "New Post" %}</a>
+                <a class="btn btn-primary float-end mb-4" href="{% url 'smbs_blog:post-create' %}">{% trans "New Post" %}</a>
             </div>
         </div>
     {% endif %}
@@ -30,7 +30,7 @@
                                     <h3 class="card-title">
                                         <b>{{post.title}}</b>
                                         {% if post.is_draft %}
-                                            <span class="badge badge-warning">{% trans "Draft preview" %}</span>
+                                            <span class="badge text-bg-warning">{% trans "Draft preview" %}</span>
                                         {% endif %}
                                     </h3>
                                     <p class="card-text blog-post-content">{{post.description}}</p>

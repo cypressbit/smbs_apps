@@ -11,8 +11,7 @@
     {% block metatags %}{% endblock %}
     {{theme}}
     <script type="text/javascript" src="{% static 'js/jquery-3.3.1.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/popper.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     {{global_metadata}}
     {{custom_css}}
     {% if alerts %}
@@ -38,18 +37,18 @@
                         {{site.name}}
                       {% endif %}
                   </a>
-                  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                  <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                   </button>
                   <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav mr-auto">
+                    <ul class="navbar-nav me-auto">
                       {% if 'smbs_apps.smbs_pages' in installed_apps %}
                         {% include 'smbs_pages/page_navigation.html' with pages=pages %}
                       {% endif %}
                       {% block nav-items %}
                       {% endblock %}
                     </ul>
-                    <ul class="navbar-nav ml-auto">
+                    <ul class="navbar-nav ms-auto">
                       {% block right-nav-items %}
                       {% endblock %}
                     </ul>
@@ -62,9 +61,7 @@
             {% for alert in alerts %}
                 {% if not alert.homepage_only or request.get_full_path == '/' %}
                     <div class="alert alert-{{alert.alert_type}} alert-{{alert.position}}" role="alert">
-                      <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                      </button>
+                      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                       <h4 class="alert-heading">{{alert.title}}</h4>
                       <p>{{alert.content|safe}}</p>
                     </div>

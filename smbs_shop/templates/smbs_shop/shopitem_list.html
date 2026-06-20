@@ -13,7 +13,7 @@
     {% if shop_settings.enable_custom_attribute_filtering %}
         <form method="get" class="form-inline mb-4">
             {% for filter_name, filter_values in custom_filters.items %}
-                <label class="mr-2">{{ filter_name|title }}</label>
+                <label class="me-2">{{ filter_name|title }}</label>
                 {% for value in filter_values %}
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="{{ filter_name }}" value="{{ value }}" id="{{ filter_name }}_{{ forloop.counter }}">
@@ -42,7 +42,7 @@
                                 <h4 class="text-center"><strong>${{ item.get_effective_price }} {{ currency }}</strong></h4>
                                 <form action="{% url 'shop:add_to_cart' item.id %}" method="post">
                                     {% csrf_token %}
-                                    <button type="submit" class="btn btn-primary btn-block btn-sm">{% trans "Add to Cart" %}</button>
+                                    <button type="submit" class="btn btn-primary w-100 btn-sm">{% trans "Add to Cart" %}</button>
                                 </form>
                             </div>
                         </div>

@@ -16,7 +16,7 @@
         </figure>
         <h1 class="text-primary blog-post-title">{{object.title|title}}
             {% if request.user.is_staff %}
-                <a class="btn btn-primary float-right" href="{% url 'smbs_blog:post-edit' object.id %}">{% trans "Edit Post" %}</a>
+                <a class="btn btn-primary float-end" href="{% url 'smbs_blog:post-edit' object.id %}">{% trans "Edit Post" %}</a>
             {% endif %}
         </h1>
         <p><small>{% trans 'Written by' %} {{object.author.get_full_name}} {% trans 'on' %} {{object.publish_date}}</small></p>
@@ -31,9 +31,9 @@
             {% if object and object.checks.seo %}
                 {% with object.checks.seo as seo %}
                     {% if seo.passed %}
-                        <span class="badge badge-success">{% trans "Passed all SEO checks" %}</span>
+                        <span class="badge text-bg-success">{% trans "Passed all SEO checks" %}</span>
                     {% else %}
-                        <span class="badge badge-danger">{% trans "One or more SEO checks failed" %}</span>
+                        <span class="badge text-bg-danger">{% trans "One or more SEO checks failed" %}</span>
                     {% endif %}
                     <table class="table table-borderless">
                       <thead>
@@ -81,7 +81,7 @@
                                     <h3 class="card-title">
                                         <b>{{post.title}}</b>
                                         {% if post.is_draft %}
-                                            <span class="badge badge-warning">{% trans "Draft preview" %}</span>
+                                            <span class="badge text-bg-warning">{% trans "Draft preview" %}</span>
                                         {% endif %}
                                     </h3>
                                     <p class="card-text blog-post-content">{{post.description}}</p>

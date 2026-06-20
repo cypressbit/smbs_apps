@@ -13,7 +13,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-12 mb-4">
-            <a class="btn btn-primary float-right" href="{% url 'smbs_user_posts:post-create' %}">{% trans "New Post" %}</a>
+            <a class="btn btn-primary float-end" href="{% url 'smbs_user_posts:post-create' %}">{% trans "New Post" %}</a>
         </div>
     </div>
     <article>
@@ -54,7 +54,7 @@
                 </h6>
                 <div class="post-tag-container mb-3">
                     {% for tag in object.tags.all %}
-                        <span class="badge badge-primary">{{tag.name}}</span>
+                        <span class="badge text-bg-primary">{{tag.name}}</span>
                     {% endfor %}
                 </div>
                 <h6><u>{% trans "Share this post" %}</u></h6>
