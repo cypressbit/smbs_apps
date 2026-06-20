@@ -5,7 +5,6 @@ from taggit.managers import TaggableManager
 from PIL import Image, ImageDraw, ImageFont
 
 from django.utils.translation import gettext_lazy as _, gettext
-from django.contrib.postgres.fields import JSONField
 from django.contrib.contenttypes.fields import GenericRelation
 from django.db import models
 from django.conf import settings
@@ -35,7 +34,7 @@ class ShopSettings(SettingsModel):
     stripe_webhook_secret = models.CharField(max_length=255, blank=True, null=True)
 
     enable_custom_attribute_filtering = models.BooleanField(default=False)
-    custom_attribute_filters = JSONField(blank=True, null=True)
+    custom_attribute_filters = models.JSONField(blank=True, null=True)
 
     @classmethod
     def get_settings(cls):

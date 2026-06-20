@@ -1,6 +1,6 @@
 from taggit.managers import TaggableManager
 
-from django.contrib.postgres.fields import JSONField, ArrayField
+from django.contrib.postgres.fields import ArrayField
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 
@@ -97,7 +97,7 @@ class Post(SiteModel, TimestampModel):
     # Non-editable fields
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     slug = models.SlugField(max_length=255, unique=True)
-    checks = JSONField(default=dict, blank=True, editable=False)
+    checks = models.JSONField(default=dict, blank=True, editable=False)
     # Editable fields
     metadata = models.ForeignKey(ObjectMetadata, on_delete=models.DO_NOTHING,
                                  blank=True, null=True)

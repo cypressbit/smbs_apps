@@ -15,7 +15,6 @@ except ImportError:
 
 from django.urls import reverse
 from django.db import models
-from django.contrib.postgres.fields import JSONField
 from django.core import management
 from django.core.files import File
 from django.utils.text import slugify
@@ -366,7 +365,7 @@ class Widget(TimestampModel, StyleModel, PositionModel):
     content = models.TextField(blank=True, null=True)
     media = models.ManyToManyField(Media, blank=True)
     active = models.BooleanField(default=True)
-    options = JSONField(default=dict, blank=True, null=True )
+    options = models.JSONField(default=dict, blank=True, null=True)
 
     def render(self, context=None):
         widget_module = load_widget(self.type)
