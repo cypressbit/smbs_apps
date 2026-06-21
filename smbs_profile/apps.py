@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class SmbsProfileConfig(AppConfig):
-    name = 'smbs_profile'
+    name = 'smbs_apps.smbs_profile'

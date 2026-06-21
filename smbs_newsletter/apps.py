@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class SmbsNewsletterConfig(AppConfig):
-    name = 'smbs_newsletter'
+    name = 'smbs_apps.smbs_newsletter'
