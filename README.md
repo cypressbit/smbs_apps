@@ -1,6 +1,6 @@
 # Scalable Modular Backend System (SMBS)
 
-[![GitHub release (latest by date)](https://img.shields.io/github/v/release/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/releases)
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/releases/latest)
 [![GitHub last commit](https://img.shields.io/github/last-commit/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/commits/main)
 [![GitHub issues](https://img.shields.io/github/issues/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/issues)
 [![GitHub license](https://img.shields.io/github/license/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/blob/main/LICENSE.md)
