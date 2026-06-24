@@ -1,5 +1,12 @@
 # Scalable Modular Backend System (SMBS)
 
+[![GitHub release (latest by date)](https://img.shields.io/github/v/release/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/releases)
+[![GitHub last commit](https://img.shields.io/github/last-commit/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/commits/main)
+[![GitHub issues](https://img.shields.io/github/issues/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/issues)
+[![GitHub license](https://img.shields.io/github/license/cypressbit/smbs_apps)](https://github.com/cypressbit/smbs_apps/blob/main/LICENSE.md)
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue)](https://www.python.org/)
+[![Django](https://img.shields.io/badge/django-6.0%2B-green)](https://www.djangoproject.com/)
+
 Welcome to SMBS, an open-source collection of Django-based applications designed to accelerate the development of websites and backend applications. SMBS (Scalable Modular Backend System) has been in development for over three years and is now a mature, stable platform. This suite includes various powerful applications, such as a WYSIWYG blog, full CMS support, a user forum, and an inventory app. Leveraging the full customization power of Python and the stability of Django, SMBS provides a robust foundation for rapid development and deployment.
 
 ## Table of Contents
