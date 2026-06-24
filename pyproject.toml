@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "smbs-apps"
+version = "1.0.0"
+description = "Reusable Django app library for SMBS projects"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+dependencies = [
+    "Django>=6.0",
+    "django-taggit",
+    "django-mptt",
+    "bleach",
+    "Pillow",
+    "django-imagekit",
+    "django-versatileimagefield",
+    "pyyaml",
+    "psycopg2",
+]
+
+[project.optional-dependencies]
+shop = ["stripe"]
+mailchimp = ["mailchimp3"]
+
+[tool.setuptools.packages.find]
+include = ["smbs_apps*"]
