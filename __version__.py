@@ -1,7 +1,7 @@
-VERSION = (1, 1, 0)
-__version__ = "1.1.0"
+VERSION = (1, 2, 0)
+__version__ = "1.2.0"
 
-COMMIT = "ef106e7bea0afd706223e8d53390e76ec6f8202c"
-COMMIT_SHORT = "ef106e7"
-COMMIT_DATE = "2026-06-24"
-COMMIT_MESSAGE = "Add unit tests for all 19 app modules"
+COMMIT = "8df07094e8587037281651d8057c212eeb214ed2"
+COMMIT_SHORT = "8df0709"
+COMMIT_DATE = "2026-06-25"
+COMMIT_MESSAGE = "Allow blog posts to have a custom URL slug independent of the title"
