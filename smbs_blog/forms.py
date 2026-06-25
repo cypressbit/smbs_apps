@@ -38,12 +38,14 @@ class PostForm(forms.ModelForm):
             'description': forms.Textarea(attrs={'class': 'form-control', 'cols': 100, 'rows': 3}),
             'tags': TagWidget(attrs={'class': 'form-control'}),
             'is_draft': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            'slug': forms.TextInput(attrs={'hidden': True, 'class': 'form-control'}),
+            'slug': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
     def clean_slug(self):
-        title = self.cleaned_data['title']
-        return slugify(title)
+        slug = self.cleaned_data.get('slug', '').strip()
+        if not slug:
+            slug = slugify(self.cleaned_data.get('title', ''))
+        return slugify(slug)
 
     def clean_site(self):
         return Site.objects.get_current()

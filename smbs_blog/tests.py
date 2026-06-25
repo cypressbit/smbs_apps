@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.sites.models import Site
 
 from smbs_apps.smbs_blog.models import BlogSettings
+from smbs_apps.smbs_blog.forms import PostForm
 from smbs_apps.smbs_blog.seo import (
     post_word_count,
     post_images,
@@ -155,3 +156,45 @@ class RunSeoChecksTest(TestCase):
         results, errors = run_seo_checks([], {}, post)
         self.assertTrue(results['passed'])
         self.assertEqual(errors, [])
+
+
+class PostFormSlugTest(TestCase):
+    def _form_data(self, **overrides):
+        import datetime
+        from django.contrib.sites.models import Site
+        site = Site.objects.get_current()
+        from django.contrib.auth.models import User
+        user, _ = User.objects.get_or_create(username='blogauthor')
+        data = {
+            'author': user.pk,
+            'site': site.pk,
+            'title': 'My Great Post Title',
+            'slug': '',
+            'publish_date': '2026-01-01 00:00:00',
+            'language': 'en',
+            'description': 'A short description of the post.',
+            'content': 'Body content here.',
+            'is_draft': True,
+        }
+        data.update(overrides)
+        return data
+
+    def test_slug_derived_from_title_when_empty(self):
+        form = PostForm(data=self._form_data(slug=''))
+        form.is_valid()
+        self.assertEqual(form.cleaned_data.get('slug'), 'my-great-post-title')
+
+    def test_custom_slug_preserved_when_provided(self):
+        form = PostForm(data=self._form_data(slug='custom-url-slug'))
+        form.is_valid()
+        self.assertEqual(form.cleaned_data.get('slug'), 'custom-url-slug')
+
+    def test_slug_is_slugified_even_when_user_provides_spaces(self):
+        form = PostForm(data=self._form_data(slug='My Custom URL'))
+        form.is_valid()
+        self.assertEqual(form.cleaned_data.get('slug'), 'my-custom-url')
+
+    def test_slug_whitespace_only_falls_back_to_title(self):
+        form = PostForm(data=self._form_data(slug='   '))
+        form.is_valid()
+        self.assertEqual(form.cleaned_data.get('slug'), 'my-great-post-title')
