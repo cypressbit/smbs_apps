@@ -18,6 +18,10 @@ class PostListView(SMBSView, ListView):
     model = Post
     name = 'blog'
 
+    def get_paginate_by(self, queryset):
+        settings = BlogSettings.get_settings()
+        return settings.get('posts_per_page', BlogSettings.POSTS_PER_PAGE)
+
     def get_context_data(self, **kwargs):
         context = super(PostListView, self).get_context_data(**kwargs)
         settings = BlogSettings.get_settings()

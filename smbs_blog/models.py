@@ -39,8 +39,11 @@ class BlogSettings(SettingsModel):
         ('keywords', 'Keyword count'),
     )
 
+    POSTS_PER_PAGE = 10
+
     blog_metadata = models.TextField(blank=True)
     comments_enabled = models.BooleanField(default=COMMENTS_ENABLED)
+    posts_per_page = models.PositiveSmallIntegerField(default=POSTS_PER_PAGE)
     minimum_word_count = models.PositiveSmallIntegerField(default=MIN_WORD_COUNT)
     minimum_tag_count = models.PositiveSmallIntegerField(default=MIN_TAG_COUNT)
     minimum_internal_link_count = models.PositiveSmallIntegerField(default=MIN_INTERNAL_LINK_COUNT)
@@ -67,6 +70,7 @@ class BlogSettings(SettingsModel):
 
         response = {
             'comments_enabled': getattr(settings, 'comments_enabled', cls.COMMENTS_ENABLED),
+            'posts_per_page': getattr(settings, 'posts_per_page', cls.POSTS_PER_PAGE),
             'word_count': {
                 'min_count': getattr(settings, 'minimum_word_count', cls.MIN_WORD_COUNT),
             },
