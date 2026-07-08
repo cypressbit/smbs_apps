@@ -1,11 +1,15 @@
 .smbs-social-icon {
     height: 50px;
+    width: 50px;
     margin-bottom: 10px;
+    display: inline-block;
+    vertical-align: middle;
 }
 
 @media only screen and (max-width: 600px) {
     .smbs-social-icon {
         height: 32px;
+        width: 32px;
         margin-bottom: 10px;
         margin-right: 0px;
     }
