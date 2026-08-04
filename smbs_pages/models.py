@@ -114,6 +114,10 @@ class Page(SiteModel, TimestampModel):
     parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING)
     name = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, allow_unicode=True, blank=True, null=True, unique=True)
+    external_url = models.URLField(
+        blank=True, null=True,
+        help_text="If set, this page has no content of its own — the navbar links straight to this URL instead."
+    )
     active = models.BooleanField(default=False)
     show_on_navigation = models.BooleanField(default=True)
     navigation_order = models.PositiveSmallIntegerField(blank=True, null=True)
@@ -155,6 +159,8 @@ class Page(SiteModel, TimestampModel):
         return pages
 
     def get_absolute_url(self):
+        if self.external_url:
+            return self.external_url
         args = [self.slug]
         args.extend([p.slug for p in self.get_all_parents()])
         url = reverse('smbs_pages:page-detail', args=reversed([a for a in args if a]))
