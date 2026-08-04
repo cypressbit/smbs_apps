@@ -14,7 +14,7 @@
         <figure>
             {% generateimage 'smbs_blog:cover1200x600' source=object.cover_image -- alt=object.get_cover_alt class="img-fluid mb-3 border rounded" style="width: 100%" %}
         </figure>
-        <h1 class="text-primary blog-post-title">{{object.title|title}}
+        <h1 class="text-primary blog-post-title">{{object.title}}
             {% if request.user.is_staff %}
                 <a class="btn btn-primary float-end" href="{% url 'smbs_blog:post-edit' object.id %}">{% trans "Edit Post" %}</a>
             {% endif %}
@@ -64,7 +64,7 @@
     {% endif %}
     <div class="row mt-5 mb-4">
         <div class="col-md-12">
-                <h1 class="text-center">{% trans "Related Posts" %}</h1>
+                <h2 class="text-center">{% trans "Related Posts" %}</h2>
         </div>
     </div>
     <div class="row">
