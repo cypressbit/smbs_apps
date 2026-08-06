@@ -17,6 +17,7 @@
     {% if alerts %}
       <link href="{% static "css/alerts.css" %}" rel="stylesheet" type="text/css">
     {% endif %}
+    <link href="{% static "css/cookie_consent.css" %}" rel="stylesheet" type="text/css">
     {% if icon %}
       <link rel="shortcut icon" href="{{icon.url}}">
     {% endif %}
@@ -87,5 +88,7 @@
           </footer>
       </div>
     {% endblock %}
+    {% include 'smbs_base/cookie_consent.html' %}
+    <script type="text/javascript" src="{% static 'js/cookie_consent.js' %}"></script>
   </body>
 </html>

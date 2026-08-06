@@ -1,0 +1,12 @@
+{% load i18n %}
+<div id="smbs-cookie-consent" class="smbs-cookie-consent" role="region" aria-label="{% trans 'Cookie notice' %}" hidden>
+    <div class="smbs-cookie-consent__container">
+        <p class="smbs-cookie-consent__text">
+            {% blocktrans %}We use cookies to run this site and to understand how it's used. You can accept analytics cookies or decline and keep browsing with only the essential ones.{% endblocktrans %}
+        </p>
+        <div class="smbs-cookie-consent__actions">
+            <button type="button" id="smbs-cookie-decline" class="smbs-cookie-consent__btn smbs-cookie-consent__btn--decline">{% trans "Decline" %}</button>
+            <button type="button" id="smbs-cookie-accept" class="smbs-cookie-consent__btn smbs-cookie-consent__btn--accept">{% trans "Accept" %}</button>
+        </div>
+    </div>
+</div>
