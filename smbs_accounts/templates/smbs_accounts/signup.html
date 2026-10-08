@@ -8,6 +8,14 @@
     <h1>{% trans "Sign Up" %}</h1>
     <p>{% trans "Already a member?" %} <a href="{% url 'smbs_accounts:login' %}?next={{next}}"><b>{% trans "Login!" %}</b></a></p>
     <hr class="mb-4">
+    {% if google_oauth_enabled %}
+    <div class="d-grid mb-4">
+        <a href="{% url 'smbs_oauth:google_login' %}?next={{next}}" class="btn btn-outline-secondary">
+            {% trans "Continue with Google" %}
+        </a>
+    </div>
+    <div class="text-center text-muted mb-4">{% trans "or sign up with email" %}</div>
+    {% endif %}
     {% if form.non_field_errors %}
         <p class="text-danger">{{form.non_field_errors.as_text}}</p>
     {% endif %}

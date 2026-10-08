@@ -20,6 +20,7 @@ Each directory at the root is a standalone Django app. Apps are imported as `smb
 - **`smbs_comments_tree`** — abstract `Comment` model (MPTT tree, bleach-sanitized) used by blog, Q&A, and user posts.
 - **`smbs_reactions`** — `ReactionMixin` and `Reaction` model; mixed into comments and other content types.
 - **`smbs_accounts`** — user registration/auth + a `sync_mailchimp` management command.
+- **`smbs_oauth`** — "Sign in with Google" (OAuth 2.0 Authorization Code flow via plain `requests`, no third-party auth library). Adds a `google_oauth_enabled` context processor so `smbs_accounts`' login/signup templates show the button only on sites that install and register this app; client id/secret are admin-editable (`GoogleOAuthSettings`, same singleton pattern as `smbs_base.SettingsModel`).
 - **`smbs_social`** — social sharing links via context processor.
 - **`smbs_alerts`** — site-wide banner alerts.
 - **`smbs_qa`** — Q&A forum.

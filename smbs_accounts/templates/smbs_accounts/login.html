@@ -14,6 +14,14 @@
         <p class="text-danger">{{form.non_field_errors.as_text}}</p>
     {% endif %}
     <p>{% trans "Not a member yet?" %} <a href="{% url 'smbs_accounts:signup' %}?next={{next}}"><b>{% trans "Sign up!" %}</b></a></p>
+    {% if google_oauth_enabled %}
+    <div class="d-grid mb-4">
+        <a href="{% url 'smbs_oauth:google_login' %}?next={{next}}" class="btn btn-outline-secondary">
+            {% trans "Continue with Google" %}
+        </a>
+    </div>
+    <div class="text-center text-muted mb-4">{% trans "or log in with email" %}</div>
+    {% endif %}
     <form id="post-form" enctype="multipart/form-data" method="POST">
         {% csrf_token %}
         <div class="mb-3">
