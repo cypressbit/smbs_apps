@@ -69,9 +69,20 @@
     .smbs-cookie-consent__container {
         flex-direction: column;
         align-items: stretch;
+        gap: 10px;
+        padding: 12px 16px calc(12px + env(safe-area-inset-bottom, 0px));
     }
 
-    .smbs-cookie-consent__actions {
-        justify-content: flex-end;
+    /* In a column layout a flex-basis sets the height, so the desktop
+       320px basis turned the text into a 320px-tall block on phones. */
+    .smbs-cookie-consent__text {
+        flex: 0 0 auto;
+        font-size: 0.85rem;
+        line-height: 1.4;
+    }
+
+    .smbs-cookie-consent__btn {
+        flex: 1 1 0;
+        padding: 0.45rem 0.75rem;
     }
 }
