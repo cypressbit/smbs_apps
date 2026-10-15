@@ -12,7 +12,7 @@
 <div class="container blog-post">
     {% block post %}
         <figure>
-            {% generateimage 'smbs_blog:cover1200x600' source=object.cover_image -- alt=object.get_cover_alt class="img-fluid mb-3 border rounded" style="width: 100%" %}
+            {% if object.cover_image %}{% generateimage 'smbs_blog:cover1200x600' source=object.cover_image -- alt=object.get_cover_alt class="img-fluid mb-3 border rounded" style="width: 100%" %}{% endif %}
         </figure>
         <h1 class="text-primary blog-post-title">{{object.title}}
             {% if request.user.is_staff %}
@@ -75,7 +75,7 @@
                         <a href="{% url 'smbs_blog:post-detail' post.slug %}" class="card-link text-dark">
                             <div class="card border-0">
                                 <figure>
-                                    {% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}
+                                    {% if post.cover_image %}{% generateimage 'smbs_blog:cover600x300' source=post.cover_image -- alt=post.title class="card-img-top" style="width: 100%; height: auto" loading="lazy" %}{% endif %}
                                 </figure>
                                 <div class="card-body">
                                     <h3 class="card-title">

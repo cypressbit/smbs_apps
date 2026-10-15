@@ -18,6 +18,15 @@ class PostListView(SMBSView, ListView):
     model = Post
     name = 'blog'
 
+    def get_queryset(self):
+        # Sites sharing one database only list their own posts; drafts are
+        # still listed for staff (the template marks them), but no longer
+        # count against everyone else's pagination.
+        queryset = super().get_queryset().filter(site=get_current_site(self.request))
+        if not self.request.user.is_staff:
+            queryset = queryset.filter(is_draft=False)
+        return queryset
+
     def get_paginate_by(self, queryset):
         settings = BlogSettings.get_settings()
         return settings.get('posts_per_page', BlogSettings.POSTS_PER_PAGE)
