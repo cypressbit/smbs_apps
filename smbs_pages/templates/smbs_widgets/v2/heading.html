@@ -1,0 +1,2 @@
+{% if props.eyebrow %}<div class="db-eyebrow mb-2">{{ props.eyebrow }}</div>{% endif %}
+<h{{ props.level }} class="{% if props.size == 'display' %}display-{% if props.level == 1 %}4{% else %}5{% endif %} fw-bold{% elif props.size == 'small' %}h5{% endif %} mb-0">{{ props.text }}</h{{ props.level }}>

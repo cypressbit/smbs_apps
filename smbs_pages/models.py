@@ -13,14 +13,16 @@ try:
 except ImportError:
     from yaml import Loader, Dumper
 
+from django.conf import settings
 from django.urls import reverse
 from django.db import models
 from django.core import management
 from django.core.files import File
 from django.utils.text import slugify
 
-from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata
-from smbs_apps.smbs_pages.widgets import discovered_widgets, load_widget
+from smbs_apps.smbs_base.models import SiteModel, TimestampModel, ObjectMetadata, SettingsModel
+from smbs_apps.smbs_pages.documents import empty_document, empty_chrome
+from smbs_apps.smbs_pages.widgets import legacy_widget_choices, load_widget
 
 
 class Template(SiteModel, TimestampModel):
@@ -33,7 +35,7 @@ class Template(SiteModel, TimestampModel):
 
     @property
     def template_data(self):
-        if not getattr(self, '_template_data'):
+        if not getattr(self, '_template_data', None):
             if self.is_installed:
                 self._template_data = self.load_template_file()
             else:
@@ -108,6 +110,13 @@ class Template(SiteModel, TimestampModel):
 
 
 class Page(SiteModel, TimestampModel):
+
+    class ContentMode(models.TextChoices):
+        # The relational Container/Row/Column/Widget tree.
+        LEGACY = 'legacy', 'Legacy widget tree'
+        # A JSON page document with drafts and revisions (see documents.py).
+        DOCUMENT = 'document', 'Page document'
+
     metadata = models.ForeignKey(ObjectMetadata, on_delete=models.DO_NOTHING,
                                  blank=True, null=True)
     template = models.ForeignKey(Template, blank=True, null=True, on_delete=models.DO_NOTHING)
@@ -124,8 +133,20 @@ class Page(SiteModel, TimestampModel):
     nav_parent = models.ForeignKey('self', blank=True, null=True, on_delete=models.DO_NOTHING,
                                    related_name='nav_children')
 
+    content_mode = models.CharField(max_length=16, choices=ContentMode.choices, default=ContentMode.LEGACY)
+    # Document mode: the editor and the AI write `draft`; visitors see `published_revision`.
+    draft = models.JSONField(default=empty_document, blank=True)
+    # Incremented on every draft save, for optimistic concurrency in the editor.
+    draft_version = models.PositiveIntegerField(default=0)
+    published_revision = models.ForeignKey('PageRevision', blank=True, null=True, on_delete=models.SET_NULL,
+                                           related_name='+')
+
     def __str__(self):
         return self.name or str(self.id)
+
+    @property
+    def is_document(self):
+        return self.content_mode == self.ContentMode.DOCUMENT
 
     def has_nav_children(self):
         return self.nav_children.filter(site=self.site, show_on_navigation=True, active=True).exists()
@@ -189,6 +210,15 @@ def media_upload_to(instance, filename: str) -> str:
 
 
 class Media(TimestampModel):
+    UPLOAD = 'upload'
+    UNSPLASH = 'unsplash'
+    AI = 'ai'
+    SOURCES = [
+        (UPLOAD, 'Upload'),
+        (UNSPLASH, 'Unsplash'),
+        (AI, 'AI generated'),
+    ]
+
     IMAGE = 'image'
     VIDEO = 'video'
     AUDIO = 'audio'
@@ -207,10 +237,26 @@ class Media(TimestampModel):
     # stored type (optional, but makes admin filtering easy)
     media_type = models.CharField(max_length=16, choices=TYPES, blank=True, null=True)
 
-    file = models.FileField(upload_to=media_upload_to)
+    file = models.FileField(upload_to=media_upload_to, blank=True)
+
+    alt_text = models.CharField(max_length=250, blank=True)
+    caption = models.CharField(max_length=500, blank=True)
+    # {"x": 0-1, "y": 0-1}: the part of the image to keep when it is cropped.
+    focal_point = models.JSONField(blank=True, null=True)
+    width = models.PositiveIntegerField(blank=True, null=True)
+    height = models.PositiveIntegerField(blank=True, null=True)
+    source = models.CharField(max_length=16, choices=SOURCES, default=UPLOAD)
+    # Stock images are hotlinked, not copied (Unsplash API guidelines).
+    remote_url = models.URLField(max_length=1000, blank=True)
+    # e.g. {"name": "Jane Doe", "profile_url": "...", "source_url": "..."}
+    attribution = models.JSONField(default=dict, blank=True)
 
     def __str__(self):
         return self.name or str(self.id)
+
+    @property
+    def url(self) -> str:
+        return self.remote_url or self.file_url
 
     @property
     def filename(self) -> str:
@@ -365,7 +411,7 @@ class Column(TimestampModel, StyleModel, PositionModel):
 
 class Widget(TimestampModel, StyleModel, PositionModel):
 
-    type = models.CharField(max_length=128, choices=discovered_widgets)
+    type = models.CharField(max_length=128, choices=legacy_widget_choices)
     column = models.ManyToManyField(Column, blank=True)
     name = models.CharField(max_length=128, blank=True, null=True)
     content = models.TextField(blank=True, null=True)
@@ -394,4 +440,38 @@ class Widget(TimestampModel, StyleModel, PositionModel):
         return self.name or str(self.id)
 
 
+class PageRevision(TimestampModel):
+    """An immutable snapshot of a page document. Publishing points the page at one."""
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name='revisions')
+    number = models.PositiveIntegerField()
+    document = models.JSONField()
+    note = models.CharField(max_length=255, blank=True)
+    created_by = models.ForeignKey(settings.AUTH_USER_MODEL, blank=True, null=True, on_delete=models.SET_NULL,
+                                   related_name='+')
 
+    class Meta:
+        ordering = ['-number']
+        constraints = [
+            models.UniqueConstraint(fields=['page', 'number'], name='smbs_pages_unique_revision_number'),
+        ]
+
+    def __str__(self):
+        return f'{self.page} #{self.number}'
+
+
+class SiteChrome(SettingsModel):
+    """
+    The site-wide header and footer, as page documents. Edited like pages:
+    `draft` is what the editor writes, `published` is what visitors see.
+    Document-mode pages render it in place of the default navbar and footer.
+    """
+    draft = models.JSONField(default=empty_chrome, blank=True)
+    draft_version = models.PositiveIntegerField(default=0)
+    published = models.JSONField(blank=True, null=True)
+
+    class Meta:
+        verbose_name = 'site header and footer'
+        verbose_name_plural = 'site header and footer'
+
+    def __str__(self):
+        return f'Header and footer ({self.site})'

@@ -18,9 +18,12 @@ dependencies = [
     "django-versatileimagefield",
     "pyyaml",
     "psycopg2",
+    "nh3",          # smbs_pages page documents: rich text sanitizing (imported lazily)
+    "requests",     # smbs_pages: SiteSpec media downloads; smbs_oauth
 ]
 
 [project.optional-dependencies]
+managed = ["PyJWT>=2.10", "cryptography"]  # smbs_managed: SSO token verification
 shop = ["stripe"]
 mailchimp = ["mailchimp3"]
 

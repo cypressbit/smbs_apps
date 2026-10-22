@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block extra_head %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'smbs_pages/sections.css' %}">
+    <link rel="stylesheet" href="{% static 'smbs_pages/vendor/bootstrap-icons/bootstrap-icons.min.css' %}">
+    {% if is_preview %}<meta name="robots" content="noindex">{% endif %}
+{% endblock %}
+
+{% block nav %}
+    {% if chrome_header_html %}<header class="db-chrome-header">{{ chrome_header_html }}</header>{% else %}{{ block.super }}{% endif %}
+{% endblock %}
+
+{% block content %}
+    <main class="db-page">{{ document_html }}</main>
+{% endblock %}
+
+{% block footer %}
+    {% if chrome_footer_html %}<footer class="db-chrome-footer">{{ chrome_footer_html }}</footer>{% else %}{{ block.super }}{% endif %}
+{% endblock %}
