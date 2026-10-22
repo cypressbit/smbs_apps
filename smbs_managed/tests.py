@@ -314,3 +314,19 @@ class ThemeHandlerTests(TestCase):
                                     HTTP_AUTHORIZATION='Bearer secret')
         self.assertEqual(response.status_code, 200, response.content)
         self.assertEqual(THEMES_APPLIED, [{'preset': 'warm'}])
+
+
+class CsrfCacheTests(TestCase):
+
+    def test_pages_that_use_a_csrf_token_are_private_whatever_the_middleware_order(self):
+        from django.middleware.csrf import get_token
+        from smbs_apps.smbs_managed.middleware import CacheHeadersMiddleware
+
+        request = RequestFactory().get('/contact/')
+        request.user = mock.Mock(is_authenticated=False)
+
+        def view(req):
+            get_token(req)
+            return HttpResponse('form')
+        response = CacheHeadersMiddleware(view)(request)
+        self.assertEqual(response['Cache-Control'], 'private, no-store')
