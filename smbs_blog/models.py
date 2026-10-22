@@ -97,6 +97,11 @@ class BlogSettings(SettingsModel):
         verbose_name = 'Blog Settings'
 
 
+
+def language_choices():
+    # A callable, so migrations don't snapshot the host's LANGUAGES setting.
+    return settings.LANGUAGES
+
 class Post(SiteModel, TimestampModel):
     # Non-editable fields
     author = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -106,7 +111,7 @@ class Post(SiteModel, TimestampModel):
     metadata = models.ForeignKey(ObjectMetadata, on_delete=models.DO_NOTHING,
                                  blank=True, null=True)
     publish_date = models.DateTimeField()
-    language = models.CharField(max_length=10, choices=settings.LANGUAGES)
+    language = models.CharField(max_length=10, choices=language_choices)
     title = models.CharField(max_length=255, unique=True)
     cover_image = models.ImageField(upload_to='smbs_blog_images', blank=True)
     cover_image_alt_text = models.CharField(max_length=300, blank=True, null=True)
