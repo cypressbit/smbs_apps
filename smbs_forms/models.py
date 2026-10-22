@@ -26,12 +26,12 @@ class FormSettings(SettingsModel):
         form_settings = cls.get_object()
         response = {
             'email_enabled': getattr(form_settings, 'email_enabled', cls.EMAIL_ENABLED),
-            'email_user': getattr(form_settings, 'email_user'),
-            'email_password': getattr(form_settings, 'email_password'),
-            'email_host': getattr(form_settings, 'email_host'),
-            'email_port': getattr(form_settings, 'email_port'),
-            'email_recipient': getattr(form_settings, 'email_recipient'),
-            'email_subject': getattr(form_settings, 'email_subject', 'Contact Form'),
+            'email_user': getattr(form_settings, 'email_user', None),
+            'email_password': getattr(form_settings, 'email_password', None),
+            'email_host': getattr(form_settings, 'email_host', None),
+            'email_port': getattr(form_settings, 'email_port', None),
+            'email_recipient': getattr(form_settings, 'email_recipient', None),
+            'email_subject': getattr(form_settings, 'email_subject', None) or 'Contact Form',
             'success_url': getattr(form_settings, 'success_url', '/') or '/',
         }
         return response

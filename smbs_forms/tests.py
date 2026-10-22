@@ -97,3 +97,37 @@ class ContactWithAddressTest(TestCase):
         c.save()
         self.assertEqual(c.address, '123 Main St')
         self.assertEqual(c.city, 'Springfield')
+
+
+class ContactViewTest(TestCase):
+
+    def setUp(self):
+        from django.urls import NoReverseMatch, reverse
+        try:
+            self.URL = reverse('smbs_forms:contact')
+        except NoReverseMatch:
+            self.skipTest('smbs_forms URLs are not routed in this project')
+    VALID = {'name': 'Rosa', 'email': 'rosa@example.com', 'phone': '(555) 123-4567', 'message': 'Hi'}
+
+    def test_get_redirects_home(self):
+        response = self.client.get(self.URL)
+        self.assertRedirects(response, '/', fetch_redirect_response=False)
+
+    def test_valid_post_returns_to_the_page_with_a_notice(self):
+        response = self.client.post(self.URL, self.VALID, HTTP_REFERER='http://testserver/contact-us/?a=1')
+        self.assertRedirects(response, '/contact-us/?a=1&contact=sent#contact', fetch_redirect_response=False)
+        self.assertEqual(Contact.objects.count(), 1)
+
+    def test_invalid_post_returns_with_error(self):
+        response = self.client.post(self.URL, {**self.VALID, 'email': 'nope'}, HTTP_REFERER='http://testserver/x/')
+        self.assertRedirects(response, '/x/?contact=error#contact', fetch_redirect_response=False)
+        self.assertEqual(Contact.objects.count(), 0)
+
+    def test_foreign_referer_is_ignored(self):
+        response = self.client.post(self.URL, self.VALID, HTTP_REFERER='https://evil.example/')
+        self.assertRedirects(response, '/?contact=sent#contact', fetch_redirect_response=False)
+
+    def test_configured_success_url_wins(self):
+        ContactFormSettings.objects.create(site=Site.objects.get_current(), success_url='https://example.com/thanks')
+        response = self.client.post(self.URL, self.VALID)
+        self.assertRedirects(response, 'https://example.com/thanks', fetch_redirect_response=False)
