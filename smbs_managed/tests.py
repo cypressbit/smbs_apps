@@ -248,7 +248,7 @@ class CacheHeadersTests(TestCase):
     def test_response_setting_cookie_is_not_cached(self):
         response = HttpResponse('ok')
         response.set_cookie('csrftoken', 'x')
-        self.assertNotIn('Cache-Control', self.run_middleware('/', response=response))
+        self.assertEqual(self.run_middleware('/', response=response)['Cache-Control'], 'private, no-store')
 
     def test_existing_cache_control_is_kept(self):
         response = HttpResponse('ok')
