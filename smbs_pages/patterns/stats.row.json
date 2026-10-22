@@ -1,0 +1,35 @@
+{
+  "key": "stats.row",
+  "name": "Key numbers",
+  "category": "social-proof",
+  "description": "Two to four numbers with labels.",
+  "ai_hint": "Only when the brief provides real numbers.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "md"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "stats",
+                "props": {}
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

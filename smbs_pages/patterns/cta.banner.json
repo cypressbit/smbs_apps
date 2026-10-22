@@ -1,0 +1,53 @@
+{
+  "key": "cta.banner",
+  "name": "Call to action",
+  "category": "cta",
+  "description": "A bold invitation with buttons on a colored band.",
+  "ai_hint": "Near the end of a page, to prompt the next step.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "theme": "dark",
+      "background": {
+        "color": "primary"
+      }
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "cta_banner",
+                "props": {
+                  "heading": "Ready to get started?",
+                  "text": "Tell us what you need and we will get back to you within one business day.",
+                  "buttons": [
+                    {
+                      "label": "Contact us",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "contact"
+                      },
+                      "style": "accent",
+                      "icon": ""
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

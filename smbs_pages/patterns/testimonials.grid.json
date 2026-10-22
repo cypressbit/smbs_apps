@@ -1,0 +1,85 @@
+{
+  "key": "testimonials.grid",
+  "name": "Testimonials grid",
+  "category": "social-proof",
+  "description": "Customer quotes as cards.",
+  "ai_hint": "Real quotes from the brief, or sample placeholders with sample=true.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center",
+      "background": {
+        "color": "surface"
+      }
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "What our customers say",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "testimonials",
+                "props": {
+                  "layout": "grid",
+                  "sample": true,
+                  "items": [
+                    {
+                      "quote": "A short quote from a happy customer.",
+                      "name": "Customer name",
+                      "role": "",
+                      "photo": null
+                    },
+                    {
+                      "quote": "Another short quote about the experience.",
+                      "name": "Customer name",
+                      "role": "",
+                      "photo": null
+                    },
+                    {
+                      "quote": "A third quote about the results.",
+                      "name": "Customer name",
+                      "role": "",
+                      "photo": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

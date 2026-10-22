@@ -1,0 +1,37 @@
+{
+  "key": "logos.row",
+  "name": "Logos",
+  "category": "social-proof",
+  "description": "A row of client or partner logos.",
+  "ai_hint": "Only logos the business provided.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "md"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "logo_cloud",
+                "props": {
+                  "heading": "Trusted by"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

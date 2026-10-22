@@ -1,0 +1,51 @@
+{
+  "key": "hero.background",
+  "name": "Hero over a photo",
+  "category": "hero",
+  "description": "Headline and buttons over a full background photo.",
+  "ai_hint": "Opening section for visual businesses (restaurants, salons, venues) with a strong photo.",
+  "capability": null,
+  "section": {
+    "style": {
+      "width": "full",
+      "padding_y": "none"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "hero",
+                "props": {
+                  "variant": "background_image",
+                  "heading": "Come as you are, leave inspired",
+                  "subheading": "A short line about the experience you offer.",
+                  "buttons": [
+                    {
+                      "label": "Reserve a table",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "contact"
+                      },
+                      "style": "primary",
+                      "icon": ""
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

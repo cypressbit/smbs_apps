@@ -1,0 +1,38 @@
+{
+  "key": "blog.latest",
+  "name": "Latest posts",
+  "category": "blog",
+  "description": "The newest blog posts.",
+  "ai_hint": "Only when the site has a blog.",
+  "capability": "blog",
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "latest_posts",
+                "props": {
+                  "count": 3,
+                  "layout": "cards"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

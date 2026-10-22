@@ -1,0 +1,64 @@
+{
+  "key": "hours.location",
+  "name": "Hours and location",
+  "category": "contact",
+  "description": "Opening hours beside a map.",
+  "ai_hint": "Visiting information for a physical location.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "background": {
+        "color": "surface"
+      }
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "center"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 5
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Visit us",
+                  "level": 2
+                }
+              },
+              {
+                "type": "hours",
+                "props": {
+                  "heading": ""
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 12,
+              "md": 7
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "location_map",
+                "props": {
+                  "address": "Times Square, New York, NY"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "visit"
+  }
+}

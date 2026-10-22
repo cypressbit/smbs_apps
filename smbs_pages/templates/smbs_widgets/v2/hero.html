@@ -1,0 +1,27 @@
+{% load smbs_documents %}{% media_for props.image as media %}
+{% if props.variant == 'split' %}
+<div class="row align-items-center g-5 db-hero db-hero-split">
+  <div class="col-lg-6">
+    {% if props.eyebrow %}<div class="db-eyebrow mb-2">{{ props.eyebrow }}</div>{% endif %}
+    <h1 class="display-5 fw-bold mb-3">{{ props.heading }}</h1>
+    {% if props.subheading %}<p class="db-lead mb-4">{{ props.subheading|linebreaksbr }}</p>{% endif %}
+    {% include 'smbs_widgets/v2/_buttons.html' with buttons=props.buttons size='large' %}
+  </div>
+  <div class="col-lg-6">
+    {% if media %}<img src="{{ media.url }}" alt="{{ props.image.alt }}" class="img-fluid db-rounded w-100 object-fit-cover" style="max-height:520px;{% if props.image.focal_point %}object-position:{{ props.image|focal_position }}{% endif %}" loading="eager">{% media_attribution media %}
+    {% else %}<div class="ratio ratio-4x3 db-rounded db-placeholder"></div>{% endif %}
+  </div>
+</div>
+{% else %}
+<div class="db-hero db-hero-{{ props.variant }} text-center mx-auto{% if props.variant == 'background_image' %} db-hero-overlay{% endif %}"
+     {% if props.variant == 'background_image' and media %}style="background-image:url('{{ media.url }}');{% if props.image.focal_point %}background-position:{{ props.image|focal_position }}{% endif %}" role="img" aria-label="{{ props.image.alt }}"{% endif %}>
+  <div class="db-hero-inner mx-auto">
+    {% if props.eyebrow %}<div class="db-eyebrow mb-2">{{ props.eyebrow }}</div>{% endif %}
+    <h1 class="display-4 fw-bold mb-3">{{ props.heading }}</h1>
+    {% if props.subheading %}<p class="db-lead mb-4">{{ props.subheading|linebreaksbr }}</p>{% endif %}
+    {% include 'smbs_widgets/v2/_buttons.html' with buttons=props.buttons size='large' center=True %}
+  </div>
+  {% if props.variant == 'centered' and media %}<img src="{{ media.url }}" alt="{{ props.image.alt }}" class="img-fluid db-rounded mt-5" loading="eager">{% media_attribution media %}{% endif %}
+  {% if props.variant == 'background_image' and media %}{% media_attribution media %}{% endif %}
+</div>
+{% endif %}

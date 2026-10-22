@@ -1,0 +1,53 @@
+{
+  "key": "testimonials.carousel",
+  "name": "Testimonials carousel",
+  "category": "social-proof",
+  "description": "One quote at a time in a slider.",
+  "ai_hint": "Real quotes from the brief, or sample placeholders with sample=true.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "testimonials",
+                "props": {
+                  "layout": "carousel",
+                  "sample": true,
+                  "items": [
+                    {
+                      "quote": "A short quote from a happy customer.",
+                      "name": "Customer name",
+                      "role": "",
+                      "photo": null
+                    },
+                    {
+                      "quote": "Another short quote about the experience.",
+                      "name": "Customer name",
+                      "role": "",
+                      "photo": null
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

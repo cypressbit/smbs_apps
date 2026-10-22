@@ -1,0 +1,13 @@
+{% load smbs_documents %}
+<div class="{% if props.layout == 'masonry' %}db-masonry db-masonry-{{ props.columns }}{% else %}row row-cols-2 row-cols-md-{{ props.columns }} g-3{% endif %} db-gallery">
+  {% for item in props.images %}{% media_for item.image as media %}
+  <figure class="{% if props.layout != 'masonry' %}col {% endif %}mb-0">
+    {% if media %}
+      {% if props.layout == 'masonry' %}<img src="{{ media.url }}" alt="{{ item.image.alt }}" class="img-fluid db-rounded w-100" loading="lazy">
+      {% else %}<div class="ratio ratio-1x1"><img src="{{ media.url }}" alt="{{ item.image.alt }}" class="w-100 h-100 object-fit-cover db-rounded" loading="lazy"{% if item.image.focal_point %} style="object-position:{{ item.image|focal_position }}"{% endif %}></div>{% endif %}
+      {% media_attribution media %}
+    {% else %}<div class="ratio ratio-1x1 db-rounded db-placeholder"></div>{% endif %}
+    {% if item.caption %}<figcaption class="small mt-1 opacity-75">{{ item.caption }}</figcaption>{% endif %}
+  </figure>
+  {% endfor %}
+</div>

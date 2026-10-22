@@ -1,0 +1,86 @@
+{
+  "key": "features.cards",
+  "name": "Feature cards",
+  "category": "features",
+  "description": "Four to six features as cards.",
+  "ai_hint": "Several services or features, each with an icon and one sentence.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "background": {
+        "color": "surface"
+      }
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "What we offer",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "feature_grid",
+                "props": {
+                  "columns": 3,
+                  "cards": true,
+                  "items": [
+                    {
+                      "icon": "star",
+                      "title": "First feature",
+                      "body": "One sentence about it."
+                    },
+                    {
+                      "icon": "shield-check",
+                      "title": "Second feature",
+                      "body": "One sentence about it."
+                    },
+                    {
+                      "icon": "lightning",
+                      "title": "Third feature",
+                      "body": "One sentence about it."
+                    },
+                    {
+                      "icon": "heart",
+                      "title": "Fourth feature",
+                      "body": "One sentence about it."
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

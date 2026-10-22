@@ -1,0 +1,17 @@
+{% load smbs_documents %}{% with accordion=node|dom_id:'faq' %}
+<div class="accordion db-faq" id="{{ accordion }}">
+  {% for item in props.items %}
+  <div class="accordion-item">
+    <h3 class="accordion-header" id="{{ accordion }}-h{{ forloop.counter }}">
+      <button class="accordion-button{% if not props.open_first or not forloop.first %} collapsed{% endif %}" type="button"
+              data-bs-toggle="collapse" data-bs-target="#{{ accordion }}-c{{ forloop.counter }}"
+              aria-expanded="{% if props.open_first and forloop.first %}true{% else %}false{% endif %}" aria-controls="{{ accordion }}-c{{ forloop.counter }}">{{ item.question }}</button>
+    </h3>
+    <div id="{{ accordion }}-c{{ forloop.counter }}" class="accordion-collapse collapse{% if props.open_first and forloop.first %} show{% endif %}"
+         aria-labelledby="{{ accordion }}-h{{ forloop.counter }}" data-bs-parent="#{{ accordion }}">
+      <div class="accordion-body db-rich-text">{{ item.answer|safe }}</div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endwith %}

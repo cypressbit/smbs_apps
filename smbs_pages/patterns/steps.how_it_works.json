@@ -1,0 +1,59 @@
+{
+  "key": "steps.how_it_works",
+  "name": "How it works",
+  "category": "content",
+  "description": "A numbered three-step process.",
+  "ai_hint": "Explain the customer journey from first contact to result.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "How it works",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "steps",
+                "props": {}
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "key": "text.centered",
+  "name": "Centered text",
+  "category": "content",
+  "description": "A heading and a few paragraphs, centered.",
+  "ai_hint": "An introduction or mission statement.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center",
+      "width": "narrow"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 10,
+              "lg": 8
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Our story",
+                  "level": 2
+                }
+              },
+              {
+                "type": "rich_text",
+                "props": {
+                  "html": "<p>A few sentences that introduce the business and what it stands for.</p>",
+                  "lead": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

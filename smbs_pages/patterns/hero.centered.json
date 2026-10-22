@@ -1,0 +1,64 @@
+{
+  "key": "hero.centered",
+  "name": "Centered hero",
+  "category": "hero",
+  "description": "A centered headline, pitch and buttons.",
+  "ai_hint": "Opening section of the home page when no strong photo is available.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "xl",
+      "theme": "light",
+      "background": {
+        "color": "surface"
+      }
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "hero",
+                "props": {
+                  "variant": "centered",
+                  "eyebrow": "Welcome",
+                  "heading": "Friendly, reliable service in your neighborhood",
+                  "subheading": "We help local families and businesses with quality work, fair prices and on-time results.",
+                  "buttons": [
+                    {
+                      "label": "Get a free quote",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "contact"
+                      },
+                      "style": "primary",
+                      "icon": ""
+                    },
+                    {
+                      "label": "Our services",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "services"
+                      },
+                      "style": "secondary",
+                      "icon": ""
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

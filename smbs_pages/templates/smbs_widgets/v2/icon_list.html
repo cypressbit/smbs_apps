@@ -1,0 +1,9 @@
+{% load smbs_documents %}
+<ul class="list-unstyled row row-cols-1{% if props.columns > 1 %} row-cols-md-{{ props.columns }}{% endif %} g-2 mb-0 db-icon-list">
+  {% for item in props.items %}
+  <li class="col d-flex align-items-start gap-2">
+    <i class="bi bi-{{ item.icon }} db-icon-sm" aria-hidden="true"></i>
+    <span>{% if item.link %}<a href="{{ item.link|link_href }}"{{ item.link|link_target }}>{{ item.text }}</a>{% else %}{{ item.text }}{% endif %}</span>
+  </li>
+  {% endfor %}
+</ul>

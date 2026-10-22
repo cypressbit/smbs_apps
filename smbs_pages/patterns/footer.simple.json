@@ -1,0 +1,103 @@
+{
+  "key": "footer.simple",
+  "name": "Simple footer",
+  "category": "chrome",
+  "description": "About text, contact details and a copyright line.",
+  "ai_hint": "The site footer (chrome).",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "md",
+      "theme": "dark",
+      "background": {
+        "color": "dark"
+      }
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 5
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Business name",
+                  "level": 4,
+                  "size": "small"
+                }
+              },
+              {
+                "type": "rich_text",
+                "props": {
+                  "html": "<p>One sentence about the business.</p>"
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 12,
+              "md": 4
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "icon_list",
+                "props": {
+                  "columns": 1,
+                  "items": [
+                    {
+                      "icon": "telephone",
+                      "text": "(555) 555-0100",
+                      "link": {
+                        "kind": "tel",
+                        "tel": "+15555550100"
+                      }
+                    },
+                    {
+                      "icon": "envelope",
+                      "text": "hello@example.com",
+                      "link": {
+                        "kind": "email",
+                        "email": "hello@example.com"
+                      }
+                    },
+                    {
+                      "icon": "geo-alt",
+                      "text": "123 Main Street, Your City",
+                      "link": null
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 12,
+              "md": 3
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "rich_text",
+                "props": {
+                  "html": "<p><small>© Business name. All rights reserved.</small></p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,13 @@
+{% load smbs_documents %}{% media_for props.image as media %}
+<div class="row align-items-center g-5 db-content-split">
+  <div class="col-md-6{% if props.image_side == 'right' %} order-md-2{% endif %}">
+    {% if media %}<img src="{{ media.url }}" alt="{{ props.image.alt }}" class="img-fluid db-rounded w-100" loading="lazy"{% if props.image.focal_point %} style="object-position:{{ props.image|focal_position }}"{% endif %}>{% media_attribution media %}
+    {% else %}<div class="ratio ratio-4x3 db-rounded db-placeholder"></div>{% endif %}
+  </div>
+  <div class="col-md-6">
+    {% if props.eyebrow %}<div class="db-eyebrow mb-2">{{ props.eyebrow }}</div>{% endif %}
+    <h2 class="mb-3">{{ props.heading }}</h2>
+    <div class="db-rich-text mb-4">{{ props.body|safe }}</div>
+    {% include 'smbs_widgets/v2/_buttons.html' with buttons=props.buttons %}
+  </div>
+</div>

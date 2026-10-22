@@ -1,0 +1,60 @@
+{
+  "key": "pricing.three_tiers",
+  "name": "Three plans",
+  "category": "pricing",
+  "description": "Three packages side by side, middle one highlighted.",
+  "ai_hint": "Only when the brief lists packages or prices.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Plans and pricing",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "pricing_table",
+                "props": {}
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "pricing"
+  }
+}

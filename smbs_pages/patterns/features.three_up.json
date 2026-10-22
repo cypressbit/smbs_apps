@@ -1,0 +1,63 @@
+{
+  "key": "features.three_up",
+  "name": "Three benefits",
+  "category": "features",
+  "description": "Three benefits with icons, no cards.",
+  "ai_hint": "Why choose us: three concrete benefits.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Why customers choose us",
+                  "level": 2,
+                  "eyebrow": "Why us"
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "feature_grid",
+                "props": {
+                  "columns": 3,
+                  "cards": false
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

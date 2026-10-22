@@ -1,0 +1,6 @@
+{% load smbs_documents %}{% if buttons %}
+<div class="d-flex flex-wrap gap-2 db-buttons{% if center %} justify-content-center{% endif %}">
+  {% for button in buttons %}
+  <a class="btn btn-db-{{ button.style }}{% if size == 'large' %} btn-lg{% endif %}" href="{{ button.link|link_href }}"{{ button.link|link_target }}>{% if button.icon %}<i class="bi bi-{{ button.icon }} me-1" aria-hidden="true"></i>{% endif %}{{ button.label }}</a>
+  {% endfor %}
+</div>{% endif %}

@@ -1,0 +1,30 @@
+{% if props.heading %}<h2 class="mb-4">{{ props.heading }}</h2>{% endif %}
+{% if posts %}
+{% if props.layout == 'cards' %}
+<div class="row row-cols-1 row-cols-md-3 g-4 db-latest-posts">
+  {% for post in posts %}
+  <div class="col">
+    <a href="{{ post.get_absolute_url }}" class="db-card d-block text-decoration-none p-0 overflow-hidden">
+      {% if post.cover_image %}<div class="ratio ratio-16x9"><img src="{{ post.cover_image.url }}" alt="{{ post.get_cover_alt }}" class="w-100 h-100 object-fit-cover" loading="lazy"></div>{% endif %}
+      <div class="p-3">
+        <div class="small opacity-75 mb-1">{{ post.publish_date|date:"M j, Y" }}</div>
+        <h3 class="h5 mb-2">{{ post.title }}</h3>
+        <p class="mb-0 small">{{ post.description }}</p>
+      </div>
+    </a>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<ul class="list-unstyled mb-0 db-latest-posts">
+  {% for post in posts %}
+  <li class="py-3{% if not forloop.last %} border-bottom{% endif %}">
+    <a href="{{ post.get_absolute_url }}" class="h5 d-block mb-1">{{ post.title }}</a>
+    <div class="small opacity-75">{{ post.publish_date|date:"M j, Y" }} · {{ post.description }}</div>
+  </li>
+  {% endfor %}
+</ul>
+{% endif %}
+{% else %}
+<p class="opacity-75">No posts yet.</p>
+{% endif %}

@@ -1,0 +1,21 @@
+{% load smbs_documents %}
+{% if props.sample %}<div class="text-center mb-3"><span class="badge db-badge-sample">Sample testimonial</span></div>{% endif %}
+{% if props.layout == 'carousel' %}{% with carousel=node|dom_id:'testimonials' %}
+<div id="{{ carousel }}" class="carousel slide db-testimonials" data-bs-ride="carousel">
+  <div class="carousel-inner">
+    {% for item in props.items %}
+    <div class="carousel-item{% if forloop.first %} active{% endif %}">
+      {% include 'smbs_widgets/v2/_testimonial.html' with item=item center=True %}
+    </div>
+    {% endfor %}
+  </div>
+  {% if props.items|length > 1 %}
+  <button class="carousel-control-prev" type="button" data-bs-target="#{{ carousel }}" data-bs-slide="prev"><span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Previous</span></button>
+  <button class="carousel-control-next" type="button" data-bs-target="#{{ carousel }}" data-bs-slide="next"><span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Next</span></button>
+  {% endif %}
+</div>
+{% endwith %}{% else %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 db-testimonials">
+  {% for item in props.items %}<div class="col"><div class="db-card">{% include 'smbs_widgets/v2/_testimonial.html' with item=item %}</div></div>{% endfor %}
+</div>
+{% endif %}

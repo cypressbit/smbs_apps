@@ -1,0 +1,9 @@
+{% load smbs_documents %}
+{% if props.heading %}<p class="text-center db-eyebrow mb-4">{{ props.heading }}</p>{% endif %}
+<div class="d-flex flex-wrap justify-content-center align-items-center gap-4 gap-md-5 db-logos{% if props.grayscale %} db-logos-grayscale{% endif %}">
+  {% for logo in props.logos %}{% media_for logo.image as media %}
+    {% if media %}
+      {% if logo.link %}<a href="{{ logo.link|link_href }}"{{ logo.link|link_target }}>{% endif %}<img src="{{ media.url }}" alt="{{ logo.image.alt }}" class="db-logo" loading="lazy">{% if logo.link %}</a>{% endif %}
+    {% else %}<div class="db-logo db-placeholder"></div>{% endif %}
+  {% endfor %}
+</div>

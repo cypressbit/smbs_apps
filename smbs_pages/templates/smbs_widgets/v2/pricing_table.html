@@ -1,0 +1,19 @@
+{% load smbs_documents %}
+<div class="row row-cols-1 row-cols-md-{{ props.plans|length }} g-4 align-items-stretch db-pricing">
+  {% for plan in props.plans %}
+  <div class="col">
+    <div class="db-card d-flex flex-column{% if plan.highlighted %} db-card-highlight{% endif %}">
+      {% if plan.highlighted %}<span class="badge db-badge align-self-start mb-2">Most popular</span>{% endif %}
+      <h3 class="h5 mb-1">{{ plan.name }}</h3>
+      {% if plan.description %}<p class="small opacity-75 mb-3">{{ plan.description }}</p>{% endif %}
+      <div class="mb-3"><span class="display-6 fw-bold">{{ plan.price }}</span>{% if plan.period %} <span class="opacity-75">{{ plan.period }}</span>{% endif %}</div>
+      {% if plan.features %}
+      <ul class="list-unstyled mb-4">
+        {% for feature in plan.features %}<li class="d-flex gap-2 mb-2"><i class="bi bi-check2 db-icon-sm" aria-hidden="true"></i><span>{{ feature.text }}</span></li>{% endfor %}
+      </ul>
+      {% endif %}
+      <a class="btn btn-db-{{ plan.button.style }} mt-auto" href="{{ plan.button.link|link_href }}"{{ plan.button.link|link_target }}>{% if plan.button.icon %}<i class="bi bi-{{ plan.button.icon }} me-1" aria-hidden="true"></i>{% endif %}{{ plan.button.label }}</a>
+    </div>
+  </div>
+  {% endfor %}
+</div>

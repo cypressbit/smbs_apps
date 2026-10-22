@@ -1,0 +1,60 @@
+{
+  "key": "hero.split",
+  "name": "Hero with image",
+  "category": "hero",
+  "description": "Headline and buttons beside a large image.",
+  "ai_hint": "Opening section when there is a good photo of the work, product or place.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "hero",
+                "props": {
+                  "variant": "split",
+                  "eyebrow": "Welcome",
+                  "heading": "Quality work you can count on",
+                  "subheading": "Tell visitors who you help and what makes you different.",
+                  "buttons": [
+                    {
+                      "label": "Book now",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "contact"
+                      },
+                      "style": "primary",
+                      "icon": ""
+                    },
+                    {
+                      "label": "Learn more",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "about"
+                      },
+                      "style": "secondary",
+                      "icon": ""
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

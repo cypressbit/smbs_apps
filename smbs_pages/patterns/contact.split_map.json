@@ -1,0 +1,60 @@
+{
+  "key": "contact.split_map",
+  "name": "Contact with map",
+  "category": "contact",
+  "description": "Contact form beside a map and opening hours.",
+  "ai_hint": "Contact section for businesses with a physical location.",
+  "capability": "forms",
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 7
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "contact_form",
+                "props": {
+                  "heading": "Get in touch",
+                  "intro": "Send us a message and we will reply as soon as we can."
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 12,
+              "md": 5
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "location_map",
+                "props": {
+                  "address": "Times Square, New York, NY",
+                  "height": "sm"
+                }
+              },
+              {
+                "type": "hours",
+                "props": {}
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "contact"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "key": "services.list",
+  "name": "Services list",
+  "category": "content",
+  "description": "Services with descriptions and optional prices.",
+  "ai_hint": "The offerings from the brief; prices only if given.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 4
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Our services",
+                  "level": 2,
+                  "eyebrow": "What we do"
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 12,
+              "md": 8
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "services_list",
+                "props": {
+                  "layout": "list",
+                  "items": [
+                    {
+                      "icon": "check2-circle",
+                      "title": "First service",
+                      "description": "What it includes.",
+                      "price": ""
+                    },
+                    {
+                      "icon": "check2-circle",
+                      "title": "Second service",
+                      "description": "What it includes.",
+                      "price": ""
+                    },
+                    {
+                      "icon": "check2-circle",
+                      "title": "Third service",
+                      "description": "What it includes.",
+                      "price": ""
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "services"
+  }
+}

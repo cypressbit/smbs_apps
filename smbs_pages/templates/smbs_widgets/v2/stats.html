@@ -1,0 +1,8 @@
+<div class="row row-cols-2 row-cols-md-{{ props.items|length }} g-4 text-center db-stats">
+  {% for item in props.items %}
+  <div class="col">
+    <div class="db-stat-value display-6 fw-bold">{{ item.value }}</div>
+    <div class="db-stat-label opacity-75">{{ item.label }}</div>
+  </div>
+  {% endfor %}
+</div>

@@ -1,0 +1,59 @@
+{
+  "key": "team.grid",
+  "name": "Team",
+  "category": "about",
+  "description": "People with photo, role and short bio.",
+  "ai_hint": "Only people named in the brief.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "align": "center"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Meet the team",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "team",
+                "props": {}
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

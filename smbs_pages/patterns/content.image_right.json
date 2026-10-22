@@ -1,0 +1,40 @@
+{
+  "key": "content.image_right",
+  "name": "Image right, text beside",
+  "category": "content",
+  "description": "An image on the right with a heading, text and an optional button.",
+  "ai_hint": "About us, a featured service or how you work.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "content_split",
+                "props": {
+                  "image_side": "right",
+                  "eyebrow": "About us",
+                  "heading": "A little about us",
+                  "body": "<p>Share how the business started, who runs it and what you care about.</p>"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,7 @@
+<div class="db-hours">
+  {% if props.heading %}<h3 class="h5 mb-3">{{ props.heading }}</h3>{% endif %}
+  <dl class="row mb-0">
+    {% for row in props.rows %}<dt class="col-6 fw-normal">{{ row.day }}</dt><dd class="col-6 text-end mb-2">{{ row.hours }}</dd>{% endfor %}
+  </dl>
+  {% if props.note %}<p class="small opacity-75 mt-2 mb-0">{{ props.note }}</p>{% endif %}
+</div>

@@ -1,0 +1,64 @@
+{
+  "key": "header.simple",
+  "name": "Simple header",
+  "category": "chrome",
+  "description": "Site name with a call-to-action button.",
+  "ai_hint": "The site header (chrome). Site name as text, one button.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "sm"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "center"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 6
+            },
+            "valign": "center",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Business name",
+                  "level": 4,
+                  "size": "small"
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 6
+            },
+            "valign": "center",
+            "widgets": [
+              {
+                "type": "button_group",
+                "props": {
+                  "buttons": [
+                    {
+                      "label": "Contact us",
+                      "link": {
+                        "kind": "anchor",
+                        "anchor": "contact"
+                      },
+                      "style": "primary",
+                      "icon": ""
+                    }
+                  ],
+                  "size": "small"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "key": "faq.accordion",
+  "name": "FAQ",
+  "category": "content",
+  "description": "Frequently asked questions.",
+  "ai_hint": "Questions customers ask before buying; short factual answers.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "width": "narrow"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "center"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Frequently asked questions",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 10,
+              "lg": 8
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "faq",
+                "props": {
+                  "items": [
+                    {
+                      "question": "How do I get started?",
+                      "answer": "<p>Send us a message or give us a call and we will take it from there.</p>"
+                    },
+                    {
+                      "question": "Which areas do you serve?",
+                      "answer": "<p>Describe your service area here.</p>"
+                    },
+                    {
+                      "question": "How do I pay?",
+                      "answer": "<p>List the payment methods you accept.</p>"
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "faq"
+  }
+}

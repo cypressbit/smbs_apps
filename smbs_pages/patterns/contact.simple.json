@@ -1,0 +1,42 @@
+{
+  "key": "contact.simple",
+  "name": "Contact form",
+  "category": "contact",
+  "description": "A centered contact form.",
+  "ai_hint": "Contact section for online or mobile businesses.",
+  "capability": "forms",
+  "section": {
+    "style": {
+      "padding_y": "lg",
+      "width": "narrow"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12,
+              "md": 10,
+              "lg": 8
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "contact_form",
+                "props": {
+                  "heading": "Get in touch",
+                  "intro": "Tell us a little about what you need."
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "contact"
+  }
+}

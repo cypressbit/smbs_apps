@@ -1,0 +1,26 @@
+<div class="db-contact-form">
+  {% if props.heading %}<h2 class="mb-2">{{ props.heading }}</h2>{% endif %}
+  {% if props.intro %}<p class="mb-4 opacity-75">{{ props.intro|linebreaksbr }}</p>{% endif %}
+  {% if request.GET.contact == 'sent' %}
+  <div class="alert alert-success" role="status">Thanks! Your message was sent.</div>
+  {% elif request.GET.contact == 'error' %}
+  <div class="alert alert-danger" role="alert">Your message couldn't be sent. Please check the fields and try again.</div>
+  {% endif %}
+  <form method="post" action="{% url 'smbs_forms:contact' %}">
+    {% csrf_token %}
+    <div class="row g-3">
+      {% for field in form %}
+      <div class="{% if field.name == 'message' %}col-12{% else %}col-md-6{% endif %}">
+        <label class="form-label" for="{{ field.auto_id }}">{{ field.help_text|default:field.label }}</label>
+        {% if field.name == 'message' %}
+        <textarea class="form-control" name="{{ field.html_name }}" id="{{ field.auto_id }}" rows="5" required></textarea>
+        {% else %}
+        <input class="form-control" type="{% if field.name == 'email' %}email{% elif field.name == 'phone' %}tel{% else %}text{% endif %}"
+               name="{{ field.html_name }}" id="{{ field.auto_id }}"{% if field.field.max_length %} maxlength="{{ field.field.max_length }}"{% endif %}{% if field.field.required %} required{% endif %}>
+        {% endif %}
+      </div>
+      {% endfor %}
+      <div class="col-12"><button type="submit" class="btn btn-db-primary">{{ props.button_label }}</button></div>
+    </div>
+  </form>
+</div>

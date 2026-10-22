@@ -1,0 +1,12 @@
+{% if props.heading %}<h2 class="mb-4">{{ props.heading }}</h2>{% endif %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-{{ props.columns }} g-4 db-feature-grid">
+  {% for item in props.items %}
+  <div class="col">
+    <div class="{% if props.cards %}db-card{% else %}h-100{% endif %}">
+      <i class="bi bi-{{ item.icon }} db-icon d-block mb-3" aria-hidden="true"></i>
+      <h3 class="h5 mb-2">{{ item.title }}</h3>
+      {% if item.body %}<p class="mb-0 opacity-75">{{ item.body|linebreaksbr }}</p>{% endif %}
+    </div>
+  </div>
+  {% endfor %}
+</div>

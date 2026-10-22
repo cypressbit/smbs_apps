@@ -1,0 +1,61 @@
+{
+  "key": "gallery.grid",
+  "name": "Gallery",
+  "category": "media",
+  "description": "A grid of photos.",
+  "ai_hint": "Photos of the work, products or place.",
+  "capability": null,
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Gallery",
+                  "level": 2
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "gallery",
+                "props": {
+                  "columns": 3
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "gallery"
+  }
+}
