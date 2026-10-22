@@ -31,7 +31,11 @@ class HealthCheckMiddleware:
 class CacheHeadersMiddleware:
     """
     Marks anonymous public pages cacheable at the edge (Cloudflare) and
-    everything private (panel, admin, previews, signed-in users) as no-store.
+    everything private (panel, admin, previews, signed-in users, pages that
+    use a CSRF token or set cookies) as no-store.
+
+    Put it near the top of MIDDLEWARE (right after SecurityMiddleware) so its
+    response phase runs after the session and CSRF middleware have set cookies.
     """
 
     def __init__(self, get_response):
@@ -43,14 +47,18 @@ class CacheHeadersMiddleware:
         private = (
             request.path.startswith(tuple(conf.get('MANAGED_PRIVATE_PATHS')))
             or 'preview' in request.GET
+            # A page that rendered a CSRF token is per-visitor (Django sets this in get_token();
+            # CsrfViewMiddleware clears it again once it has set the cookie).
+            or request.META.get('CSRF_COOKIE_NEEDS_UPDATE')
+            # Anything that sets cookies (CSRF, session) is per-visitor too.
+            or bool(response.cookies)
             or (hasattr(request, 'user') and request.user.is_authenticated)
         )
         if private:
             if 'no-store' not in existing and 'private' not in existing:
                 response['Cache-Control'] = PRIVATE_CACHE
             return response
-        if (request.method in ('GET', 'HEAD') and response.status_code == 200
-                and not existing and not response.cookies):
+        if request.method in ('GET', 'HEAD') and response.status_code == 200 and not existing:
             response['Cache-Control'] = PUBLIC_CACHE
         return response
 

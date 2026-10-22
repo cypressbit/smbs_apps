@@ -248,7 +248,7 @@ class CacheHeadersTests(TestCase):
     def test_response_setting_cookie_is_not_cached(self):
         response = HttpResponse('ok')
         response.set_cookie('csrftoken', 'x')
-        self.assertNotIn('Cache-Control', self.run_middleware('/', response=response))
+        self.assertEqual(self.run_middleware('/', response=response)['Cache-Control'], 'private, no-store')
 
     def test_existing_cache_control_is_kept(self):
         response = HttpResponse('ok')
@@ -295,3 +295,38 @@ class CoreClientTests(TestCase):
         with self.assertRaises(CoreAPIError) as ctx:
             CoreClient(session=session).ai_assist({'node': 'w_1'})
         self.assertEqual(ctx.exception.status, 500)
+
+
+THEMES_APPLIED = []
+
+
+def record_theme(theme):
+    THEMES_APPLIED.append(theme)
+
+
+class ThemeHandlerTests(TestCase):
+
+    @override_settings(CORE_API_TOKEN='secret', MANAGED_THEME_HANDLER='smbs_apps.smbs_managed.tests.record_theme')
+    def test_materialize_passes_the_theme_to_the_host_handler(self):
+        THEMES_APPLIED.clear()
+        spec = {'theme': {'preset': 'warm'}, 'pages': [{'key': 'home', 'name': 'Home', 'slug': None}]}
+        response = self.client.post('/manage/api/materialize/', json.dumps(spec), content_type='application/json',
+                                    HTTP_AUTHORIZATION='Bearer secret')
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(THEMES_APPLIED, [{'preset': 'warm'}])
+
+
+class CsrfCacheTests(TestCase):
+
+    def test_pages_that_use_a_csrf_token_are_private_whatever_the_middleware_order(self):
+        from django.middleware.csrf import get_token
+        from smbs_apps.smbs_managed.middleware import CacheHeadersMiddleware
+
+        request = RequestFactory().get('/contact/')
+        request.user = mock.Mock(is_authenticated=False)
+
+        def view(req):
+            get_token(req)
+            return HttpResponse('form')
+        response = CacheHeadersMiddleware(view)(request)
+        self.assertEqual(response['Cache-Control'], 'private, no-store')

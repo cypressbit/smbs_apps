@@ -4,6 +4,7 @@ import os
 
 from django.http import HttpResponseForbidden, HttpResponseRedirect, JsonResponse
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.utils.module_loading import import_string
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_GET, require_POST
@@ -44,6 +45,11 @@ def sso_login(request):
     return response
 
 
+def _theme_handler():
+    path = conf.get('MANAGED_THEME_HANDLER')
+    return import_string(path) if path else None
+
+
 @csrf_exempt
 @require_POST
 def materialize(request):
@@ -61,7 +67,7 @@ def materialize(request):
     else:
         spec, publish = body, True
     try:
-        result = materialize_spec(spec, publish=bool(publish))
+        result = materialize_spec(spec, publish=bool(publish), theme_handler=_theme_handler())
     except DocumentError as exc:
         return JsonResponse({'errors': exc.errors}, status=400)
     return JsonResponse(result)
