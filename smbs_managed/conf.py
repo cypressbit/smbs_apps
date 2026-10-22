@@ -11,6 +11,8 @@ DEFAULTS = {
     'CORE_API_TOKEN': '',            # shared bearer token, used in both directions
     'MANAGED_PRIVATE_PATHS': ('/manage/', '/admin/', '/account/'),
     'MANAGED_ADMIN_PATH': '/admin/',
+    # Dotted path to a callable(theme_tokens) that applies a SiteSpec's theme (themes live in the host).
+    'MANAGED_THEME_HANDLER': '',
 }
 
 

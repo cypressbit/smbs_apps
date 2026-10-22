@@ -295,3 +295,22 @@ class CoreClientTests(TestCase):
         with self.assertRaises(CoreAPIError) as ctx:
             CoreClient(session=session).ai_assist({'node': 'w_1'})
         self.assertEqual(ctx.exception.status, 500)
+
+
+THEMES_APPLIED = []
+
+
+def record_theme(theme):
+    THEMES_APPLIED.append(theme)
+
+
+class ThemeHandlerTests(TestCase):
+
+    @override_settings(CORE_API_TOKEN='secret', MANAGED_THEME_HANDLER='smbs_apps.smbs_managed.tests.record_theme')
+    def test_materialize_passes_the_theme_to_the_host_handler(self):
+        THEMES_APPLIED.clear()
+        spec = {'theme': {'preset': 'warm'}, 'pages': [{'key': 'home', 'name': 'Home', 'slug': None}]}
+        response = self.client.post('/manage/api/materialize/', json.dumps(spec), content_type='application/json',
+                                    HTTP_AUTHORIZATION='Bearer secret')
+        self.assertEqual(response.status_code, 200, response.content)
+        self.assertEqual(THEMES_APPLIED, [{'preset': 'warm'}])
