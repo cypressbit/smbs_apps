@@ -23,6 +23,10 @@ def _back(request, status):
     return urlunsplit(('', '', parts.path or '/', urlencode(query), 'contact'))
 
 
+def _csrf_protected(request):
+    """Stand-in view for CsrfViewMiddleware.process_view (passing the exempt `contact` would skip the check)."""
+
+
 @csrf_exempt  # checked below: Turnstile when it's configured, Django's CSRF check otherwise
 def contact(request):
     if request.method != 'POST':
@@ -31,7 +35,7 @@ def contact(request):
         if not turnstile.verify(request):
             return redirect(_back(request, 'error'))
     else:
-        rejected = CsrfViewMiddleware(lambda r: None).process_view(request, contact, (), {})
+        rejected = CsrfViewMiddleware(lambda r: None).process_view(request, _csrf_protected, (), {})
         if rejected is not None:
             return rejected
     form = ContactForm(request.POST)
