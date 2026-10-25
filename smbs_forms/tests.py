@@ -1,4 +1,5 @@
-from django.test import TestCase
+import requests
+from django.test import Client, TestCase, override_settings
 from django.core.exceptions import ValidationError
 from django.contrib.sites.models import Site
 
@@ -131,3 +132,50 @@ class ContactViewTest(TestCase):
         ContactFormSettings.objects.create(site=Site.objects.get_current(), success_url='https://example.com/thanks')
         response = self.client.post(self.URL, self.VALID)
         self.assertRedirects(response, 'https://example.com/thanks', fetch_redirect_response=False)
+
+
+class TurnstileContactTest(TestCase):
+    """With Turnstile keys, the form needs a valid token instead of a CSRF token."""
+    VALID = ContactViewTest.VALID
+
+    def setUp(self):
+        from django.urls import NoReverseMatch, reverse
+        try:
+            self.URL = reverse('smbs_forms:contact')
+        except NoReverseMatch:
+            self.skipTest('smbs_forms URLs are not routed in this project')
+        self.client = Client(enforce_csrf_checks=True)
+
+    def test_csrf_is_still_required_without_turnstile(self):
+        self.assertEqual(self.client.post(self.URL, self.VALID).status_code, 403)
+        self.assertEqual(Contact.objects.count(), 0)
+
+    @override_settings(TURNSTILE_SITE_KEY='site', TURNSTILE_SECRET_KEY='secret')
+    def test_turnstile_replaces_csrf(self):
+        from unittest import mock
+        verified = mock.Mock(**{'json.return_value': {'success': True}})
+        with mock.patch('smbs_apps.smbs_forms.turnstile.requests.post', return_value=verified) as post:
+            response = self.client.post(self.URL, {**self.VALID, 'cf-turnstile-response': 'token'})
+        self.assertRedirects(response, '/?contact=sent#contact', fetch_redirect_response=False)
+        self.assertEqual(post.call_args.kwargs['data']['response'], 'token')
+        self.assertEqual(Contact.objects.count(), 1)
+
+    @override_settings(TURNSTILE_SITE_KEY='site', TURNSTILE_SECRET_KEY='secret')
+    def test_missing_or_rejected_tokens_fail(self):
+        from unittest import mock
+        rejected = mock.Mock(**{'json.return_value': {'success': False}})
+        with mock.patch('smbs_apps.smbs_forms.turnstile.requests.post', return_value=rejected):
+            self.client.post(self.URL, self.VALID)
+            self.client.post(self.URL, {**self.VALID, 'cf-turnstile-response': 'bad'})
+        with mock.patch('smbs_apps.smbs_forms.turnstile.requests.post', side_effect=requests.ConnectionError):
+            self.client.post(self.URL, {**self.VALID, 'cf-turnstile-response': 'token'})
+        self.assertEqual(Contact.objects.count(), 0)
+
+    @override_settings(TURNSTILE_SITE_KEY='site-key-1', TURNSTILE_SECRET_KEY='secret')
+    def test_widget_renders_turnstile_without_a_csrf_token(self):
+        from smbs_apps.smbs_pages import rendering
+        doc = {'schema_version': 1, 'sections': [{'id': 's_1', 'style': {}, 'rows': [{'id': 'r_1', 'style': {}, 'columns': [
+            {'id': 'c_1', 'span': {'xs': 12}, 'valign': 'top', 'widgets': [{'id': 'w_1', 'type': 'contact_form', 'props': {}}]}]}]}]}
+        html = str(rendering.render_document(doc))
+        self.assertIn('data-sitekey="site-key-1"', html)
+        self.assertNotIn('csrfmiddlewaretoken', html)

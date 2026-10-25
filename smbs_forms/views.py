@@ -1,10 +1,13 @@
 from urllib.parse import urlencode, urlsplit, urlunsplit, parse_qsl
 
+from django.middleware.csrf import CsrfViewMiddleware
 from django.shortcuts import redirect
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.csrf import csrf_exempt
 from django.core.mail import send_mail
 from django.core.mail.backends.smtp import EmailBackend as SMTPBackend
 
+from smbs_apps.smbs_forms import turnstile
 from smbs_apps.smbs_forms.models import ContactFormSettings
 from smbs_apps.smbs_forms.forms import ContactForm
 
@@ -20,9 +23,17 @@ def _back(request, status):
     return urlunsplit(('', '', parts.path or '/', urlencode(query), 'contact'))
 
 
+@csrf_exempt  # checked below: Turnstile when it's configured, Django's CSRF check otherwise
 def contact(request):
     if request.method != 'POST':
         return redirect('/')
+    if turnstile.enabled():
+        if not turnstile.verify(request):
+            return redirect(_back(request, 'error'))
+    else:
+        rejected = CsrfViewMiddleware(lambda r: None).process_view(request, contact, (), {})
+        if rejected is not None:
+            return rejected
     form = ContactForm(request.POST)
     if form.is_valid():
         obj = form.save()

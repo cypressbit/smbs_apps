@@ -1,3 +1,4 @@
+from smbs_apps.smbs_forms import turnstile
 from smbs_apps.smbs_forms.forms import ContactForm
 from smbs_apps.smbs_pages import fields
 from smbs_apps.smbs_pages.widgets import BaseWidget
@@ -21,4 +22,5 @@ class ContactFormBlock(BaseWidget):
     def get_context_data(self):
         context = super().get_context_data()
         context['form'] = ContactForm()
+        context['turnstile_site_key'] = turnstile.site_key() if turnstile.enabled() else ''
         return context
