@@ -1,5 +1,5 @@
-<div class="db-cta text-center mx-auto">
-  <h2 class="mb-3">{{ props.heading }}</h2>
-  {% if props.text %}<p class="db-lead mb-4">{{ props.text|linebreaksbr }}</p>{% endif %}
+{% load smbs_documents %}<div class="db-cta text-center mx-auto">
+  <h2 class="mb-3"{% db_field 'heading' %}>{{ props.heading }}</h2>
+  {% if props.text %}<p class="db-lead mb-4"{% db_field 'text' %}>{{ props.text|linebreaksbr }}</p>{% endif %}
   {% include 'smbs_widgets/v2/_buttons.html' with buttons=props.buttons size='large' center=True %}
 </div>

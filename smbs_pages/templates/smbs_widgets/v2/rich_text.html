@@ -1,1 +1,1 @@
-<div class="db-rich-text{% if props.lead %} db-lead{% endif %}">{{ props.html|safe }}</div>
+{% load smbs_documents %}<div class="db-rich-text{% if props.lead %} db-lead{% endif %}"{% db_field 'html' rich=True %}>{{ props.html|safe }}</div>

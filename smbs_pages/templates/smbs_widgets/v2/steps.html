@@ -1,9 +1,9 @@
-<ol class="list-unstyled row row-cols-1 row-cols-md-{{ props.items|length }} g-4 mb-0 db-steps">
+{% load smbs_documents %}<ol class="list-unstyled row row-cols-1 row-cols-md-{{ props.items|length }} g-4 mb-0 db-steps">
   {% for item in props.items %}
   <li class="col">
     <div class="db-step-number mb-3" aria-hidden="true">{{ forloop.counter }}</div>
-    <h3 class="h5 mb-2">{{ item.title }}</h3>
-    {% if item.body %}<p class="mb-0 opacity-75">{{ item.body|linebreaksbr }}</p>{% endif %}
+    <h3 class="h5 mb-2"{% db_field 'items' forloop.counter0 'title' %}>{{ item.title }}</h3>
+    {% if item.body %}<p class="mb-0 opacity-75"{% db_field 'items' forloop.counter0 'body' %}>{{ item.body|linebreaksbr }}</p>{% endif %}
   </li>
   {% endfor %}
 </ol>

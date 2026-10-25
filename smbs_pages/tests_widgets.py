@@ -224,3 +224,35 @@ class PatternTests(TestCase):
         entries = patterns.catalog(capabilities={'forms', 'blog'})
         self.assertTrue(all('section' in entry for entry in entries))
         json.dumps(entries)
+
+
+class FieldMarkerTests(TestCase):
+    """Edit mode marks widget text for in-place editing; the published HTML carries no markers."""
+
+    def test_markers_only_in_edit_mode(self):
+        for pattern in patterns.list_patterns():
+            section = patterns.instantiate(pattern['key'])
+            doc = {'schema_version': 1, 'sections': [section]}
+            published = str(rendering.render_document(doc))
+            self.assertNotIn('data-db-field', published, pattern['key'])
+            edited = str(rendering.render_document(doc, edit=True))
+            for path in re.findall(r'data-db-field="([^"]+)"', edited):
+                self.assertTrue(all(part.isidentifier() or part.isdigit() for part in path.split('.')), path)
+
+    def test_marker_paths_resolve_to_text(self):
+        hero = {'id': 'w_1', 'type': 'hero', 'props': widgets.get_widget('hero').defaults()}
+        hero['props']['variant'] = 'split'
+        features = {'id': 'w_2', 'type': 'feature_grid', 'props': widgets.get_widget('feature_grid').defaults()}
+        doc = {'schema_version': 1, 'sections': [{'id': 's_1', 'style': {}, 'rows': [{'id': 'r_1', 'style': {}, 'columns': [
+            {'id': 'c_1', 'span': {'xs': 12}, 'valign': 'top', 'widgets': [hero, features]}]}]}]}
+        html = str(rendering.render_document(doc, edit=True))
+        self.assertIn('data-db-field="heading"', html)
+        self.assertIn('data-db-field="buttons.0.label"', html)
+        self.assertIn('data-db-field="items.0.title"', html)
+        for widget in (hero, features):
+            fragment = str(rendering.Renderer(edit=True).widget(widget))
+            for path in re.findall(r'data-db-field="([^"]+)"', fragment):
+                value = widget['props']
+                for part in path.split('.'):
+                    value = value[int(part)] if part.isdigit() else value[part]
+                self.assertIsInstance(value, str, path)

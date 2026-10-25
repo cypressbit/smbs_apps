@@ -1,4 +1,4 @@
-"""Template helpers for document widgets: links and media attribution."""
+"""Template helpers for document widgets: links, media attribution and editor field markers."""
 from django import template
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -72,3 +72,17 @@ def dom_id(node, suffix=''):
     """A DOM id unique to a document node, e.g. for accordions and carousels."""
     node_id = (node or {}).get('id') or 'db-node'
     return f'{node_id}-{suffix}' if suffix else node_id
+
+
+@register.simple_tag(takes_context=True)
+def db_field(context, *path, rich=False):
+    """
+    In the visual editor, marks an element as the text of a widget field so it
+    can be edited in place: {% db_field 'heading' %} or, inside a repeater,
+    {% db_field 'items' forloop.counter0 'title' %}. Outputs nothing on the
+    published site.
+    """
+    if not context.get('editing'):
+        return ''
+    return format_html(' data-db-field="{}"{}', '.'.join(str(part) for part in path),
+                       mark_safe(' data-db-rich') if rich else '')

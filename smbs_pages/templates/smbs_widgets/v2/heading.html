@@ -1,2 +1,2 @@
-{% if props.eyebrow %}<div class="db-eyebrow mb-2">{{ props.eyebrow }}</div>{% endif %}
-<h{{ props.level }} class="{% if props.size == 'display' %}display-{% if props.level == 1 %}4{% else %}5{% endif %} fw-bold{% elif props.size == 'small' %}h5{% endif %} mb-0">{{ props.text }}</h{{ props.level }}>
+{% load smbs_documents %}{% if props.eyebrow %}<div class="db-eyebrow mb-2"{% db_field 'eyebrow' %}>{{ props.eyebrow }}</div>{% endif %}
+<h{{ props.level }} class="{% if props.size == 'display' %}display-{% if props.level == 1 %}4{% else %}5{% endif %} fw-bold{% elif props.size == 'small' %}h5{% endif %} mb-0"{% db_field 'text' %}>{{ props.text }}</h{{ props.level }}>

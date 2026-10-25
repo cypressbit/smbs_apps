@@ -4,9 +4,9 @@
   <div class="col text-center">
     {% if photo %}<img src="{{ photo.url }}" alt="{{ member.photo.alt }}" class="db-avatar mb-3" loading="lazy"{% if member.photo.focal_point %} style="object-position:{{ member.photo|focal_position }}"{% endif %}>
     {% else %}<div class="db-avatar db-placeholder mb-3 mx-auto"><i class="bi bi-person" aria-hidden="true"></i></div>{% endif %}
-    <h3 class="h5 mb-1">{{ member.name }}</h3>
-    {% if member.role %}<div class="opacity-75 mb-2">{{ member.role }}</div>{% endif %}
-    {% if member.bio %}<p class="small mb-0">{{ member.bio|linebreaksbr }}</p>{% endif %}
+    <h3 class="h5 mb-1"{% db_field 'members' forloop.counter0 'name' %}>{{ member.name }}</h3>
+    {% if member.role %}<div class="opacity-75 mb-2"{% db_field 'members' forloop.counter0 'role' %}>{{ member.role }}</div>{% endif %}
+    {% if member.bio %}<p class="small mb-0"{% db_field 'members' forloop.counter0 'bio' %}>{{ member.bio|linebreaksbr }}</p>{% endif %}
   </div>
   {% endfor %}
 </div>
