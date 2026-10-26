@@ -258,8 +258,10 @@ class CacheHeadersTests(TestCase):
         response['Cache-Control'] = 'no-store'
         self.assertEqual(self.run_middleware('/manage/', response=response)['Cache-Control'], 'no-store')
 
-    def test_errors_are_not_cached(self):
-        self.assertNotIn('Cache-Control', self.run_middleware('/', response=HttpResponse(status=404)))
+    def test_errors_and_redirects_are_not_cached(self):
+        for status in (301, 302, 404, 500):
+            with self.subTest(status):
+                self.assertEqual(self.run_middleware('/', response=HttpResponse(status=status))['Cache-Control'], 'no-store')
 
 
 @override_settings(**MANAGED_SETTINGS)

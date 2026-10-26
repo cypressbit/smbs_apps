@@ -7,7 +7,9 @@
   <div class="alert alert-danger" role="alert">Your message couldn't be sent. Please check the fields and try again.</div>
   {% endif %}
   <form method="post" action="{% url 'smbs_forms:contact' %}">
-    {% csrf_token %}
+    {% if turnstile_site_key %}{# Turnstile instead of a CSRF token keeps the page cacheable #}
+    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% else %}{% csrf_token %}{% endif %}
     <div class="row g-3">
       {% for field in form %}
       <div class="{% if field.name == 'message' %}col-12{% else %}col-md-6{% endif %}">
@@ -20,6 +22,7 @@
         {% endif %}
       </div>
       {% endfor %}
+      {% if turnstile_site_key %}<div class="col-12"><div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}"></div></div>{% endif %}
       <div class="col-12"><button type="submit" class="btn btn-db-primary">{{ props.button_label }}</button></div>
     </div>
   </form>

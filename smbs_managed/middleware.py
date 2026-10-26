@@ -6,6 +6,9 @@ from smbs_apps.smbs_managed import conf
 
 PUBLIC_CACHE = 'public, max-age=60, s-maxage=86400, stale-while-revalidate=86400'
 PRIVATE_CACHE = 'private, no-store'
+# Errors and redirects are never edge-cached: a 404 cached before a page was
+# published (or a redirect to a moved page) would outlive the fix.
+UNCACHEABLE = 'no-store'
 
 
 class HealthCheckMiddleware:
@@ -60,6 +63,8 @@ class CacheHeadersMiddleware:
             return response
         if request.method in ('GET', 'HEAD') and response.status_code == 200 and not existing:
             response['Cache-Control'] = PUBLIC_CACHE
+        elif response.status_code != 200 and not existing:
+            response['Cache-Control'] = UNCACHEABLE
         return response
 
 
