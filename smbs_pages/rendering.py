@@ -42,7 +42,8 @@ def _media_url(media_id):
 class Renderer:
 
     def __init__(self, context=None, edit=False):
-        self.context = context if context is not None else {}
+        # Widgets see `editing` to mark their fields for in-place editing ({% db_field %}).
+        self.context = {**(context or {}), 'editing': edit}
         self.edit = edit
 
     def document(self, doc):

@@ -7,7 +7,7 @@
       {% else %}<div class="ratio ratio-1x1"><img src="{{ media.url }}" alt="{{ item.image.alt }}" class="w-100 h-100 object-fit-cover db-rounded" loading="lazy"{% if item.image.focal_point %} style="object-position:{{ item.image|focal_position }}"{% endif %}></div>{% endif %}
       {% media_attribution media %}
     {% else %}<div class="ratio ratio-1x1 db-rounded db-placeholder"></div>{% endif %}
-    {% if item.caption %}<figcaption class="small mt-1 opacity-75">{{ item.caption }}</figcaption>{% endif %}
+    {% if item.caption %}<figcaption class="small mt-1 opacity-75"{% db_field 'images' forloop.counter0 'caption' %}>{{ item.caption }}</figcaption>{% endif %}
   </figure>
   {% endfor %}
 </div>

@@ -8,9 +8,9 @@
        {% if props.image.focal_point %}style="object-position: {% widthratio props.image.focal_point.x 1 100 %}% {% widthratio props.image.focal_point.y 1 100 %}%"{% endif %}>
   {% if props.aspect != 'natural' %}</div>{% endif %}
   {% if props.link %}</a>{% endif %}
-  {% if props.caption %}<figcaption class="small mt-2 opacity-75">{{ props.caption }}</figcaption>{% endif %}
+  {% if props.caption %}<figcaption class="small mt-2 opacity-75"{% db_field 'caption' %}>{{ props.caption }}</figcaption>{% endif %}
   {% media_attribution media %}
 </figure>
-{% elif request.GET.edit %}
+{% elif editing %}
 <div class="ratio ratio-16x9 db-rounded bg-body-secondary d-flex align-items-center justify-content-center"><i class="bi bi-image fs-1 opacity-50 m-auto"></i></div>
 {% endif %}

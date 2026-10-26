@@ -5,11 +5,11 @@
     <h3 class="accordion-header" id="{{ accordion }}-h{{ forloop.counter }}">
       <button class="accordion-button{% if not props.open_first or not forloop.first %} collapsed{% endif %}" type="button"
               data-bs-toggle="collapse" data-bs-target="#{{ accordion }}-c{{ forloop.counter }}"
-              aria-expanded="{% if props.open_first and forloop.first %}true{% else %}false{% endif %}" aria-controls="{{ accordion }}-c{{ forloop.counter }}">{{ item.question }}</button>
+              aria-expanded="{% if props.open_first and forloop.first %}true{% else %}false{% endif %}" aria-controls="{{ accordion }}-c{{ forloop.counter }}"><span{% db_field 'items' forloop.counter0 'question' %}>{{ item.question }}</span></button>
     </h3>
     <div id="{{ accordion }}-c{{ forloop.counter }}" class="accordion-collapse collapse{% if props.open_first and forloop.first %} show{% endif %}"
          aria-labelledby="{{ accordion }}-h{{ forloop.counter }}" data-bs-parent="#{{ accordion }}">
-      <div class="accordion-body db-rich-text">{{ item.answer|safe }}</div>
+      <div class="accordion-body db-rich-text"{% db_field 'items' forloop.counter0 'answer' rich=True %}>{{ item.answer|safe }}</div>
     </div>
   </div>
   {% endfor %}

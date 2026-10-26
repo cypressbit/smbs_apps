@@ -1,8 +1,8 @@
 {% load smbs_documents %}{% media_for item.photo as photo %}
 <figure class="mb-0 {% if center %}text-center mx-auto db-testimonial-wide{% endif %}">
-  <blockquote class="mb-3"><p class="mb-0">&ldquo;{{ item.quote|linebreaksbr }}&rdquo;</p></blockquote>
+  <blockquote class="mb-3"><p class="mb-0">&ldquo;<span{% db_field 'items' index 'quote' %}>{{ item.quote|linebreaksbr }}</span>&rdquo;</p></blockquote>
   <figcaption class="d-flex align-items-center gap-2{% if center %} justify-content-center{% endif %}">
     {% if photo %}<img src="{{ photo.url }}" alt="{{ item.photo.alt }}" class="db-avatar-sm" loading="lazy">{% endif %}
-    <span><strong>{{ item.name }}</strong>{% if item.role %}<span class="d-block small opacity-75">{{ item.role }}</span>{% endif %}</span>
+    <span><strong{% db_field 'items' index 'name' %}>{{ item.name }}</strong>{% if item.role %}<span class="d-block small opacity-75"{% db_field 'items' index 'role' %}>{{ item.role }}</span>{% endif %}</span>
   </figcaption>
 </figure>

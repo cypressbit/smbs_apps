@@ -1,10 +1,10 @@
-{% if props.layout == 'cards' %}
+{% load smbs_documents %}{% if props.layout == 'cards' %}
 <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4 db-services">
   {% for item in props.items %}
   <div class="col"><div class="db-card">
     {% if item.icon %}<i class="bi bi-{{ item.icon }} db-icon d-block mb-3" aria-hidden="true"></i>{% endif %}
-    <div class="d-flex justify-content-between gap-3"><h3 class="h5 mb-2">{{ item.title }}</h3>{% if item.price %}<span class="fw-semibold text-nowrap">{{ item.price }}</span>{% endif %}</div>
-    {% if item.description %}<p class="mb-0 opacity-75">{{ item.description|linebreaksbr }}</p>{% endif %}
+    <div class="d-flex justify-content-between gap-3"><h3 class="h5 mb-2"{% db_field 'items' forloop.counter0 'title' %}>{{ item.title }}</h3>{% if item.price %}<span class="fw-semibold text-nowrap"{% db_field 'items' forloop.counter0 'price' %}>{{ item.price }}</span>{% endif %}</div>
+    {% if item.description %}<p class="mb-0 opacity-75"{% db_field 'items' forloop.counter0 'description' %}>{{ item.description|linebreaksbr }}</p>{% endif %}
   </div></div>
   {% endfor %}
 </div>
@@ -14,8 +14,8 @@
   <li class="d-flex gap-3 py-3{% if not forloop.last %} border-bottom{% endif %}">
     {% if item.icon %}<i class="bi bi-{{ item.icon }} db-icon" aria-hidden="true"></i>{% endif %}
     <div class="flex-grow-1">
-      <div class="d-flex justify-content-between gap-3"><h3 class="h5 mb-1">{{ item.title }}</h3>{% if item.price %}<span class="fw-semibold text-nowrap">{{ item.price }}</span>{% endif %}</div>
-      {% if item.description %}<p class="mb-0 opacity-75">{{ item.description|linebreaksbr }}</p>{% endif %}
+      <div class="d-flex justify-content-between gap-3"><h3 class="h5 mb-1"{% db_field 'items' forloop.counter0 'title' %}>{{ item.title }}</h3>{% if item.price %}<span class="fw-semibold text-nowrap"{% db_field 'items' forloop.counter0 'price' %}>{{ item.price }}</span>{% endif %}</div>
+      {% if item.description %}<p class="mb-0 opacity-75"{% db_field 'items' forloop.counter0 'description' %}>{{ item.description|linebreaksbr }}</p>{% endif %}
     </div>
   </li>
   {% endfor %}

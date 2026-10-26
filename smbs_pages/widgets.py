@@ -87,7 +87,8 @@ class BaseWidget:
         }
 
     def get_context_data(self):
-        return {'props': self.props, 'widget': self, 'node': self.node, 'request': self.context.get('request')}
+        return {'props': self.props, 'widget': self, 'node': self.node, 'request': self.context.get('request'),
+                'editing': bool(self.context.get('editing'))}
 
     def render(self):
         return loader.render_to_string(self.template, self.get_context_data(), request=self.context.get('request'))
