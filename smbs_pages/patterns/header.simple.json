@@ -2,8 +2,8 @@
   "key": "header.simple",
   "name": "Simple header",
   "category": "chrome",
-  "description": "Site name with a call-to-action button.",
-  "ai_hint": "The site header (chrome). Site name as text, one button.",
+  "description": "Your logo (or the business name) with a call-to-action button.",
+  "ai_hint": "The site header (chrome). The business name in the logo block, one button.",
   "capability": null,
   "section": {
     "style": {
@@ -23,11 +23,11 @@
             "valign": "center",
             "widgets": [
               {
-                "type": "heading",
+                "type": "site_logo",
                 "props": {
-                  "text": "Business name",
-                  "level": 4,
-                  "size": "small"
+                  "name": "Business name",
+                  "logo": null,
+                  "height": "md"
                 }
               }
             ]

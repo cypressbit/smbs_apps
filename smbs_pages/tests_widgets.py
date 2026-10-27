@@ -371,6 +371,21 @@ class ResponsiveImageTests(TestCase):
         self.assertIn('sizes="(min-width: 1400px) 440px, (min-width: 768px) 33vw, 50vw"', html)
         self.assertNotIn('db-lightbox-link', self.render(doc, edit=True))
 
+    def test_site_logo_shows_the_logo_or_the_business_name(self):
+        doc, _ = documents.validate(doc_with(node('site_logo', {'name': 'Rosa’s Bakery', 'logo': None, 'height': 'md'})))
+        html = self.render(doc)
+        self.assertIn('<a href="/" class="db-site-logo db-site-logo-md', html)
+        self.assertIn('Rosa’s Bakery</span>', html)
+        self.assertIn('data-db-field="name"', self.render(doc, edit=True))
+        media = self.upload(image_bytes((600, 200), 'PNG', mode='RGBA'), 'logo.png')
+        doc, _ = documents.validate(doc_with(node('site_logo', {
+            'name': 'Rosa’s Bakery', 'logo': {'media': media.id, 'alt': 'Rosa’s Bakery'}, 'height': 'lg'})))
+        html = self.render(doc)
+        self.assertIn('db-site-logo-lg', html)
+        self.assertIn(f'srcset="/media/{media.variants["widths"]["480"]} 480w', html)
+        self.assertIn('alt="Rosa’s Bakery"', html)
+        self.assertNotIn('</span></a>', html)
+
     def test_backfill_command(self):
         media = self.upload(image_bytes((1000, 500)))
         Media.objects.filter(pk=media.pk).update(variants={})
@@ -379,3 +394,14 @@ class ResponsiveImageTests(TestCase):
         out = io.StringIO()
         call_command('build_image_variants', stdout=out)
         self.assertIn('0 image(s)', out.getvalue())
+
+
+class ThemeVariableTests(TestCase):
+
+    def test_section_css_defaults_never_override_the_site_theme(self):
+        # sections.css loads after the theme's <style>: its defaults must have no specificity.
+        from django.contrib.staticfiles import finders
+        with open(finders.find('smbs_pages/sections.css')) as handle:
+            css = handle.read()
+        self.assertIn(':where(:root) {', css)
+        self.assertNotRegex(css, r'(?m)^:root\s*\{')
