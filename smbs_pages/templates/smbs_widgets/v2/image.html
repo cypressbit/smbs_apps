@@ -3,7 +3,7 @@
 <figure class="mb-0">
   {% if props.link %}<a href="{{ props.link|link_href }}"{{ props.link|link_target }}>{% endif %}
   {% if props.aspect != 'natural' %}<div class="ratio ratio-{{ props.aspect }}">{% endif %}
-  <img src="{{ media.url }}" alt="{{ props.image.alt }}" loading="lazy"
+  <img{% if props.aspect == 'natural' %}{% img_sources media '(min-width: 1400px) 1320px, 100vw' dims=True %}{% else %}{% img_sources media '(min-width: 1400px) 1320px, 100vw' %}{% endif %} alt="{{ props.image.alt }}" loading="lazy"
        class="{% if props.rounded %}db-rounded {% endif %}{% if props.aspect != 'natural' %}w-100 h-100 object-fit-cover{% else %}img-fluid{% endif %}"
        {% if props.image.focal_point %}style="object-position: {% widthratio props.image.focal_point.x 1 100 %}% {% widthratio props.image.focal_point.y 1 100 %}%"{% endif %}>
   {% if props.aspect != 'natural' %}</div>{% endif %}

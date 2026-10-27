@@ -1,7 +1,7 @@
 {% load smbs_documents %}{% media_for props.image as media %}
 <div class="row align-items-center g-4 g-lg-5 db-content-split">
   <div class="col-md-6{% if props.image_side == 'right' %} order-md-2{% endif %}">
-    {% if media %}<img src="{{ media.url }}" alt="{{ props.image.alt }}" class="img-fluid db-rounded w-100" loading="lazy"{% if props.image.focal_point %} style="object-position:{{ props.image|focal_position }}"{% endif %}>{% media_attribution media %}
+    {% if media %}<img{% img_sources media '(min-width: 1400px) 660px, (min-width: 768px) 50vw, 100vw' dims=True %} alt="{{ props.image.alt }}" class="img-fluid db-rounded w-100" loading="lazy"{% if props.image.focal_point %} style="object-position:{{ props.image|focal_position }}"{% endif %}>{% media_attribution media %}
     {% else %}<div class="ratio ratio-4x3 db-rounded db-placeholder"></div>{% endif %}
   </div>
   <div class="col-md-6">

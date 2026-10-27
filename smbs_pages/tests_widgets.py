@@ -1,16 +1,21 @@
 """Tests for the schema widget library and section patterns."""
 import importlib.util
+import io
 import json
 import re
+import shutil
+import tempfile
 from unittest import skipUnless
 from datetime import timedelta
 
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.test import RequestFactory, TestCase
+from django.core.files.base import ContentFile
+from django.core.management import call_command
+from django.test import RequestFactory, TestCase, override_settings
 from django.utils import timezone
 
-from smbs_apps.smbs_pages import documents, patterns, rendering, widgets
+from smbs_apps.smbs_pages import documents, images, patterns, rendering, widgets
 from smbs_apps.smbs_pages.models import Media
 
 
@@ -158,7 +163,7 @@ class WidgetLibraryTests(TestCase):
         members = [{'name': 'Ana', 'role': 'Owner', 'photo': {'media': media.id, 'alt': 'Ana in the bakery'}}]
         doc, _ = documents.validate(doc_with(node('team', {'members': members})))
         html = self.render(doc)
-        self.assertIn('src="https://images.unsplash.com/photo-1"', html)
+        self.assertIn('src="https://images.unsplash.com/photo-1?w=1440&amp;q=75&amp;auto=format"', html)
         self.assertIn('alt="Ana in the bakery"', html)
         self.assertIn('loading="lazy"', html)
 
@@ -256,3 +261,121 @@ class FieldMarkerTests(TestCase):
                 for part in path.split('.'):
                     value = value[int(part)] if part.isdigit() else value[part]
                 self.assertIsInstance(value, str, path)
+
+
+def image_bytes(size, image_format='JPEG', mode='RGB', **save):
+    from PIL import Image
+    buffer = io.BytesIO()
+    Image.new(mode, size, 'red' if mode == 'RGB' else (255, 0, 0, 128)).save(buffer, image_format, **save)
+    return buffer.getvalue()
+
+
+@needs_nh3
+class ResponsiveImageTests(TestCase):
+
+    def setUp(self):
+        self.media_root = tempfile.mkdtemp()
+        self.addCleanup(shutil.rmtree, self.media_root)
+        settings = override_settings(MEDIA_ROOT=self.media_root, MEDIA_URL='/media/')
+        settings.enable()
+        self.addCleanup(settings.disable)
+
+    def upload(self, data, filename='photo.jpg'):
+        media = Media(name=filename.split('.')[0], media_type=Media.IMAGE, alt_text='A photo')
+        media.file.save(filename, ContentFile(data), save=False)
+        media.save()
+        return media
+
+    def opened(self, name):
+        from PIL import Image
+        with Image.open(f'{self.media_root}/{name}') as image:
+            return image.format, image.size, image.mode
+
+    def render(self, doc, edit=False):
+        return str(rendering.render_document(doc, {'request': RequestFactory().get('/')}, edit=edit))
+
+    def test_uploads_get_smaller_webp_copies_the_right_way_up(self):
+        from PIL import Image
+        exif = Image.Exif()
+        exif[0x0112] = 6  # taken with the phone turned: shown rotated 90°
+        media = self.upload(image_bytes((3000, 2000), exif=exif.tobytes()))
+        widths = media.variants['widths']
+        self.assertEqual(media.variants['source'], media.file.name)
+        self.assertEqual(sorted(widths, key=int), ['480', '960', '1440', '2000'])
+        self.assertEqual(self.opened(widths['2000']), ('WEBP', (2000, 3000), 'RGB'))
+        self.assertEqual(self.opened(widths['480'])[1], (480, 720))
+        saved = Media.objects.get(pk=media.pk)
+        self.assertEqual((saved.variants, saved.width, saved.height), (media.variants, 2000, 3000))
+        # The browser picks from the copies; the original is never sent.
+        self.assertEqual(images.src(media), f'/media/{widths["1440"]}')
+        self.assertEqual(images.src(media, 600), f'/media/{widths["960"]}')
+        self.assertEqual(images.src(media, 5000), f'/media/{widths["2000"]}')
+        self.assertTrue(images.srcset(media).startswith(f'/media/{widths["480"]} 480w, '))
+
+    def test_small_images_are_never_enlarged_and_keep_transparency(self):
+        media = self.upload(image_bytes((300, 100), 'PNG', mode='RGBA'), 'logo.png')
+        self.assertEqual(list(media.variants['widths']), ['300'])
+        self.assertEqual(self.opened(media.variants['widths']['300']), ('WEBP', (300, 100), 'RGBA'))
+
+    def test_a_new_file_replaces_the_copies(self):
+        media = self.upload(image_bytes((1000, 500)))
+        old = set(media.variants['widths'].values())
+        media.file.save('other.jpg', ContentFile(image_bytes((600, 300))), save=False)
+        media.save()
+        self.assertEqual(sorted(media.variants['widths'], key=int), ['480', '600'])
+        for name in old - set(media.variants['widths'].values()):
+            self.assertFalse(media.file.storage.exists(name))
+
+    def test_files_without_copies_are_served_as_they_are(self):
+        from PIL import Image
+        frames = [Image.new('RGB', (800, 600), color) for color in ('red', 'blue')]
+        buffer = io.BytesIO()
+        frames[0].save(buffer, 'GIF', save_all=True, append_images=frames[1:])
+        animated = self.upload(buffer.getvalue(), 'dance.gif')
+        with self.assertLogs('smbs_apps.smbs_pages.images', 'ERROR'):
+            broken = self.upload(b'not an image', 'broken.jpg')  # saving still works
+        for media in (animated, broken):
+            self.assertEqual(media.variants['widths'], {})
+            self.assertEqual(images.srcset(media), '')
+            self.assertEqual(images.src(media), media.url)
+        doc, _ = documents.validate(doc_with(node('image', {'image': {'media': animated.id, 'alt': 'Dancing'}})))
+        html = self.render(doc)
+        self.assertIn(f'src="{animated.url}"', html)
+        self.assertNotIn('srcset', html)
+
+    def test_unsplash_sizes_come_from_the_url(self):
+        media = Media.objects.create(source=Media.UNSPLASH, width=1200, height=800,
+                                     remote_url='https://images.unsplash.com/photo-1?ixid=abc&fm=jpg&q=80&w=1080')
+        self.assertEqual([w for _, w in images.candidates(media)], [480, 960])
+        self.assertEqual(images.src(media), 'https://images.unsplash.com/photo-1?ixid=abc&fm=jpg&w=960&q=75&auto=format')
+
+    def test_widgets_and_backgrounds_use_the_copies(self):
+        media = self.upload(image_bytes((2400, 1600)))
+        widths = media.variants['widths']
+        doc, _ = documents.validate(doc_with(node('content_split', {
+            'heading': 'Fresh bread', 'image': {'media': media.id, 'alt': 'Bread'}})))
+        doc['sections'][0]['style'] = {'background': {'image': {'media': media.id}}}
+        html = self.render(doc)
+        self.assertIn(f'src="/media/{widths["1440"]}" srcset="/media/{widths["480"]} 480w,', html)
+        self.assertIn('sizes="(min-width: 1400px) 660px, (min-width: 768px) 50vw, 100vw" width="2400" height="1600"', html)
+        self.assertIn('db-bg-responsive', html)
+        self.assertIn(f"--db-bg-sm:url('/media/{widths['960']}')", html)
+        self.assertIn(f"--db-bg-lg:url('/media/{widths['2000']}')", html)
+
+    def test_gallery_photos_open_in_the_lightbox_but_not_in_the_editor(self):
+        media = self.upload(image_bytes((2400, 1600)))
+        doc, _ = documents.validate(doc_with(node('gallery', {
+            'columns': 3, 'images': [{'image': {'media': media.id, 'alt': 'Cakes'}, 'caption': 'Cakes'}] * 2})))
+        html = self.render(doc)
+        self.assertIn(f'<a href="/media/{media.variants["widths"]["2000"]}" class="db-lightbox-link', html)
+        self.assertIn('sizes="(min-width: 1400px) 440px, (min-width: 768px) 33vw, 50vw"', html)
+        self.assertNotIn('db-lightbox-link', self.render(doc, edit=True))
+
+    def test_backfill_command(self):
+        media = self.upload(image_bytes((1000, 500)))
+        Media.objects.filter(pk=media.pk).update(variants={})
+        call_command('build_image_variants', stdout=io.StringIO())
+        self.assertEqual(sorted(Media.objects.get(pk=media.pk).variants['widths'], key=int), ['480', '960', '1000'])
+        out = io.StringIO()
+        call_command('build_image_variants', stdout=out)
+        self.assertIn('0 image(s)', out.getvalue())

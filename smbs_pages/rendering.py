@@ -8,7 +8,7 @@ placeholder instead of disappearing.
 """
 import logging
 
-from django.utils.html import escape, format_html
+from django.utils.html import conditional_escape, format_html
 from django.utils.safestring import mark_safe
 
 from smbs_apps.smbs_pages.widgets import get_widget
@@ -33,10 +33,10 @@ def _edit_attrs(edit, node, kind):
     return format_html(' data-db-node="{}" data-db-kind="{}"', node['id'], kind)
 
 
-def _media_url(media_id):
+def _background_css(media_id):
     from smbs_apps.smbs_pages.models import Media
-    media = Media.objects.filter(pk=media_id).first()
-    return media.url if media else ''
+    from smbs_apps.smbs_pages.templatetags.smbs_documents import background_css
+    return background_css(Media.objects.filter(pk=media_id).first())
 
 
 class Renderer:
@@ -59,7 +59,7 @@ class Renderer:
             f'db-theme-{style.get("theme", "light")}',
             f'db-bg-{color}' if color and not color.startswith('#') else '',
             'text-center' if style.get('align') == 'center' else '',
-            'db-has-bg-image' if background.get('image') else '',
+            'db-has-bg-image db-bg-responsive' if background.get('image') else '',
             style.get('classes', '') if style.get('width') != 'raw' else '',
         )
         css = []
@@ -67,9 +67,9 @@ class Renderer:
             css.append(f'background-color:{color}')
         image = background.get('image')
         if image:
-            url = _media_url(image['media'])
-            if url:
-                css.append(f"background-image:url('{escape(url)}')")
+            background_image = _background_css(image['media'])
+            if background_image:
+                css.append(background_image)
                 focal = image.get('focal_point')
                 if focal:
                     css.append(f'background-position:{focal["x"] * 100:.0f}% {focal["y"] * 100:.0f}%')
@@ -82,7 +82,7 @@ class Renderer:
             custom_css,
             classes,
             format_html(' id="{}"', section['anchor']) if section.get('anchor') else '',
-            format_html(' style="{}"', ';'.join(css)) if css else '',
+            format_html(' style="{}"', mark_safe(';'.join(conditional_escape(part) for part in css))) if css else '',
             _edit_attrs(self.edit, section, 'section'),
             style.get('classes', '') if style.get('width') == 'raw' else CONTAINER.get(style.get('width', 'contained'), 'container'),
             mark_safe(rows),

@@ -5,6 +5,7 @@
     {{ block.super }}
     <link rel="stylesheet" href="{% static 'smbs_pages/sections.css' %}">
     <link rel="stylesheet" href="{% static 'smbs_pages/vendor/bootstrap-icons/bootstrap-icons.min.css' %}">
+    <script src="{% static 'smbs_pages/lightbox.js' %}" defer></script>
     {% if is_preview %}<meta name="robots" content="noindex">{% endif %}
 {% endblock %}
 

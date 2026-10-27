@@ -1,13 +1,18 @@
 {% load smbs_documents %}
 <div class="{% if props.layout == 'masonry' %}db-masonry db-masonry-{{ props.columns }}{% else %}row row-cols-2 row-cols-md-{{ props.columns }} g-3{% endif %} db-gallery">
+  {% widthratio 100 props.columns 1 as column_vw %}{% widthratio 1320 props.columns 1 as column_px %}
+  {% with sizes='(min-width: 1400px) '|add:column_px|add:'px, (min-width: 768px) '|add:column_vw|add:'vw, 50vw' %}
   {% for item in props.images %}{% media_for item.image as media %}
   <figure class="{% if props.layout != 'masonry' %}col {% endif %}mb-0">
     {% if media %}
-      {% if props.layout == 'masonry' %}<img src="{{ media.url }}" alt="{{ item.image.alt }}" class="img-fluid db-rounded w-100" loading="lazy">
-      {% else %}<div class="ratio ratio-1x1"><img src="{{ media.url }}" alt="{{ item.image.alt }}" class="w-100 h-100 object-fit-cover db-rounded" loading="lazy"{% if item.image.focal_point %} style="object-position:{{ item.image|focal_position }}"{% endif %}></div>{% endif %}
+      {% if not editing %}<a href="{{ media|image_url }}" class="db-lightbox-link db-rounded" aria-label="View larger: {{ item.image.alt }}">{% endif %}
+      {% if props.layout == 'masonry' %}<img{% img_sources media sizes dims=True %} alt="{{ item.image.alt }}" class="img-fluid db-rounded w-100" loading="lazy">
+      {% else %}<div class="ratio ratio-1x1"><img{% img_sources media sizes %} alt="{{ item.image.alt }}" class="w-100 h-100 object-fit-cover db-rounded" loading="lazy"{% if item.image.focal_point %} style="object-position:{{ item.image|focal_position }}"{% endif %}></div>{% endif %}
+      {% if not editing %}</a>{% endif %}
       {% media_attribution media %}
     {% else %}<div class="ratio ratio-1x1 db-rounded db-placeholder"></div>{% endif %}
     {% if item.caption %}<figcaption class="small mt-1 opacity-75"{% db_field 'images' forloop.counter0 'caption' %}>{{ item.caption }}</figcaption>{% endif %}
   </figure>
   {% endfor %}
+  {% endwith %}
 </div>
