@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Spam check</title>
+<style>html, body { margin: 0; padding: 0; background: transparent; overflow: hidden; }</style>
+</head>
+<body>
+{# The Turnstile widget for a form on another of this site's hosts: its token goes to that page. #}
+<div id="widget"></div>
+<script>
+  window.dbTurnstileReady = function () {
+    var send = function (token) {
+      window.parent.postMessage({type: 'db-turnstile', token: token || ''}, {{ parent_origin_json|safe }});
+    };
+    turnstile.render('#widget', {
+      sitekey: {{ site_key_json|safe }},
+      callback: send,
+      'expired-callback': function () { send(''); },
+      'error-callback': function () { send(''); },
+    });
+  };
+</script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=dbTurnstileReady" async defer></script>
+</body>
+</html>

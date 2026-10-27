@@ -179,3 +179,61 @@ class TurnstileContactTest(TestCase):
         html = str(rendering.render_document(doc))
         self.assertIn('data-sitekey="site-key-1"', html)
         self.assertNotIn('csrfmiddlewaretoken', html)
+
+
+@override_settings(TURNSTILE_SITE_KEY='site-key-1', TURNSTILE_SECRET_KEY='secret', TURNSTILE_DOMAINS='platform.test',
+                   ALLOWED_HOSTS=['shop.platform.test', 'www.shop.com'])
+class TurnstileFrameTest(TestCase):
+    """A widget only works on the domains it lists, so customer domains get it in a frame from one it does."""
+    DOC = {'schema_version': 1, 'sections': [{'id': 's_1', 'style': {}, 'rows': [{'id': 'r_1', 'style': {}, 'columns': [
+        {'id': 'c_1', 'span': {'xs': 12}, 'valign': 'top', 'widgets': [{'id': 'w_1', 'type': 'contact_form', 'props': {}}]}]}]}]}
+
+    def setUp(self):
+        from django.urls import NoReverseMatch, reverse
+        try:
+            self.FRAME = reverse('smbs_forms:turnstile')
+        except NoReverseMatch:
+            self.skipTest('smbs_forms URLs are not routed in this project')
+
+    def render(self, host):
+        from django.test import RequestFactory
+        from smbs_apps.smbs_pages import rendering
+        request = RequestFactory().get('/', HTTP_HOST=host, secure=True)
+        return str(rendering.render_document(self.DOC, {'request': request}))
+
+    def frame(self, origin, host='shop.platform.test'):
+        return self.client.get(self.FRAME, {'origin': origin}, HTTP_HOST=host, secure=True)
+
+    def test_covered_hosts_use_the_widget_directly(self):
+        html = self.render('shop.platform.test')
+        self.assertIn('class="cf-turnstile" data-sitekey="site-key-1"', html)
+        self.assertNotIn('<iframe', html)
+
+    def test_other_hosts_get_the_widget_in_a_frame(self):
+        from urllib.parse import quote
+        html = self.render('www.shop.com')
+        self.assertIn(f'<iframe src="https://shop.platform.test{self.FRAME}?origin={quote("https://www.shop.com", safe="")}"', html)
+        self.assertIn('name="cf-turnstile-response"', html)
+        self.assertNotIn('class="cf-turnstile"', html)
+        self.assertNotIn('turnstile/v0/api.js', html)  # loaded by the frame
+
+    def test_frame_posts_the_token_only_to_the_sites_own_hosts(self):
+        response = self.frame('https://www.shop.com')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response['Content-Security-Policy'], 'frame-ancestors https://www.shop.com')
+        self.assertNotIn('X-Frame-Options', response)
+        self.assertContains(response, 'sitekey: "site-key-1"')
+        self.assertContains(response, '}, "https://www.shop.com");')
+        for origin in ('https://evil.example', 'http://www.shop.com', 'https://www.shop.com/path', '', 'javascript:alert(1)',
+                       'https://www.shop.com.evil.example'):
+            with self.subTest(origin=origin):
+                self.assertEqual(self.frame(origin).status_code, 404)
+
+    def test_frame_only_on_covered_hosts_and_with_keys(self):
+        self.assertEqual(self.frame('https://shop.platform.test', host='www.shop.com').status_code, 404)
+        with self.settings(TURNSTILE_SITE_KEY=''):
+            self.assertEqual(self.frame('https://www.shop.com').status_code, 404)
+
+    def test_without_turnstile_domains_every_host_uses_the_widget(self):
+        with self.settings(TURNSTILE_DOMAINS=None):
+            self.assertIn('class="cf-turnstile"', self.render('www.shop.com'))

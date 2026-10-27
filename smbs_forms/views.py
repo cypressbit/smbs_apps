@@ -1,9 +1,14 @@
 from urllib.parse import urlencode, urlsplit, urlunsplit, parse_qsl
 
+import json
+
+from django.http import Http404
 from django.middleware.csrf import CsrfViewMiddleware
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.utils.http import url_has_allowed_host_and_scheme
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_GET
 from django.core.mail import send_mail
 from django.core.mail.backends.smtp import EmailBackend as SMTPBackend
 
@@ -62,3 +67,18 @@ def contact(request):
             return redirect(settings.get('success_url'))
         return redirect(_back(request, 'sent'))
     return redirect(_back(request, 'error'))
+
+
+@require_GET
+@xframe_options_exempt  # framed only by the site's own hosts: see frame-ancestors below
+def turnstile_frame(request):
+    """The Turnstile widget, for a form on one of the site's hosts the widget doesn't cover (turnstile.frame_url)."""
+    parent = turnstile.allowed_parent(request.GET.get('origin'))
+    if not turnstile.enabled() or not turnstile.covers(request.get_host()) or not parent:
+        raise Http404
+    response = render(request, 'smbs_forms/turnstile_frame.html', {
+        'site_key_json': json.dumps(turnstile.site_key()).replace('<', '\\u003c'),
+        'parent_origin_json': json.dumps(parent).replace('<', '\\u003c'),
+    })
+    response['Content-Security-Policy'] = f'frame-ancestors {parent}'
+    return response
