@@ -8,7 +8,7 @@
   {% endif %}
   <form method="post" action="{% url 'smbs_forms:contact' %}">
     {% if turnstile_site_key %}{# Turnstile instead of a CSRF token keeps the page cacheable #}
-    <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>
+    {% if not turnstile_frame_url %}<script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer></script>{% endif %}
     {% else %}{% csrf_token %}{% endif %}
     <div class="row g-3">
       {% for field in form %}
@@ -22,7 +22,22 @@
         {% endif %}
       </div>
       {% endfor %}
-      {% if turnstile_site_key %}<div class="col-12"><div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}"></div></div>{% endif %}
+      {% if turnstile_frame_url %}
+      <div class="col-12">
+        <iframe src="{{ turnstile_frame_url }}" title="Spam check by Cloudflare Turnstile" class="db-turnstile-frame" width="300" height="65" style="border:0;display:block;max-width:100%"></iframe>
+        <input type="hidden" name="cf-turnstile-response" value="">
+        <script>
+          (function (frame) {
+            var input = frame.nextElementSibling, origin = new URL(frame.src).origin;
+            window.addEventListener('message', function (event) {
+              if (event.source === frame.contentWindow && event.origin === origin && event.data && event.data.type === 'db-turnstile') {
+                input.value = typeof event.data.token === 'string' ? event.data.token : '';
+              }
+            });
+          })(document.currentScript.parentNode.querySelector('iframe'));
+        </script>
+      </div>
+      {% elif turnstile_site_key %}<div class="col-12"><div class="cf-turnstile" data-sitekey="{{ turnstile_site_key }}"></div></div>{% endif %}
       <div class="col-12"><button type="submit" class="btn btn-db-primary">{{ props.button_label }}</button></div>
     </div>
   </form>

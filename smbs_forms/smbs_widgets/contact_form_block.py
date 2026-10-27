@@ -23,4 +23,6 @@ class ContactFormBlock(BaseWidget):
         context = super().get_context_data()
         context['form'] = ContactForm()
         context['turnstile_site_key'] = turnstile.site_key() if turnstile.enabled() else ''
+        # On a host the widget doesn't cover (a customer's own domain), it's shown in a frame from one it does.
+        context['turnstile_frame_url'] = turnstile.frame_url(context['request']) if turnstile.enabled() else ''
         return context
