@@ -4,6 +4,7 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.http import urlencode
 
+from smbs_apps.smbs_pages import images
 from smbs_apps.smbs_pages.models import Media, Page
 
 
@@ -56,6 +57,42 @@ def media_for(image):
     if not image or not image.get('media'):
         return None
     return Media.objects.filter(pk=image['media']).first()
+
+
+@register.simple_tag
+def img_sources(media, sizes='100vw', dims=False):
+    """
+    The src, srcset and sizes attributes for an <img> of a Media:
+    <img{% img_sources media '(min-width: 768px) 50vw, 100vw' %} alt="...">.
+    dims=True adds width and height, for images whose CSS height is auto.
+    """
+    if not isinstance(media, Media):
+        return ''
+    html = format_html(' src="{}"', images.src(media))
+    if images.candidates(media):
+        html += format_html(' srcset="{}" sizes="{}"', images.srcset(media), sizes)
+    if dims and media.width and media.height:
+        html += format_html(' width="{}" height="{}"', media.width, media.height)
+    return html
+
+
+@register.simple_tag
+def bg_image(media):
+    """CSS variables for a responsive background image (see .db-bg-responsive in sections.css)."""
+    return background_css(media)
+
+
+def background_css(media):
+    if not isinstance(media, Media) or not media.url:
+        return ''
+    return format_html("--db-bg-sm:url('{}');--db-bg-md:url('{}');--db-bg-lg:url('{}')",
+                       images.src(media, 960), images.src(media, 1440), images.src(media, 2000))
+
+
+@register.filter
+def image_url(media, width=2000):
+    """The URL of the copy of a Media closest to `width`: {{ media|image_url:960 }}."""
+    return images.src(media, int(width)) if isinstance(media, Media) else ''
 
 
 @register.filter

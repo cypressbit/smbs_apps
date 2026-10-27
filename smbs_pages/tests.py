@@ -489,7 +489,7 @@ class SiteSpecTests(TestCase):
         self.assertEqual(image['link']['page'], result['pages']['about'])
         response = self.client.get(home_url())
         self.assertContains(response, 'Fresh bread daily')
-        self.assertContains(response, 'https://images.unsplash.com/photo-1?w=1600')
+        self.assertContains(response, 'https://images.unsplash.com/photo-1?w=1440&amp;q=75&amp;auto=format')
         self.assertContains(response, 'Photo by <a href="https://unsplash.com/@jane?')
         self.assertContains(response, f'href="{url(Page.objects.get(slug="about"))}"')
         self.assertContains(response, '© Rosa')

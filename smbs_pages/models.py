@@ -250,6 +250,8 @@ class Media(TimestampModel):
     remote_url = models.URLField(max_length=1000, blank=True)
     # e.g. {"name": "Jane Doe", "profile_url": "...", "source_url": "..."}
     attribution = models.JSONField(default=dict, blank=True)
+    # Smaller WebP copies of an uploaded image, for srcset (smbs_pages.images).
+    variants = models.JSONField(default=dict, blank=True, editable=False)
 
     def __str__(self):
         return self.name or str(self.id)
@@ -323,6 +325,9 @@ class Media(TimestampModel):
             self.file.name = new_relpath
 
         super().save(*args, **kwargs)
+        if self.media_type == self.IMAGE:
+            from smbs_apps.smbs_pages import images
+            images.update_variants(self)
 
 
 class StyleModel(models.Model):
