@@ -58,6 +58,9 @@
 .db-mb-md { margin-bottom: 1.5rem; }
 .db-mb-lg { margin-bottom: 3rem; }
 .db-column > .db-widget:last-child { margin-bottom: 0; }
+/* A Bootstrap row cancels its own vertical gutter, so stacked rows (a heading row, then the items)
+   touched. Keep the gutter between rows: the row's gap applies down as well as across. */
+.db-section > .container > .row + .row { margin-top: 0; }
 .db-widget img { max-width: 100%; height: auto; }
 .db-rounded { border-radius: var(--db-radius); }
 .db-card { background: var(--db-light); color: var(--db-text); border-radius: var(--db-radius);
