@@ -18,5 +18,5 @@
 {% endblock %}
 
 {% block footer %}
-    {% if chrome_footer_html %}<footer class="db-chrome-footer">{{ chrome_footer_html }}</footer>{% else %}{{ block.super }}{% endif %}
+    {% if chrome_footer_html %}<footer class="db-chrome-footer">{{ chrome_footer_html }}</footer>{% include "smbs_pages/_site_credit.html" %}{% else %}{{ block.super }}{% endif %}
 {% endblock %}
