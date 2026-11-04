@@ -27,6 +27,22 @@ from smbs_apps.smbs_pages import fields
 logger = logging.getLogger(__name__)
 
 
+# Data a widget needs from the host project, by name: e.g. "shop.products", which the site's shop app
+# provides. Widgets defined here (so every host can validate them) read it through data(); on a host
+# without the provider they get None and show nothing.
+_PROVIDERS = {}
+
+
+def provide(key, function):
+    """Registers the host's function for a widget data name (call it from an AppConfig.ready)."""
+    _PROVIDERS[key] = function
+
+
+def data(key, *args, **kwargs):
+    function = _PROVIDERS.get(key)
+    return function(*args, **kwargs) if function else None
+
+
 class BaseWidget:
     """
     Base class for schema widgets. Subclasses set `key` (stored in documents,

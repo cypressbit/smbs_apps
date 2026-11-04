@@ -54,7 +54,23 @@ class WidgetLibraryTests(TestCase):
                 for edit in (False, True):
                     html = self.render(doc, edit=edit)
                     self.assertNotIn('db-widget-error', html)
-                    self.assertIn(f'db-widget-{key.replace("_", "-")}', html)
+                    if rendering._capability_off(widget_class.capability) and not edit:
+                        self.assertEqual(html.count('db-widget '), 0)  # hidden until the site enables it
+                    else:
+                        self.assertIn(f'db-widget-{key.replace("_", "-")}', html)
+
+    def test_shop_sections_wait_for_the_shop(self):
+        section = patterns.instantiate('shop.products')
+        doc, _ = documents.validate({'schema_version': 1, 'sections': [section]}, assign_ids=True)
+        cart = doc_with(node('cart_link', {}))
+        with override_settings(SITE_CAPABILITIES=['forms']):
+            self.assertEqual(self.render(doc), '')  # visitors see nothing
+            edited = self.render(doc, edit=True)
+            self.assertIn('db-section-off', edited)
+            self.assertIn('Visitors see this once the shop is turned on.', edited)
+            self.assertNotIn('db-widget-error', edited)
+            self.assertNotIn('db-widget-cart-link', self.render(cart))  # a widget alone, e.g. in the header
+            self.assertIn('Visitors see this once the shop is turned on.', self.render(cart, edit=True))
 
     def test_a_lone_narrow_column_is_not_pushed_to_the_left(self):
         doc = doc_with(node('heading', {'text': 'Questions', 'level': 2}))

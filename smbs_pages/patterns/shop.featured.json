@@ -1,0 +1,39 @@
+{
+  "key": "shop.featured",
+  "name": "Featured product",
+  "category": "commerce",
+  "description": "One product shown large, with its photo, price and “Add to cart”.",
+  "ai_hint": "Only when the business sells products online, and at most once. Leave the product empty: the owner picks one of their own.",
+  "capability": "shop",
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "featured_product",
+                "props": {
+                  "product": "",
+                  "photo_side": "left"
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "featured"
+  }
+}
