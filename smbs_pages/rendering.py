@@ -75,7 +75,8 @@ class Renderer:
                     css.append(f'background-position:{focal["x"] * 100:.0f}% {focal["y"] * 100:.0f}%')
         if background.get('overlay'):
             css.append(f'--db-overlay:{background["overlay"] / 100:.2f}')
-        rows = ''.join(self.row(row) for row in section.get('rows', []))
+        narrow = style.get('width') == 'narrow'
+        rows = ''.join(self.row(row, narrow=narrow) for row in section.get('rows', []))
         custom_css = format_html('<style>{}</style>', mark_safe(style['css'])) if style.get('css') else ''
         return format_html(
             '{}<section class="{}"{}{}{}><div class="{}">{}</div></section>',
@@ -88,15 +89,20 @@ class Renderer:
             mark_safe(rows),
         )
 
-    def row(self, row):
+    def row(self, row, narrow=False):
         style = row.get('style') or {}
+        columns = row.get('columns', [])
+        # A single column narrower than its row used to sit against the left edge (an FAQ under its
+        # heading looked off-center). In a narrow section, which already limits the width, it fills the
+        # row, lining up with the section's other rows; elsewhere it sits in the middle.
+        lone = len(columns) == 1 and any(n and int(n) < 12 for n in (columns[0].get('span') or {}).values())
         classes = _classes('row', GAP.get(style.get('gap', 'md'), ''), ROW_ALIGN.get(style.get('align', 'stretch'), ''),
-                           style.get('classes', ''))
-        columns = ''.join(self.column(column) for column in row.get('columns', []))
+                           'justify-content-center' if lone and not narrow else '', style.get('classes', ''))
+        columns = ''.join(self.column(column, full=lone and narrow) for column in columns)
         return format_html('<div class="{}"{}>{}</div>', classes, _edit_attrs(self.edit, row, 'row'), mark_safe(columns))
 
-    def column(self, column):
-        span = column.get('span') or {'xs': 12}
+    def column(self, column, full=False):
+        span = {'xs': 12} if full else (column.get('span') or {'xs': 12})
         classes = _classes(
             f'col-{span.get("xs", 12)}',
             f'col-md-{span["md"]}' if span.get('md') else '',

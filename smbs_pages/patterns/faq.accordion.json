@@ -42,9 +42,7 @@
         "columns": [
           {
             "span": {
-              "xs": 12,
-              "md": 10,
-              "lg": 8
+              "xs": 12
             },
             "valign": "top",
             "widgets": [

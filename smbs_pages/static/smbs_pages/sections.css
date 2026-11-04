@@ -75,11 +75,30 @@
 .db-site-logo-sm img { height: 2rem; }
 .db-site-logo-lg img { height: 4.5rem; }
 
-.btn-db-primary { background: var(--db-primary); border-color: var(--db-primary); color: #fff; }
-.btn-db-primary:hover { filter: brightness(1.08); color: #fff; }
-.btn-db-secondary { background: transparent; border: 2px solid currentColor; color: inherit; }
-.btn-db-secondary:hover { background: rgba(127, 127, 127, .12); color: inherit; }
-.btn-db-accent { background: var(--db-accent); border-color: var(--db-accent); color: var(--db-dark); }
+/* Through Bootstrap's own variables: its .btn:hover/:active rules read --bs-btn-hover-* and --bs-btn-active-*,
+   and without them a button's background went transparent on hover (white text on a white header).
+   Every state keeps the button's colors; hover only brightens. */
+.btn-db-primary { --db-btn-bg: var(--db-primary); --db-btn-color: var(--db-on-primary, #fff); }
+.btn-db-accent { --db-btn-bg: var(--db-accent); --db-btn-color: var(--db-on-accent, var(--db-dark)); }
+.btn-db-primary, .btn-db-accent {
+  --bs-btn-bg: var(--db-btn-bg); --bs-btn-border-color: var(--db-btn-bg); --bs-btn-color: var(--db-btn-color);
+  --bs-btn-hover-bg: var(--db-btn-bg); --bs-btn-hover-border-color: var(--db-btn-bg); --bs-btn-hover-color: var(--db-btn-color);
+  --bs-btn-active-bg: var(--db-btn-bg); --bs-btn-active-border-color: var(--db-btn-bg); --bs-btn-active-color: var(--db-btn-color);
+  --bs-btn-disabled-bg: var(--db-btn-bg); --bs-btn-disabled-border-color: var(--db-btn-bg); --bs-btn-disabled-color: var(--db-btn-color);
+  background: var(--db-btn-bg); border-color: var(--db-btn-bg); color: var(--db-btn-color);
+}
+.btn-db-primary:is(:hover, :focus-visible), .btn-db-accent:is(:hover, :focus-visible) { filter: brightness(1.08); }
+/* On a section in the button's own color, it turns around so it still stands out. */
+.db-bg-primary .btn-db-primary { --db-btn-bg: var(--db-on-primary, #fff); --db-btn-color: var(--db-primary); }
+.db-bg-accent .btn-db-accent { --db-btn-bg: var(--db-on-accent, var(--db-dark)); --db-btn-color: var(--db-accent); }
+/* Outlined, in the text color of wherever it sits (light or dark section). */
+.btn-db-secondary {
+  --bs-btn-bg: transparent; --bs-btn-border-color: currentColor; --bs-btn-color: currentColor;
+  --bs-btn-hover-bg: rgba(127, 127, 127, .12); --bs-btn-hover-border-color: currentColor; --bs-btn-hover-color: currentColor;
+  --bs-btn-active-bg: rgba(127, 127, 127, .2); --bs-btn-active-border-color: currentColor; --bs-btn-active-color: currentColor;
+  background: transparent; border: 2px solid currentColor; color: inherit;
+}
+.btn-db-secondary:is(:hover, :focus-visible) { background: rgba(127, 127, 127, .12); color: inherit; border-color: currentColor; }
 .btn-db-link { background: none; border: 0; color: var(--db-primary); text-decoration: underline; padding-inline: 0; }
 
 /* Editor-only */

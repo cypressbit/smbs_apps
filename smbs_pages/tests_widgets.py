@@ -56,6 +56,19 @@ class WidgetLibraryTests(TestCase):
                     self.assertNotIn('db-widget-error', html)
                     self.assertIn(f'db-widget-{key.replace("_", "-")}', html)
 
+    def test_a_lone_narrow_column_is_not_pushed_to_the_left(self):
+        doc = doc_with(node('heading', {'text': 'Questions', 'level': 2}))
+        column = doc['sections'][0]['rows'][0]['columns'][0]
+        column['span'] = {'xs': 12, 'md': 10, 'lg': None}
+        html = self.render(doc)
+        self.assertIn('row g-4 justify-content-center', html)  # a contained section: centered
+        self.assertIn('col-md-10', html)
+        doc['sections'][0]['style'] = {'width': 'narrow'}
+        html = self.render(doc)
+        self.assertNotIn('justify-content-center', html)  # a narrow section: the full (narrow) width
+        self.assertNotIn('col-md-10', html)
+        self.assertIn('col-12', html)
+
     def test_every_widget_describes_itself_as_json(self):
         for key, widget_class in widgets.get_registry().items():
             with self.subTest(widget=key):
