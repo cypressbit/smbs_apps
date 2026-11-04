@@ -102,6 +102,9 @@
 .btn-db-link { background: none; border: 0; color: var(--db-primary); text-decoration: underline; padding-inline: 0; }
 
 /* Editor-only */
+.db-section-off { opacity: .6; }
+.db-capability-off { padding: .75rem 1rem; border: 1px dashed currentColor; border-radius: var(--db-radius, .5rem);
+  font-size: .9rem; opacity: .85; margin-bottom: 1rem; }
 .db-widget-error { padding: 1rem; border: 1px dashed #c33; color: #c33; font-size: .9rem; }
 
 /* Widget library */

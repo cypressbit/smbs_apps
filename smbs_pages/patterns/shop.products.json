@@ -1,0 +1,71 @@
+{
+  "key": "shop.products",
+  "name": "Products",
+  "category": "commerce",
+  "description": "The shop’s products in a grid, with prices and “Add to cart”, under a heading and a short introduction.",
+  "ai_hint": "Only when the business sells products online; once on the whole site, on the home page or its own \"Shop\" page. Write the heading and introduction only: the products are the owner’s own, added later; never name products or prices.",
+  "capability": "shop",
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Shop",
+                  "level": 2
+                }
+              },
+              {
+                "type": "rich_text",
+                "props": {
+                  "html": "<p>A sentence about what you can buy here.</p>",
+                  "lead": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "product_grid",
+                "props": {
+                  "heading": "",
+                  "count": 8,
+                  "columns": "4",
+                  "show_all_link": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "shop"
+  }
+}
