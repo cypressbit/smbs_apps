@@ -196,7 +196,10 @@ div.db-logo { width: 8rem; height: 3rem; }
 .db-nav-small[open] > ul { position: absolute; right: 0; top: calc(100% + .4rem); z-index: 1030; min-width: 12rem;
   background: var(--db-surface, #fff); color: var(--db-text, #212529); border-radius: .75rem;
   box-shadow: 0 .5rem 1.5rem rgba(0, 0, 0, .15); padding: .5rem 1rem; }
-.db-nav-small[open] > ul .db-nav-link { display: block; padding: .5rem 0; }
+.db-nav-small[open] > ul { text-align: left; }
+.db-nav-small[open] > ul li { padding: .3rem 0; }
 .db-nav-start .db-nav-small[open] > ul { right: auto; left: 0; }
 .text-end > .db-buttons { justify-content: flex-end; }
 .text-center > .db-buttons { justify-content: center; }
+/* A column whose only widget is hidden on phones (the header's button) takes no space there either. */
+@media (max-width: 767.98px) { .db-column:has(> .db-widget.d-none:only-child) { display: none; } }
