@@ -503,6 +503,22 @@ class SiteSpecTests(TestCase):
         self.assertEqual(Page.objects.count(), 2)
         self.assertEqual(Page.objects.get(slug=None).revisions.count(), 2)
 
+    def test_a_rebuild_takes_the_pages_it_leaves_out_offline(self):
+        import copy
+        documents.materialize(SPEC)
+        extra = copy.deepcopy(SPEC)
+        extra['pages'].append({**copy.deepcopy(SPEC['pages'][-1]), 'key': 'menu', 'name': 'Menu', 'slug': 'menu'})
+        documents.materialize(extra)
+        legacy = PageViewTests.legacy_page(self, slug='old')
+        self.assertTrue(Page.objects.get(slug='menu').active)
+        rebuild = copy.deepcopy(SPEC)
+        rebuild['site'] = {**rebuild['site'], 'replace_pages': True}
+        documents.materialize(rebuild)
+        self.assertFalse(Page.objects.get(slug='menu').active)  # kept, but offline
+        self.assertTrue(Page.objects.get(slug='about').active)
+        legacy.refresh_from_db()
+        self.assertEqual(legacy.active, True)  # only document pages are replaced
+
     def test_materialize_without_publishing_keeps_legacy_pages_live(self):
         legacy = PageViewTests.legacy_page(self, slug='about')
         documents.materialize(SPEC, publish=False)

@@ -574,7 +574,8 @@ def materialize(spec, *, user=None, publish=True, theme_handler=None):
     """
     Applies a SiteSpec to this site in one transaction: creates media, creates
     or updates pages (matched by slug) as document pages, sets the header and
-    footer, and (by default) publishes everything. `theme_handler(theme)` is
+    footer, and (by default) publishes everything. With `site.replace_pages`
+    (a rebuild), document pages not in the spec are deactivated (kept). `theme_handler(theme)` is
     called with the spec's theme tokens if given (themes live in the host).
 
     Returns {"pages": {key: id}, "media": {key: id}}.
@@ -630,6 +631,11 @@ def materialize(spec, *, user=None, publish=True, theme_handler=None):
             page.parent = None
             page.save()
             pages_by_key[item['key']] = page
+        if spec['site'].get('replace_pages'):
+            # A rebuild: the document pages it doesn't include are taken offline (kept, not deleted).
+            kept = [page.pk for page in pages_by_key.values()]
+            Page.objects.filter(site=site, content_mode=Page.ContentMode.DOCUMENT, active=True).exclude(
+                pk__in=kept).update(active=False)
         for item in spec['pages']:
             page = pages_by_key[item['key']]
             page.parent = pages_by_key.get(item.get('parent'))
