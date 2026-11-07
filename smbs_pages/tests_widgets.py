@@ -400,6 +400,38 @@ class ResponsiveImageTests(TestCase):
         self.assertIn('sizes="(min-width: 1400px) 440px, (min-width: 768px) 33vw, 50vw"', html)
         self.assertNotIn('db-lightbox-link', self.render(doc, edit=True))
 
+    def test_menu_lists_the_pages_visitors_can_see(self):
+        from django.contrib.sites.models import Site
+        from smbs_apps.smbs_pages import services
+        from smbs_apps.smbs_pages.models import Page
+        site = Site.objects.get_current()
+        doc_page = Page.ContentMode.DOCUMENT
+        home = Page.objects.create(site=site, name='Home', slug=None, active=True, content_mode=doc_page,
+                                   navigation_order=0)
+        about = Page.objects.create(site=site, name='About us', slug='about-us', active=True, content_mode=doc_page,
+                                    navigation_order=1)
+        Page.objects.create(site=site, name='Draft', slug='draft', active=True, content_mode=doc_page,
+                            navigation_order=2)  # never published
+        Page.objects.create(site=site, name='Hidden', slug='hidden', active=True, show_on_navigation=False)
+        Page.objects.create(site=site, name='Child', slug='child', active=True, nav_parent=about)
+        Page.objects.create(site=site, name='Old', slug='old', active=False)
+        for page in (home, about):
+            page.draft = {'schema_version': 1, 'sections': []}
+            page.save()
+            services.publish_page(page, user=None, note='test')
+        doc, _ = documents.validate(doc_with(node('nav_menu', {'align': 'end'})))
+        html = str(rendering.render_document(doc, {'request': RequestFactory().get('/about-us/')}))
+        self.assertIn('<nav class="db-nav db-nav-end" aria-label="Main">', html)
+        self.assertEqual(html.count('href="/"'), 2)  # the row of links, and the phone menu
+        self.assertIn('<a class="db-nav-link" href="/about-us/" aria-current="page">About us</a>', html)
+        for gone in ('Draft', 'Hidden', 'Child', 'Old'):
+            self.assertNotIn(gone, html)
+
+    def test_header_pattern_has_the_menu(self):
+        section = patterns.instantiate('header.simple')
+        types = [w['type'] for row in section['rows'] for c in row['columns'] for w in c['widgets']]
+        self.assertEqual(types, ['site_logo', 'nav_menu', 'button_group'])
+
     def test_site_logo_shows_the_logo_or_the_business_name(self):
         doc, _ = documents.validate(doc_with(node('site_logo', {'name': 'Rosa’s Bakery', 'logo': None, 'height': 'md'})))
         html = self.render(doc)

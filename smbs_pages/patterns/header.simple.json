@@ -2,8 +2,8 @@
   "key": "header.simple",
   "name": "Simple header",
   "category": "chrome",
-  "description": "Your logo (or the business name) with a call-to-action button.",
-  "ai_hint": "The site header (chrome). The business name in the logo block, one button.",
+  "description": "Your logo (or the business name), a menu of your pages and a call-to-action button.",
+  "ai_hint": "The site header (chrome). The business name in the logo block and one call-to-action button; the menu lists the pages by itself.",
   "capability": null,
   "section": {
     "style": {
@@ -18,7 +18,8 @@
         "columns": [
           {
             "span": {
-              "xs": 6
+              "xs": 9,
+              "md": 3
             },
             "valign": "center",
             "widgets": [
@@ -34,7 +35,26 @@
           },
           {
             "span": {
-              "xs": 6
+              "xs": 3,
+              "md": 6
+            },
+            "valign": "center",
+            "widgets": [
+              {
+                "type": "nav_menu",
+                "props": {
+                  "align": "end"
+                },
+                "style": {
+                  "align": "end"
+                }
+              }
+            ]
+          },
+          {
+            "span": {
+              "xs": 12,
+              "md": 3
             },
             "valign": "center",
             "widgets": [
@@ -53,6 +73,10 @@
                     }
                   ],
                   "size": "small"
+                },
+                "style": {
+                  "align": "end",
+                  "classes": "d-none d-md-block"
                 }
               }
             ]
