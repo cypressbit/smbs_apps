@@ -178,6 +178,9 @@ div.db-logo { width: 8rem; height: 3rem; }
 }
 
 /* Menu (nav_menu): links in a row from md up; a small dropdown on phones (no JavaScript). */
+/* Each section's content is its own layer (z-index 1), so the header as a whole goes above the page:
+   otherwise the next section (the hero) paints over the open menu. */
+.db-chrome-header { position: relative; z-index: 1020; }
 .db-nav { display: flex; }
 .db-nav-end { justify-content: flex-end; }
 .db-nav-center { justify-content: center; }
