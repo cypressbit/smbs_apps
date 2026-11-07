@@ -420,8 +420,7 @@ class ResponsiveImageTests(TestCase):
             page.save()
             services.publish_page(page, user=None, note='test')
         doc, _ = documents.validate(doc_with(node('nav_menu', {'align': 'end'})))
-        self.request = RequestFactory().get('/about-us/')
-        html = self.render(doc)
+        html = str(rendering.render_document(doc, {'request': RequestFactory().get('/about-us/')}))
         self.assertIn('<nav class="db-nav db-nav-end" aria-label="Main">', html)
         self.assertEqual(html.count('href="/"'), 2)  # the row of links, and the phone menu
         self.assertIn('<a class="db-nav-link" href="/about-us/" aria-current="page">About us</a>', html)
