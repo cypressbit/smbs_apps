@@ -1,0 +1,11 @@
+{% if items %}<nav class="db-nav db-nav-{{ props.align }}" aria-label="Main">
+  <ul class="db-nav-links list-unstyled d-none d-md-flex flex-wrap mb-0">
+    {% for item in items %}<li><a class="db-nav-link" href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.name }}</a></li>{% endfor %}
+  </ul>
+  <details class="db-nav-small d-md-none">
+    <summary class="db-nav-toggle" aria-label="Menu"><i class="bi bi-list" aria-hidden="true"></i></summary>
+    <ul class="list-unstyled mb-0">
+      {% for item in items %}<li><a class="db-nav-link" href="{{ item.url }}"{% if item.current %} aria-current="page"{% endif %}{% if item.external %} target="_blank" rel="noopener"{% endif %}>{{ item.name }}</a></li>{% endfor %}
+    </ul>
+  </details>
+</nav>{% endif %}
