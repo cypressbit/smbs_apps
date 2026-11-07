@@ -74,6 +74,7 @@
 .db-site-logo img { width: auto; max-width: 100%; height: 3rem; object-fit: contain; object-position: left center; }
 .db-site-logo-sm img { height: 2rem; }
 .db-site-logo-lg img { height: 4.5rem; }
+.db-site-logo img + .db-site-logo-name { margin-left: .6rem; font-family: var(--db-heading-font, inherit); }
 
 /* Through Bootstrap's own variables: its .btn:hover/:active rules read --bs-btn-hover-* and --bs-btn-active-*,
    and without them a button's background went transparent on hover (white text on a white header).

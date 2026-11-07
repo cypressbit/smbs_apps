@@ -16,6 +16,8 @@ class SiteLogo(BaseWidget):
         name = fields.Text(max_length=80, default='Business name', label='Business name')
         logo = fields.Image(required=False)
         height = fields.Choice(['md', 'sm', 'lg'], label='Logo size')
+        # For a mark without words (an emblem): the name is set beside it in the theme's heading font.
+        show_name = fields.Bool(label='Show the name next to the logo')
 
     def get_context_data(self):
         context = super().get_context_data()

@@ -414,6 +414,13 @@ class ResponsiveImageTests(TestCase):
         self.assertIn(f'srcset="/media/{media.variants["widths"]["480"]} 480w', html)
         self.assertIn('alt="Rosa’s Bakery"', html)
         self.assertNotIn('</span></a>', html)
+        # An emblem with the name beside it: the image is decorative (the name is the link's text).
+        doc, _ = documents.validate(doc_with(node('site_logo', {
+            'name': 'Rosa’s Bakery', 'logo': {'media': media.id, 'alt': 'Rosa’s Bakery'}, 'height': 'md',
+            'show_name': True})))
+        html = self.render(doc)
+        self.assertIn('alt="">', html)
+        self.assertIn('Rosa’s Bakery</span>', html)
 
     def test_backfill_command(self):
         media = self.upload(image_bytes((1000, 500)))
