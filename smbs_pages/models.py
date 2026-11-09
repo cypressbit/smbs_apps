@@ -473,6 +473,9 @@ class SiteChrome(SettingsModel):
     draft = models.JSONField(default=empty_chrome, blank=True)
     draft_version = models.PositiveIntegerField(default=0)
     published = models.JSONField(blank=True, null=True)
+    # The website's language (BCP 47, e.g. "es"), for <html lang>: set by a SiteSpec's site.language. Blank: the
+    # host's LANGUAGE_CODE.
+    language = models.CharField(max_length=16, blank=True)
 
     class Meta:
         verbose_name = 'site header and footer'

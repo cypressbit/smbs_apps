@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.http import Http404
 from django.shortcuts import get_object_or_404
 
@@ -5,7 +6,7 @@ from django.views.generic import DetailView
 
 from smbs_apps.smbs_base.views import SMBSObjectMetadataView
 
-from smbs_apps.smbs_pages import rendering, services
+from smbs_apps.smbs_pages import rendering, services, structured_data
 from smbs_apps.smbs_pages.models import Page, SiteChrome
 
 
@@ -53,6 +54,15 @@ class PageDetailView(SMBSObjectMetadataView, DetailView):
         render_context = {'request': self.request, 'page': self.object, 'preview': preview}
         chrome = SiteChrome.get_object()
         chrome_document = (chrome.draft if preview else chrome.published) if chrome else None
+        context['site_language'] = chrome.language if chrome else ''
+        if self.object.slug is None and getattr(settings, 'SMBS_PAGES_STRUCTURED_DATA', True):
+            # The home page says who the business is (hosts with their own structured data turn this off).
+            data = structured_data.local_business(
+                name=self.object.site.name, url=self.request.build_absolute_uri('/'),
+                description=getattr(self.object.metadata, 'description', '') if self.object.metadata_id else '',
+                page_document=document, chrome_document=chrome_document,
+                media_url=self.request.build_absolute_uri)
+            context['structured_data'] = structured_data.as_script(data) if data else ''
         context.update({
             'is_preview': preview,
             'document_html': rendering.render_document(document, render_context),
