@@ -503,6 +503,36 @@ class SiteSpecTests(TestCase):
         self.assertEqual(Page.objects.count(), 2)
         self.assertEqual(Page.objects.get(slug=None).revisions.count(), 2)
 
+    def test_the_site_language_and_who_the_business_is(self):
+        import copy
+        import json
+        import re
+        spec = copy.deepcopy(SPEC)
+        spec['site'] = {**spec['site'], 'language': 'es'}
+        spec['pages'][0]['document']['sections'][0]['rows'][0]['columns'][0]['widgets'] += [
+            {'id': 'w_map0001', 'type': 'location_map', 'props': {'address': '1420 Schertz Pkwy, Schertz, TX', 'height': 'md'}},
+            {'id': 'w_btn0001', 'type': 'button_group', 'props': {'size': 'default', 'buttons': [
+                {'label': 'Llámanos', 'link': {'kind': 'tel', 'tel': '+1 210 555 0100'}, 'style': 'primary', 'icon': ''}]}},
+        ]
+        documents.materialize(spec)
+        html = self.client.get(home_url()).content.decode()
+        self.assertIn('<html lang="es">', html)
+        data = json.loads(re.search(r'<script type="application/ld\+json">(.*?)</script>', html, re.S).group(1))
+        self.assertEqual((data['@type'], data['name']), ('LocalBusiness', "Rosa's Bakery"))
+        self.assertEqual((data['address'], data['telephone']), ('1420 Schertz Pkwy, Schertz, TX', '+1 210 555 0100'))
+        self.assertTrue(data['url'].endswith('/'))
+        # Only the home page; other pages keep the host's language when none is set.
+        self.assertNotIn('ld+json', self.client.get(url(Page.objects.get(slug='about'))).content.decode())
+        with self.settings(SMBS_PAGES_STRUCTURED_DATA=False):
+            self.assertNotIn('ld+json', self.client.get(home_url()).content.decode())
+        documents.materialize({**SPEC, 'site': {**SPEC['site'], 'language': '<script>'}})  # not a language: ignored
+        self.assertIn('<html lang="es">', self.client.get(home_url()).content.decode())
+
+    def test_a_site_with_nothing_but_a_name_gets_no_business_data(self):
+        from smbs_apps.smbs_pages import structured_data
+        self.assertIsNone(structured_data.local_business(name='Club', url='https://x/', description='',
+                                                         page_document={'sections': []}, chrome_document=None))
+
     def test_a_rebuild_takes_the_pages_it_leaves_out_offline(self):
         import copy
         documents.materialize(SPEC)

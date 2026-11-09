@@ -474,6 +474,7 @@ SPEC_PAGE_KEYS = {'key', 'name', 'slug', 'parent', 'nav_parent', 'show_on_naviga
 SPEC_MEDIA_KEYS = {'key', 'source', 'url', 'remote_url', 'alt_text', 'caption', 'width', 'height',
                    'focal_point', 'attribution', 'name'}
 MAX_DOWNLOAD_BYTES = 15 * 1024 * 1024
+LANGUAGE_TAG = re.compile(r'^[a-z]{2,3}(-[A-Za-z0-9]{2,8})?$')  # site.language: "es", "en-US", "pt-BR"
 
 
 def validate_spec(spec):
@@ -661,6 +662,8 @@ def materialize(spec, *, user=None, publish=True, theme_handler=None):
                 services.publish_page(page, user=user, note='Generated site')
 
         chrome = SiteChrome.get_object() or SiteChrome(site=site)
+        if LANGUAGE_TAG.match(str(spec['site'].get('language') or '')):
+            chrome.language = spec['site']['language']
         chrome.draft = {part: map_references(spec['chrome'][part], resolve) for part in ('header', 'footer')}
         chrome.draft_version += 1
         chrome.save()
