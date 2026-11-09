@@ -1,16 +1,17 @@
 {% load smbs_documents %}{% media_for props.image as media %}
 {% if props.variant == 'split' %}
 <div class="row align-items-center g-4 g-lg-5 db-hero db-hero-split">
-  <div class="col-lg-6">
+  {# Without a photo, visitors see the text alone; the striped placeholder is only for the editor. #}
+  <div class="{% if media or editing %}col-lg-6{% else %}col-lg-8{% endif %}">
     {% if props.eyebrow %}<div class="db-eyebrow mb-2"{% db_field 'eyebrow' %}>{{ props.eyebrow }}</div>{% endif %}
     <h1 class="display-5 fw-bold mb-3"{% db_field 'heading' %}>{{ props.heading }}</h1>
     {% if props.subheading %}<p class="db-lead mb-4"{% db_field 'subheading' %}>{{ props.subheading|linebreaksbr }}</p>{% endif %}
     {% include 'smbs_widgets/v2/_buttons.html' with buttons=props.buttons size='large' %}
   </div>
-  <div class="col-lg-6">
+  {% if media or editing %}<div class="col-lg-6">
     {% if media %}<img{% img_sources media '(min-width: 1400px) 660px, (min-width: 992px) 50vw, 100vw' %} alt="{{ props.image.alt }}" class="img-fluid db-rounded w-100 object-fit-cover" style="max-height:520px;{% if props.image.focal_point %}object-position:{{ props.image|focal_position }}{% endif %}" loading="eager" fetchpriority="high">{% media_attribution media %}
     {% else %}<div class="ratio ratio-4x3 db-rounded db-placeholder"></div>{% endif %}
-  </div>
+  </div>{% endif %}
 </div>
 {% else %}
 <div class="db-hero db-hero-{{ props.variant }} text-center mx-auto{% if props.variant == 'background_image' %} db-hero-overlay db-bg-responsive{% endif %}"

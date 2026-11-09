@@ -432,6 +432,16 @@ class ResponsiveImageTests(TestCase):
         types = [w['type'] for row in section['rows'] for c in row['columns'] for w in c['widgets']]
         self.assertEqual(types, ['site_logo', 'nav_menu', 'button_group'])
 
+    def test_no_photo_placeholder_for_visitors(self):
+        # A hero or split section without a photo: visitors see the text alone; the editor shows where it goes.
+        for widget, props in (('hero', {'variant': 'split', 'heading': 'Fresh bread', 'image': None}),
+                              ('content_split', {'heading': 'Our story', 'body': '<p>Since 2009.</p>', 'image': None})):
+            doc, _ = documents.validate(doc_with(node(widget, props)))
+            live, editor = self.render(doc), self.render(doc, edit=True)
+            self.assertNotIn('db-placeholder', live, widget)
+            self.assertIn('db-placeholder', editor, widget)
+            self.assertIn('col-lg-8', live, widget)  # the text takes the room
+
     def test_site_logo_shows_the_logo_or_the_business_name(self):
         doc, _ = documents.validate(doc_with(node('site_logo', {'name': 'Rosa’s Bakery', 'logo': None, 'height': 'md'})))
         html = self.render(doc)
