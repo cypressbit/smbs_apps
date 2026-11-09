@@ -441,6 +441,15 @@ class ResponsiveImageTests(TestCase):
             self.assertNotIn('db-placeholder', live, widget)
             self.assertIn('db-placeholder', editor, widget)
             self.assertIn('col-lg-8', live, widget)  # the text takes the room
+        # A gallery skips its empty tiles for visitors; a photo-background hero without a photo uses the theme.
+        doc, _ = documents.validate(doc_with(node('gallery', {'layout': 'grid', 'columns': 3,
+                                                              'images': [{'image': None, 'caption': 'Cakes'},
+                                                                         {'image': None, 'caption': ''}]})))
+        self.assertNotIn('db-placeholder', self.render(doc))
+        self.assertNotIn('Cakes', self.render(doc))
+        self.assertEqual(self.render(doc, edit=True).count('db-placeholder'), 2)
+        doc, _ = documents.validate(doc_with(node('hero', {'variant': 'background_image', 'heading': 'Hi', 'image': None})))
+        self.assertIn('db-hero-no-image', self.render(doc))
 
     def test_site_logo_shows_the_logo_or_the_business_name(self):
         doc, _ = documents.validate(doc_with(node('site_logo', {'name': 'Rosa’s Bakery', 'logo': None, 'height': 'md'})))

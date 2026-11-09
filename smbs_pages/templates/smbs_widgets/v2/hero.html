@@ -14,7 +14,7 @@
   </div>{% endif %}
 </div>
 {% else %}
-<div class="db-hero db-hero-{{ props.variant }} text-center mx-auto{% if props.variant == 'background_image' %} db-hero-overlay db-bg-responsive{% endif %}"
+<div class="db-hero db-hero-{{ props.variant }} text-center mx-auto{% if props.variant == 'background_image' %} db-hero-overlay db-bg-responsive{% if not media %} db-hero-no-image{% endif %}{% endif %}"
      {% if props.variant == 'background_image' and media %}style="{% bg_image media %};{% if props.image.focal_point %}background-position:{{ props.image|focal_position }}{% endif %}" role="img" aria-label="{{ props.image.alt }}"{% endif %}>
   <div class="db-hero-inner mx-auto">
     {% if props.eyebrow %}<div class="db-eyebrow mb-2"{% db_field 'eyebrow' %}>{{ props.eyebrow }}</div>{% endif %}

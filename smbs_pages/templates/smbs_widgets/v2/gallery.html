@@ -3,6 +3,7 @@
   {% widthratio 100 props.columns 1 as column_vw %}{% widthratio 1320 props.columns 1 as column_px %}
   {% with sizes='(min-width: 1400px) '|add:column_px|add:'px, (min-width: 768px) '|add:column_vw|add:'vw, 50vw' %}
   {% for item in props.images %}{% media_for item.image as media %}
+  {% if media or editing %}{# visitors don't see empty tiles; the editor shows where a photo goes #}
   <figure class="{% if props.layout != 'masonry' %}col {% endif %}mb-0">
     {% if media %}
       {% if not editing %}<a href="{{ media|image_url }}" class="db-lightbox-link db-rounded" aria-label="View larger: {{ item.image.alt }}">{% endif %}
@@ -13,6 +14,7 @@
     {% else %}<div class="ratio ratio-1x1 db-rounded db-placeholder"></div>{% endif %}
     {% if item.caption %}<figcaption class="small mt-1 opacity-75"{% db_field 'images' forloop.counter0 'caption' %}>{{ item.caption }}</figcaption>{% endif %}
   </figure>
+  {% endif %}
   {% endfor %}
   {% endwith %}
 </div>
