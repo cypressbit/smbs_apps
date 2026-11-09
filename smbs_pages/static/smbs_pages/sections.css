@@ -122,6 +122,8 @@
   background-size: cover; background-position: center; color: #fff; overflow: hidden; }
 .db-hero-overlay::before { content: ""; position: absolute; inset: 0; background: rgba(0, 0, 0, .45); }
 .db-hero-overlay > * { position: relative; }
+/* A photo background without its photo: the theme's colours rather than flat grey. */
+.db-hero-no-image { background: linear-gradient(135deg, var(--db-primary), var(--db-dark, #1f1712)); }
 .db-hero-background_image .db-attribution { position: absolute; right: 1rem; bottom: .5rem; }
 .db-hero-background_image .db-attribution a { color: #fff; }
 
