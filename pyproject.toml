@@ -25,6 +25,7 @@ dependencies = [
 [project.optional-dependencies]
 managed = ["PyJWT>=2.10", "cryptography"]  # smbs_managed: SSO token verification
 shop = ["stripe"]
+scheduler = ["icalendar>=6.1,<8", "recurring-ical-events>=3.3,<4"]  # smbs_scheduler: reading iCal calendars
 mailchimp = ["mailchimp3"]
 
 [tool.setuptools.packages.find]
