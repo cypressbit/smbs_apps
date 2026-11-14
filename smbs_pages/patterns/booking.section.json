@@ -1,0 +1,70 @@
+{
+  "key": "booking.section",
+  "name": "Book an appointment",
+  "category": "booking",
+  "description": "The booking calendar: visitors choose a service, a person and a time, under a heading and a short introduction.",
+  "ai_hint": "Only when the business takes appointments; once on the whole site, on its own \"Book\" page or the home page. Write the heading and introduction only: services, prices and hours are the owner’s own, added later; never name them.",
+  "capability": "booking",
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Book an appointment",
+                  "level": 2
+                }
+              },
+              {
+                "type": "rich_text",
+                "props": {
+                  "html": "<p>Choose a service and a time that suits you.</p>",
+                  "lead": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "booking",
+                "props": {
+                  "layout": "booker",
+                  "service": "",
+                  "show_prices": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "book"
+  }
+}

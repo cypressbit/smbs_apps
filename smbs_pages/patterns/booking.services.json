@@ -1,0 +1,70 @@
+{
+  "key": "booking.services",
+  "name": "Services to book",
+  "category": "booking",
+  "description": "The services with their prices and a “Book” button each, under a heading and a short introduction.",
+  "ai_hint": "Only when the business takes appointments; on the home page or a services page. Write the heading and introduction only: never name services or prices.",
+  "capability": "booking",
+  "section": {
+    "style": {
+      "padding_y": "lg"
+    },
+    "rows": [
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "heading",
+                "props": {
+                  "text": "Services",
+                  "level": 2
+                }
+              },
+              {
+                "type": "rich_text",
+                "props": {
+                  "html": "<p>Choose a service to book it online.</p>",
+                  "lead": false
+                }
+              }
+            ]
+          }
+        ]
+      },
+      {
+        "style": {
+          "gap": "md",
+          "align": "stretch"
+        },
+        "columns": [
+          {
+            "span": {
+              "xs": 12
+            },
+            "valign": "top",
+            "widgets": [
+              {
+                "type": "booking",
+                "props": {
+                  "layout": "list",
+                  "service": "",
+                  "show_prices": true
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ],
+    "anchor": "services"
+  }
+}
